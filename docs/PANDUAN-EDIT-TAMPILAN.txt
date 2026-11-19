@@ -1,0 +1,555 @@
+======================================================================
+PANDUAN SISTEM OSIS: RINGKASAN DAN CARA AMAN MENGEDIT TAMPILAN
+======================================================================
+
+Lokasi project : C:\xampp\htdocs\pweb\laptop 6
+Tanggal dibuat : 18 November 2026
+Diperbarui     : 19 November 2026
+Tujuan         : ringkasan pekerjaan dan panduan belajar mengedit tampilan
+                 tanpa merusak login, role, atau data.
+
+Catatan pembaruan:
+- Header memakai nama OSKA PASIM dengan menu Dashboard dan Anggota OSIS.
+- Fitur hapus anggota tersedia di halaman daftar dan dashboard admin.
+- Tombol tambah cepat di header sudah dihapus; tombol Tambah anggota tetap
+  ada di halaman daftar.
+
+
+======================================================================
+1. RINGKASAN YANG SUDAH JADI
+======================================================================
+
+- Login, register, logout, dan profile memakai Laravel Breeze.
+- Dashboard admin menampilkan data asli dari tabel osis: total anggota,
+  jumlah sekbid, dan 5 anggota terbaru.
+- Halaman OSIS punya CRUD: daftar, tambah, edit.
+- Ada dua role: admin dan user.
+- Admin bisa tambah/edit anggota. User hanya bisa melihat.
+- Dashboard sekarang hanya untuk admin. User yang membuka /dashboard
+  dialihkan ke /osis.
+- Menu Dashboard disembunyikan dari navigasi user.
+- Logo Laravel di navigasi dashboard sudah diganti icon home dari Iconoir.
+- Halaman OSIS memakai layout dan CSS sendiri, terpisah dari Breeze.
+- Test terakhir: 32 test lulus, 83 assertion.
+
+Akun yang ada:
+
+  Admin : test@example.com / password
+  User  : 123@test.com /12345678
+
+
+======================================================================
+2. PENTING: ADA DUA SISTEM TAMPILAN
+======================================================================
+
+Project ini punya dua gaya halaman yang berbeda. Ini yang bikin bingung
+kalau mau edit. Jangan campur keduanya.
+
+A. Halaman Breeze (login, register, dashboard admin, profile)
+   - Teknologi : Blade + Tailwind + Alpine
+   - CSS        : class Tailwind di file Blade + resources/css/app.css
+   - Perlu build: ya, jalankan npm run build
+
+B. Halaman OSIS (/osis, create, edit)
+   - Teknologi : Blade + CSS biasa
+   - CSS        : public/css/osis.css
+   - Perlu build: tidak, langsung terpakai
+
+C. Landing page /
+   - Teknologi : welcome page bawaan Laravel
+   - CSS        : campuran inline dan @vite
+   - Perlu build: tidak untuk edit teks
+
+Jadi:
+
+- Mau ubah halaman OSIS: edit public/css/osis.css.
+- Mau ubah dashboard atau login: edit class Tailwind di file Blade,
+  lalu jalankan npm run build.
+
+
+======================================================================
+3. PETA FILE TAMPILAN
+======================================================================
+
+resources/views/
+  layouts/
+    app.blade.php            <- kerangka Breeze: head, font, Vite, nav, $slot
+    guest.blade.php          <- kerangka login/register: logo, font, $slot
+    navigation.blade.php     <- navbar Breeze: menu admin/user, dropdown, mobile
+    osis.blade.php           <- kerangka halaman OSIS: nav, CSS, JS, @yield
+
+  components/
+    application-logo.blade.php   <- logo Laravel, masih dipakai di login
+    dashboard-summary.blade.php  <- kartu statistik + tabel anggota terbaru
+    ...                          <- komponen Breeze (nav-link, dropdown, input, dll)
+
+  auth/
+    login.blade.php          <- form login
+    register.blade.php       <- form register
+    forgot-password.blade.php
+    reset-password.blade.php
+    confirm-password.blade.php
+    verify-email.blade.php
+
+  osis/
+    index.blade.php          <- daftar anggota, tampilan admin vs user
+    create.blade.php         <- form tambah anggota
+    edit.blade.php           <- form edit anggota
+
+  profile/                   <- halaman profil Breeze
+  dashboard.blade.php        <- dashboard khusus admin
+  welcome.blade.php          <- landing page bawaan Laravel
+  errors/403.blade.php       <- halaman "Akses ditolak"
+
+public/
+  css/osis.css               <- semua styling halaman OSIS
+  js/osis.js                 <- cegah form terkirim dua kali
+  build/                     <- hasil build, jangan diedit manual
+
+resources/
+  css/app.css                <- pintu masuk Tailwind
+  js/app.js                  <- Alpine.js dan bootstrap
+
+tailwind.config.js           <- font, path scan, plugin Tailwind
+vite.config.js               <- daftar file yang di-build
+postcss.config.js            <- konfigurasi PostCSS untuk Tailwind
+package.json                 <- script build/dev
+
+
+======================================================================
+4. MAU UBAH APA, EDIT DI MANA
+======================================================================
+
+- Warna, font, jarak, tombol halaman OSIS
+  -> public/css/osis.css
+
+- Teks halaman daftar anggota
+  -> resources/views/osis/index.blade.php
+
+- Form tambah anggota
+  -> resources/views/osis/create.blade.php
+
+- Form edit anggota
+  -> resources/views/osis/edit.blade.php
+
+- Navbar halaman OSIS
+  -> resources/views/layouts/osis.blade.php
+
+- Navbar dashboard Breeze
+  -> resources/views/layouts/navigation.blade.php
+
+- Head, font, icon, Vite dashboard
+  -> resources/views/layouts/app.blade.php
+
+- Head, font, logo login
+  -> resources/views/layouts/guest.blade.php
+
+- Form login/register
+  -> resources/views/auth/login.blade.php
+  -> resources/views/auth/register.blade.php
+
+- Dashboard admin
+  -> resources/views/dashboard.blade.php
+
+- Kartu statistik dan tabel dashboard
+  -> resources/views/components/dashboard-summary.blade.php
+
+- Halaman akses ditolak
+  -> resources/views/errors/403.blade.php
+
+- Font Tailwind
+  -> tailwind.config.js + link font di layout
+
+- Icon home/Iconoir
+  -> resources/views/layouts/navigation.blade.php
+
+- Izin/role/akses
+  -> routes/web.php
+  -> app/Http/Middleware/EnsureUserIsAdmin.php
+  -> app/Models/User.php
+
+- Validasi CRUD
+  -> app/Http/Controllers/OsisController.php
+
+- Struktur database
+  -> migration baru, jangan edit migration lama
+
+
+======================================================================
+5. KALAU MAU GANTI FONT
+======================================================================
+
+Ada tiga tempat font. Jangan cuma ganti satu.
+
+A. Halaman Breeze: login, register, dashboard, profile
+   Sekarang memakai font Figtree dari Bunny Fonts.
+
+   1. Buka resources/views/layouts/app.blade.php, cari:
+
+      <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+   2. Buka resources/views/layouts/guest.blade.php, ganti link yang sama.
+
+   3. Buka tailwind.config.js, ganti:
+
+      fontFamily: {
+          sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+      },
+
+   4. Jalankan:
+
+      npm run build
+
+   5. Hard refresh browser: Ctrl + F5.
+
+   Kalau font baru dari Google Fonts, ganti URL-nya dengan link Google Fonts
+   yang sesuai, lalu samakan nama font di tailwind.config.js.
+
+B. Halaman OSIS
+   Sekarang memakai Georgia untuk judul dan system UI untuk isi.
+
+   Buka public/css/osis.css, di bagian paling atas:
+
+   --font-display: Georgia, 'Times New Roman', serif;
+   --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+
+   Ganti dua baris itu. Tidak perlu npm run build, cukup simpan dan
+   hard refresh.
+
+   Kalau mau pakai font dari internet, tambahkan <link> font di
+   resources/views/layouts/osis.blade.php, lalu tulis nama fontnya di
+   dua variabel itu.
+
+C. Landing page /
+   resources/views/welcome.blade.php memakai Instrument Sans dan punya
+   blok CSS inline yang sangat panjang. Ini terpisah dari halaman lain.
+   Kalau mau seragam, ubah link font di file itu. Tapi hati-hati, file ini
+   paling ribet dan bukan prioritas untuk belajar.
+
+
+======================================================================
+6. KALAU MAU UBAH CSS
+======================================================================
+
+A. Halaman OSIS
+   Semua di public/css/osis.css.
+
+   Di atas ada variabel warna:
+
+   --paper: #f5f1e7;
+   --surface: #fffcf5;
+   --ink: #1d2926;
+   --muted: #5d6a65;
+   --accent: #0f5a49;
+   --accent-deep: #0a4135;
+   --focus: #9a6a1e;
+   --radius: 4px;
+
+   Kalau mau ganti tema, cukup ubah variabel ini. Contoh:
+
+   --accent: #1d4ed8;
+   --accent-deep: #1e3a8a;
+
+   Bagian lain:
+
+   - .site-header, .site-nav: navbar.
+   - .page-head, .lede: judul halaman.
+   - .btn, .btn--primary, .btn--ghost: tombol.
+   - .alert--success, .alert--error: pesan.
+   - .table-wrap, .data-table: tabel.
+   - .form-card, .field, .field-row: form.
+   - Bagian bawah ada media query untuk layar kecil.
+
+   Setelah simpan, cukup Ctrl + F5. Tidak ada build.
+
+B. Halaman Breeze/Tailwind
+   Class Tailwind ada langsung di file Blade. Contoh di dashboard.blade.php:
+
+   class="rounded-lg border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-800"
+
+   Kalau mau ganti warna, ganti class-nya, misalnya bg-gray-800 jadi
+   bg-emerald-800. Setelah itu:
+
+   npm run build
+
+   Kalau ingin warna khusus di luar palette Tailwind, baru edit
+   tailwind.config.js.
+
+
+======================================================================
+7. FILE AMAN VS BERISIKO
+======================================================================
+
+A. Aman untuk belajar
+
+   - public/css/osis.css
+   - Teks di resources/views/osis/*.blade.php
+   - Class Tailwind di dashboard.blade.php
+   - Teks dan class di layouts/navigation.blade.php
+   - resources/views/errors/403.blade.php
+
+B. Sedang, perlu build atau hati-hati
+
+   - tailwind.config.js
+   - resources/views/layouts/app.blade.php
+   - resources/views/layouts/guest.blade.php
+   - resources/views/layouts/osis.blade.php
+   - resources/css/app.css
+   - vite.config.js
+   - postcss.config.js
+
+C. Berisiko, ubah kalau sudah paham
+
+   - routes/web.php
+   - app/Http/Controllers/OsisController.php
+   - app/Http/Controllers/Auth/*
+   - app/Http/Middleware/EnsureUserIsAdmin.php
+   - app/Models/User.php
+   - app/Models/Osis.php
+   - bootstrap/app.php
+   - .env
+   - semua file di database/migrations/
+
+D. Jangan diedit manual
+
+   - public/build/*
+   - storage/framework/views/*
+   - bootstrap/cache/*
+   - vendor/*
+   - node_modules/*
+
+   Semua itu hasil generate. Kalau diedit, akan tertimpa atau bikin error
+   aneh.
+
+
+======================================================================
+8. WARNING YANG PALING PENTING
+======================================================================
+
+A. Blade
+
+   - Jangan hapus @vite, {{ $slot }}, @include('layouts.navigation'),
+     atau @yield('content'). Halaman bisa blank atau error.
+   - Jangan hapus @csrf di form. Form akan ditolak.
+   - Di osis/edit.blade.php, jangan hapus @method('PUT'). Update tidak
+     akan jalan.
+   - Jangan ubah nama field id_osis, nama, kelas, jurusan, sekbid tanpa
+     mengubah validasi di controller.
+   - Jangan hapus x-data, @click, atau x-show di navigation.blade.php.
+     Dropdown dan menu mobile akan mati.
+
+B. Izin dan role
+
+   - Jangan hapus @if (Auth::user()->isAdmin()) di navigasi. User akan
+     melihat link Dashboard lagi.
+   - Jangan hapus @if ($isAdmin) di osis/index.blade.php. User akan
+     melihat tombol tambah/edit, walaupun backend tetap menolak.
+   - Jangan hapus middleware admin dari route create/store/edit/update.
+     Controller tidak mengecek role sendiri.
+   - Jangan ubah nilai role admin di database menjadi teks lain.
+     isAdmin() bergantung pada string itu.
+
+C. Database
+
+   - Jangan edit migration lama setelah dijalankan. Buat migration baru.
+   - Jangan jalankan php artisan migrate:fresh. Semua data OSIS dan user
+     akan hilang.
+   - Jangan jalankan php artisan db:seed berkali-kali. Bisa bentrok email
+     test@example.com.
+   - Kalau mau menambah kolom, buat migration baru lalu php artisan migrate.
+
+D. Build dan asset
+
+   - Jangan edit public/build/manifest.json atau file CSS/JS di dalam
+     public/build.
+   - Setelah mengubah Tailwind atau Blade, jalankan npm run build.
+   - Kalau CSS terlihat tidak berubah, hard refresh Ctrl + F5.
+   - Kalau masih tidak berubah, jalankan:
+
+     php artisan view:clear
+     php artisan optimize:clear
+
+E. Environment
+
+   - Jangan ganti APP_KEY di .env. Session dan data terenkripsi bisa rusak.
+   - Setelah mengubah .env, jalankan php artisan config:clear dan restart
+     php artisan serve.
+
+F. Tampilan
+
+   - Kalau mengganti warna, cek kontras teks. Tombol dengan teks putih
+     butuh background yang cukup gelap.
+   - Halaman Breeze punya mode gelap lewat class dark:. Kalau mengganti
+     warna terang, cek juga versi gelapnya.
+   - Halaman OSIS belum punya mode gelap.
+   - Tabel OSIS memang bisa discroll ke samping di HP. Itu disengaja lewat
+     .table-wrap.
+   - Iconoir dimuat lewat CDN @main, belum dikunci versinya. Kalau CDN
+     berubah, icon bisa hilang. Untuk produksi, sebaiknya pakai versi
+     tertentu atau simpan file CSS-nya sendiri.
+
+G. File yang masih dipakai
+
+   - components/application-logo.blade.php masih dipakai di halaman login.
+     Jangan hapus.
+   - components/dashboard-summary.blade.php dipakai dashboard admin.
+     Jangan hapus sembarangan.
+   - layouts/guest.blade.php hanya untuk login/register. Mengubah
+     layouts/app.blade.php tidak akan mengubah halaman login.
+
+
+======================================================================
+9. ALUR KERJA AMAN UNTUK BELAJAR
+======================================================================
+
+1. Backup dulu file yang mau diubah. Project ini belum pakai Git, jadi
+   paling aman copy jadi .bak, atau mulai git init.
+
+2. Ubah satu bagian kecil saja.
+
+3. Kalau mengubah public/css/osis.css: simpan, lalu Ctrl + F5.
+
+4. Kalau mengubah Blade atau Tailwind:
+
+   npm run build
+   php artisan view:clear
+
+5. Kalau mengubah route, config, atau .env:
+
+   php artisan optimize:clear
+
+6. Jalankan test:
+
+   php artisan test
+
+7. Cek halaman ini satu per satu:
+
+   - /login
+   - /dashboard sebagai admin
+   - /dashboard sebagai user, harus pindah ke /osis
+   - /osis sebagai admin dan user
+   - /osis/create sebagai admin (200) dan user (403)
+   - /profile
+   - /osis/{id}/edit sebagai admin
+
+8. Kalau ada error, buka:
+
+   storage/logs/laravel.log
+
+
+======================================================================
+10. SISA HAL KECIL YANG BELUM SERAGAM
+======================================================================
+
+- welcome.blade.php masih menampilkan link Dashboard untuk semua user yang
+  sudah login. Kalau user biasa klik, dia akan dialihkan ke /osis. Kalau
+  mau benar-benar bersih, link itu perlu dibuat khusus admin.
+
+- Logo di halaman login masih logo Laravel. Yang diganti icon home baru
+  navbar dashboard.
+
+- Label login masih bahasa Inggris: Email, Password, Log in.
+
+- Halaman OSIS belum punya mode gelap.
+
+Itu bukan error, cuma belum diseragamkan.
+
+
+======================================================================
+11. URUTAN BELAJAR YANG DISARANKAN
+======================================================================
+
+1. CSS OSIS: ubah --accent, --radius, dan --font-display di
+   public/css/osis.css. Ini paling aman dan langsung terlihat.
+
+2. Teks dan struktur OSIS: edit osis/index.blade.php dan
+   layouts/osis.blade.php. Belajar @if, @foreach, dan {{ }}.
+
+3. Tailwind dashboard: ganti class warna di dashboard.blade.php, lalu
+   npm run build.
+
+4. Font Breeze: ubah link font di dua layout dan tailwind.config.js.
+
+5. Tambah halaman statis: buat view baru dan route sederhana di
+   routes/web.php.
+
+6. Terakhir: role, controller, middleware, dan migration.
+
+Dengan urutan itu, kamu bisa belajar tampilan tanpa menyentuh bagian yang
+bisa merusak login atau data.
+
+
+======================================================================
+12. CARA MENGAKSES DASHBOARD SEBAGAI ADMIN
+======================================================================
+
+Akun admin:
+
+  Email    : test@example.com
+  Password : password
+
+Langkah:
+
+1. Pastikan MySQL menyala. Kalau memakai XAMPP, buka XAMPP Control Panel
+   lalu klik Start pada MySQL.
+
+2. Jalankan server Laravel:
+
+   cd "C:\xampp\htdocs\pweb\laptop 6"
+   php artisan serve
+
+3. Buka http://127.0.0.1:8000/login
+
+4. Login dengan akun admin di atas.
+
+5. Admin akan masuk ke http://127.0.0.1:8000/dashboard dan melihat menu
+   Dashboard.
+
+Kalau login sebagai user biasa, akan diarahkan ke
+http://127.0.0.1:8000/osis, dan menu Dashboard tidak muncul.
+
+
+======================================================================
+13. CARA MEMBUAT ADMIN BARU
+======================================================================
+
+Jalankan:
+
+  php artisan tinker
+
+Lalu:
+
+  \App\Models\User::create([
+      'name' => 'Admin',
+      'email' => 'admin@osis.test',
+      'password' => 'password',
+      'role' => 'admin',
+  ]);
+
+Atau promosikan akun yang sudah ada:
+
+  \App\Models\User::where('email', '123@test.com')->update(['role' => 'admin']);
+
+
+======================================================================
+14. HASIL PENGECEKAN TERAKHIR
+======================================================================
+
+- php artisan test: 32 test lulus, 83 assertion.
+- Admin login lalu buka /dashboard: 200, dashboard tampil.
+- User login: diarahkan ke /dashboard lalu otomatis ke /osis, status 200.
+- User membuka /dashboard langsung: dialihkan ke /osis.
+- User membuka /osis/create: 403.
+- Data OSIS tetap 1 baris, tidak ada yang berubah.
+
+
+======================================================================
+CATATAN AKHIR
+======================================================================
+
+File ini hanya dokumentasi. Tidak ada file project yang diubah saat file
+.txt ini dibuat.
+
+Kalau ingin mengedit tampilan, mulai dari bagian yang paling aman:
+public/css/osis.css. Setelah paham, baru naik ke Blade, Tailwind, font,
+lalu terakhir route, controller, middleware, dan migration.

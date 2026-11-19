@@ -61,4 +61,14 @@ class OsisController extends Controller
             ->route('osis.index')
             ->with('success', 'Data OSIS berhasil diperbarui!');
     }
+
+    public function destroy($id)
+    {
+        $osis = Osis::findOrFail($id);
+
+        $osis->delete();
+
+        return back(fallback: route('osis.index'))
+            ->with('success', 'Data OSIS berhasil dihapus!');
+    }
 }

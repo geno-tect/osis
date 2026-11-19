@@ -53,7 +53,17 @@
                         <td>{{ $item->sekbid }}</td>
                         @if ($isAdmin)
                             <td class="actions">
-                                <a href="{{ route('osis.edit', $item->id) }}">Edit</a>
+                                <div class="row-actions">
+                                    <a href="{{ route('osis.edit', $item->id) }}">Edit</a>
+
+                                    <form method="POST"
+                                          action="{{ route('osis.destroy', $item->id) }}"
+                                          onsubmit="return confirm('Hapus anggota ini? Tindakan ini tidak bisa dibatalkan.')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" aria-label="Hapus {{ $item->nama }}">Hapus</button>
+                                    </form>
+                                </div>
                             </td>
                         @endif
                     </tr>

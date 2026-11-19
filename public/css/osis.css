@@ -257,6 +257,30 @@ p {
     font-weight: 600;
 }
 
+.data-table .actions .row-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+}
+
+.data-table .actions form {
+    margin: 0;
+}
+
+.data-table .actions button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--danger);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.data-table .actions button:hover {
+    text-decoration: underline;
+}
+
 .empty-state {
     padding: 2.5rem 1rem;
     text-align: center;

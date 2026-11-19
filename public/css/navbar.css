@@ -67,14 +67,9 @@
     white-space: nowrap;
 }
 
-.header-actions,
 .header-auth {
     display: flex;
     align-items: center;
-    gap: 0.55rem;
-}
-
-.header-auth {
     justify-self: end;
     gap: 0.6rem;
 }
@@ -103,16 +98,6 @@
 .icon-btn--account:hover {
     background: var(--nav-slate-deep);
     color: #fff;
-}
-
-.icon-btn--add {
-    background: var(--nav-teal);
-    color: var(--nav-ink);
-}
-
-.icon-btn--add:hover {
-    background: var(--nav-teal-deep);
-    color: var(--nav-ink);
 }
 
 .site-nav {

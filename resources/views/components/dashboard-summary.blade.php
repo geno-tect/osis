@@ -93,10 +93,24 @@
                                     {{ $item->sekbid }}
                                 </td>
                                 <td class="whitespace-nowrap px-5 py-3 text-right text-sm">
-                                    <a href="{{ route('osis.edit', $item->id) }}"
-                                       class="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">
-                                        Edit
-                                    </a>
+                                    <div class="flex items-center justify-end gap-3">
+                                        <a href="{{ route('osis.edit', $item->id) }}"
+                                           class="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">
+                                            Edit
+                                        </a>
+
+                                        <form method="POST"
+                                              action="{{ route('osis.destroy', $item->id) }}"
+                                              onsubmit="return confirm('Hapus anggota ini? Tindakan ini tidak bisa dibatalkan.')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                    aria-label="Hapus {{ $item->nama }}"
+                                                    class="font-medium text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

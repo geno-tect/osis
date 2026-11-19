@@ -1,59 +1,168 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistem Data Anggota OSIS (OSKA PASIM)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi web untuk mencatat anggota OSIS. Dibuat dengan Laravel, Blade, dan CSS
+custom untuk halaman data. Login dan dashboard admin memakai Laravel Breeze.
 
-## About Laravel
+## Fitur
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Login, register, logout, dan halaman profil.
+- Dua role: `admin` dan `user`.
+- Admin dapat menambah, mengubah, dan menghapus anggota.
+- User hanya dapat melihat daftar anggota. Tidak ada tombol tambah, edit, atau
+  hapus, dan route pengelolaan tetap ditolak dengan status 403.
+- Dashboard hanya untuk admin. User yang membuka `/dashboard` dialihkan ke
+  `/osis`.
+- Pencarian bawaan browser tetap bisa dipakai melalui `Ctrl + F`; tidak ada
+  kotak pencarian aplikasi.
+- Halaman daftar anggota memakai layout dan CSS sendiri (`osis.css` dan
+  `navbar.css`), terpisah dari Tailwind Breeze.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Teknologi
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+| Bagian | Teknologi |
+|---|---|
+| Backend | PHP 8.2, Laravel 12 |
+| Database | MySQL / MariaDB (`db_osis`) |
+| Tampilan OSIS | Blade, CSS custom, JavaScript vanilla |
+| Tampilan admin | Blade, Tailwind CSS, Alpine.js (Laravel Breeze) |
+| Build asset | Vite 7, npm |
+| Testing | PHPUnit 11 |
+| Version control | Git, GitHub |
 
-## Learning Laravel
+## Hak akses
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+| Halaman / aksi | Admin | User |
+|---|---|---|
+| `/login`, `/register`, `/profile` | Ya | Ya |
+| `/dashboard` | Ya | Dialihkan ke `/osis` |
+| `/osis` (daftar) | Ya | Ya |
+| `/osis/create`, `/osis` (POST) | Ya | 403 |
+| `/osis/{id}/edit`, `/osis/{id}` (PUT) | Ya | 403 |
+| `/osis/{id}` (DELETE) | Ya | 403 |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Role disimpan di kolom `role` pada tabel `users`. Akun lama dipromosikan
+menjadi `admin` oleh migration, sedangkan akun baru dari registrasi otomatis
+mendapat role `user`.
 
-## Laravel Sponsors
+## Instalasi
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Prasyarat: PHP 8.2+, Composer, Node.js 20+, dan MySQL/MariaDB (XAMPP juga bisa).
 
-### Premium Partners
+```powershell
+composer install
+Copy-Item .env.example .env
+php artisan key:generate
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Buat database `db_osis` di MySQL, lalu sesuaikan `.env`:
 
-## Contributing
+```dotenv
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=db_osis
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Jalankan migration, seeder, dan build asset:
 
-## Code of Conduct
+```powershell
+php artisan migrate
+php artisan db:seed
+npm install
+npm run build
+php artisan serve
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Buka `http://127.0.0.1:8000`.
 
-## Security Vulnerabilities
+## Akun default
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Seeder membuat akun admin:
 
-## License
+```text
+Email    : test@example.com
+Password : password
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Segera ganti password setelah login. Untuk membuat admin baru:
+
+```powershell
+php artisan tinker
+```
+
+```php
+\App\Models\User::create([
+    'name' => 'Admin',
+    'email' => 'admin@osis.test',
+    'password' => 'password',
+    'role' => 'admin',
+]);
+```
+
+Atau promosikan akun yang sudah ada:
+
+```php
+\App\Models\User::where('email', 'contoh@email.com')->update(['role' => 'admin']);
+```
+
+## Struktur penting
+
+```text
+app/Http/Controllers/OsisController.php     CRUD + hapus anggota
+app/Http/Middleware/EnsureUserIsAdmin.php   penjaga route admin
+app/Models/Osis.php                         model data anggota
+app/Models/User.php                         role dan isAdmin()
+routes/web.php                              route dashboard dan OSIS
+
+resources/views/layouts/osis.blade.php      kerangka halaman OSIS
+resources/views/layouts/navigation.blade.php navbar Breeze
+resources/views/osis/                       daftar, tambah, edit
+resources/views/dashboard.blade.php         dashboard admin
+resources/views/components/dashboard-summary.blade.php
+
+public/css/osis.css                         styling halaman OSIS
+public/css/navbar.css                       styling navbar
+public/js/osis.js                           cegah submit ganda
+
+database/migrations/                        struktur database
+tests/Feature/OsisRoleTest.php              test role dan CRUD
+```
+
+## Mengedit tampilan
+
+Panduan lengkap ada di [`docs/PANDUAN-EDIT-TAMPILAN.txt`](docs/PANDUAN-EDIT-TAMPILAN.txt).
+Ringkasnya:
+
+- Warna, font, tombol, tabel halaman OSIS: `public/css/osis.css`.
+- Navbar: `public/css/navbar.css` dan `resources/views/layouts/osis.blade.php`.
+- Dashboard admin dan halaman login: class Tailwind di file Blade, lalu
+  `npm run build`.
+- Teks halaman: file di `resources/views/osis/`.
+
+Setelah mengubah CSS custom, cukup hard refresh (`Ctrl + F5`). Setelah
+mengubah class Tailwind atau JavaScript, jalankan:
+
+```powershell
+npm run build
+php artisan view:clear
+```
+
+## Testing
+
+Test memakai SQLite in-memory, jadi tidak menyentuh database `db_osis`.
+
+```powershell
+php artisan test
+```
+
+Status terakhir: 34 test lulus, 92 assertion.
+
+## Catatan repository
+
+- `.env` tidak ikut di-commit karena berisi kredensial database.
+- `vendor`, `node_modules`, dan `public/build` juga diabaikan.
+- Setelah clone, jalankan `composer install`, `npm install`, dan
+  `npm run build`.
+- Jangan mengedit file di `public/build` secara manual; itu hasil build.

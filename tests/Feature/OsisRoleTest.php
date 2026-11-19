@@ -25,12 +25,14 @@ class OsisRoleTest extends TestCase
     public function test_admin_dashboard_shows_management_controls(): void
     {
         $admin = User::factory()->admin()->create();
+        $this->anggota();
 
         $this->actingAs($admin)
             ->get('/dashboard')
             ->assertOk()
             ->assertSee('Dashboard admin')
-            ->assertSee('Tambah anggota');
+            ->assertSee('Tambah anggota')
+            ->assertSee('Hapus');
     }
 
     public function test_user_is_redirected_away_from_dashboard(): void
@@ -51,7 +53,8 @@ class OsisRoleTest extends TestCase
             ->get('/osis')
             ->assertOk()
             ->assertSee('Tambah anggota')
-            ->assertSee('Edit');
+            ->assertSee('Edit')
+            ->assertSee('Hapus');
     }
 
     public function test_user_sees_read_only_member_list(): void
@@ -64,7 +67,8 @@ class OsisRoleTest extends TestCase
             ->assertOk()
             ->assertSee('Anggota Uji')
             ->assertDontSee('Tambah anggota')
-            ->assertDontSee('Edit');
+            ->assertDontSee('Edit')
+            ->assertDontSee('Hapus');
     }
 
     public function test_user_cannot_open_create_page(): void
@@ -113,5 +117,31 @@ class OsisRoleTest extends TestCase
             'id' => $anggota->id,
             'nama' => 'Anggota Uji',
         ]);
+    }
+
+    public function test_admin_can_delete_member_from_dashboard(): void
+    {
+        $admin = User::factory()->admin()->create();
+        $anggota = $this->anggota();
+
+        $this->actingAs($admin)
+            ->from('/dashboard')
+            ->delete("/osis/{$anggota->id}")
+            ->assertRedirect('/dashboard')
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseMissing('osis', ['id' => $anggota->id]);
+    }
+
+    public function test_user_cannot_delete_member(): void
+    {
+        $user = User::factory()->create();
+        $anggota = $this->anggota();
+
+        $this->actingAs($user)
+            ->delete("/osis/{$anggota->id}")
+            ->assertForbidden();
+
+        $this->assertDatabaseHas('osis', ['id' => $anggota->id]);
     }
 }

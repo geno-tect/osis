@@ -6,7 +6,7 @@
                     Dashboard admin
                 </h1>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                    Ringkasan data anggota OSIS. Kamu bisa menambah dan mengubah data.
+                    Ringkasan data anggota OSIS. Kamu bisa menambah, mengubah, dan menghapus data.
                 </p>
             </div>
 
@@ -19,6 +19,13 @@
 
     <div class="py-8">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            @if (session('success'))
+                <div class="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 dark:border-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200"
+                     role="status">
+                    {{ session('success') }}
+                </div>
+            @endif
+
             <x-dashboard-summary
                 :total-anggota="$totalAnggota"
                 :total-sekbid="$totalSekbid"

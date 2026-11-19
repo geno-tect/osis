@@ -35,6 +35,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/osis', [OsisController::class, 'store'])->name('osis.store');
     Route::get('/osis/{id}/edit', [OsisController::class, 'edit'])->name('osis.edit');
     Route::put('/osis/{id}', [OsisController::class, 'update'])->name('osis.update');
+    Route::delete('/osis/{id}', [OsisController::class, 'destroy'])->name('osis.destroy');
 });
 
 require __DIR__.'/auth.php';
