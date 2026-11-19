@@ -30,12 +30,6 @@
                 </svg>
             </a>
 
-            <a class="pill pill--ghost"
-               href="{{ route('profile.edit') }}"
-               title="Buka profil {{ Auth::user()->name }}">
-                <span class="pill__label">{{ Auth::user()->name }}</span>
-            </a>
-
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="pill pill--solid">Keluar</button>

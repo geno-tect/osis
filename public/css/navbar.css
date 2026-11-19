@@ -166,18 +166,6 @@
     transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
-.pill--ghost {
-    max-width: 11rem;
-    border: 1.5px solid var(--nav-ink);
-    background: #fff;
-    color: var(--nav-ink);
-}
-
-.pill--ghost:hover {
-    background: var(--nav-ink);
-    color: #fff;
-}
-
 .pill--solid {
     border: 1.5px solid var(--nav-teal);
     background: var(--nav-teal);
@@ -188,13 +176,6 @@
     border-color: var(--nav-teal-deep);
     background: var(--nav-teal-deep);
     color: var(--nav-ink);
-}
-
-.pill__label {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 .icon-btn:active,
@@ -243,17 +224,6 @@
         background: #f3f4f6;
     }
 
-    .app-shell .pill--ghost {
-        border-color: #d1d5db;
-        background: transparent;
-        color: #e5e7eb;
-    }
-
-    .app-shell .pill--ghost:hover {
-        background: #e5e7eb;
-        color: #111827;
-    }
-
     .app-shell .icon-btn--account {
         background: #7a7a86;
     }
@@ -298,12 +268,6 @@
         justify-self: center;
         transform: none;
         padding-block: 0.35rem 0.55rem;
-    }
-}
-
-@media (max-width: 640px) {
-    .pill--ghost {
-        display: none;
     }
 }
 
