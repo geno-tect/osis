@@ -8,8 +8,6 @@
             <h1>Edit anggota</h1>
             <p class="lede">Perbarui data <strong>{{ $osis->nama }}</strong>.</p>
         </div>
-
-        <a class="btn btn--ghost" href="{{ route('osis.index') }}">Kembali ke daftar</a>
     </div>
 
     @if ($errors->any())

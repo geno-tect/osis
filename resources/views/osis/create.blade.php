@@ -8,8 +8,6 @@
             <h1>Tambah anggota</h1>
             <p class="lede">Catat anggota baru. Kolom bertanda <span class="req">*</span> wajib diisi.</p>
         </div>
-
-        <a class="btn btn--ghost" href="{{ route('osis.index') }}">Kembali ke daftar</a>
     </div>
 
     @if (session('success'))
