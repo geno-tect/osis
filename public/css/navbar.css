@@ -1,0 +1,316 @@
+:root {
+    --nav-ink: #1b1b1d;
+    --nav-slate: #6d6d78;
+    --nav-slate-deep: #5a5a64;
+    --nav-teal: #5ec9c2;
+    --nav-teal-deep: #45b3ac;
+    --nav-line: #d8d1c2;
+    --nav-brand-ink: #1d2926;
+    --nav-brand-muted: #5d6a65;
+    --nav-brand-line: #8d8677;
+    --nav-brand-display: Georgia, 'Times New Roman', serif;
+}
+
+.site-header {
+    background: #fff;
+}
+
+.header-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 4.25rem;
+    padding: 0.65rem clamp(1rem, 3vw, 2rem);
+}
+
+.header-start {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 2vw, 1.25rem);
+    justify-self: start;
+    min-width: 0;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--nav-brand-ink);
+    text-decoration: none;
+}
+
+.brand:hover {
+    color: var(--nav-brand-ink);
+}
+
+.brand-logo {
+    flex: none;
+    width: 3.125rem;
+    height: 3.125rem;
+    object-fit: contain;
+}
+
+.brand-mark {
+    font-family: var(--nav-brand-display);
+    font-size: 1.45rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.brand-sub {
+    padding-left: 0.75rem;
+    border-left: 1px solid var(--nav-brand-line);
+    color: var(--nav-brand-muted);
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.header-actions,
+.header-auth {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.header-auth {
+    justify-self: end;
+    gap: 0.6rem;
+}
+
+.icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.65rem;
+    height: 2.65rem;
+    border-radius: 0.65rem;
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+}
+
+.icon-btn svg {
+    width: 1.35rem;
+    height: 1.35rem;
+}
+
+.icon-btn--account {
+    background: var(--nav-slate);
+}
+
+.icon-btn--account:hover {
+    background: var(--nav-slate-deep);
+    color: #fff;
+}
+
+.icon-btn--add {
+    background: var(--nav-teal);
+}
+
+.icon-btn--add:hover {
+    background: var(--nav-teal-deep);
+    color: #fff;
+}
+
+.site-nav {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    gap: clamp(1.4rem, 4.5vw, 3.25rem);
+    transform: translate(-50%, -50%);
+}
+
+.site-nav a {
+    position: relative;
+    padding: 0.35rem 0;
+    color: var(--nav-ink);
+    font-size: 1.02rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.site-nav a::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -0.2rem;
+    left: 0;
+    height: 3px;
+    border-radius: 2px;
+    background: transparent;
+    transition: background-color 0.15s ease;
+}
+
+.site-nav a:hover {
+    color: var(--nav-ink);
+}
+
+.site-nav a:hover::after {
+    background: var(--nav-line);
+}
+
+.site-nav a.is-active::after {
+    background: var(--nav-ink);
+}
+
+.header-auth form {
+    margin: 0;
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.5rem;
+    padding: 0.5rem 1.3rem;
+    border-radius: 999px;
+    font: inherit;
+    font-size: 0.92rem;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.pill--ghost {
+    max-width: 11rem;
+    border: 1.5px solid var(--nav-ink);
+    background: #fff;
+    color: var(--nav-ink);
+}
+
+.pill--ghost:hover {
+    background: var(--nav-ink);
+    color: #fff;
+}
+
+.pill--solid {
+    border: 1.5px solid var(--nav-teal);
+    background: var(--nav-teal);
+    color: #fff;
+}
+
+.pill--solid:hover {
+    border-color: var(--nav-teal-deep);
+    background: var(--nav-teal-deep);
+    color: #fff;
+}
+
+.pill__label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.site-header :where(a, button):focus-visible {
+    outline: 2px solid var(--nav-ink);
+    outline-offset: 2px;
+}
+
+@media (max-width: 1300px) {
+    .brand-sub {
+        display: none;
+    }
+}
+
+@media (max-width: 1000px) {
+    .header-inner {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+            "start auth"
+            "nav nav";
+        gap: 0.35rem 1rem;
+        padding-block: 0.6rem 0.25rem;
+    }
+
+    .header-start {
+        grid-area: start;
+    }
+
+    .header-auth {
+        grid-area: auth;
+    }
+
+    .site-nav {
+        position: static;
+        grid-area: nav;
+        justify-self: center;
+        transform: none;
+        padding-block: 0.35rem 0.55rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .pill--ghost {
+        display: none;
+    }
+}
+
+@media (max-width: 520px) {
+    .brand-logo {
+        width: 2.6rem;
+        height: 2.6rem;
+    }
+
+    .brand-mark {
+        font-size: 1.05rem;
+    }
+
+    .icon-btn {
+        width: 2.45rem;
+        height: 2.45rem;
+        border-radius: 0.6rem;
+    }
+
+    .icon-btn svg {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+
+    .pill {
+        min-height: 2.35rem;
+        padding-inline: 1rem;
+        font-size: 0.875rem;
+    }
+
+    .site-nav {
+        gap: 1.4rem;
+    }
+
+    .site-nav a {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .brand {
+        gap: 0;
+    }
+
+    .brand-logo {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    .brand-mark {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .icon-btn,
+    .pill,
+    .site-nav a::after {
+        transition: none;
+    }
+}

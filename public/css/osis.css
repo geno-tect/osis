@@ -1,7 +1,6 @@
 :root {
     --paper: #f5f1e7;
     --surface: #fffcf5;
-    --header-bg: #efeade;
     --ink: #1d2926;
     --muted: #5d6a65;
     --line: #d8d1c2;
@@ -95,100 +94,6 @@ p {
 .skip-link:focus {
     top: 0.75rem;
     color: var(--paper);
-}
-
-/* Header dan navigasi */
-
-.site-header {
-    border-bottom: 1px solid var(--line);
-    background: var(--header-bg);
-}
-
-.header-inner {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem 1.5rem;
-    padding-block: 1rem;
-}
-
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    color: var(--ink);
-    text-decoration: none;
-}
-
-.brand:hover {
-    color: var(--ink);
-}
-
-.brand-logo {
-    flex: none;
-    width: 3.125rem;
-    height: 3.125rem;
-    object-fit: contain;
-}
-
-.brand-mark {
-    font-family: var(--font-display);
-    font-size: 1.45rem;
-    font-weight: 700;
-}
-
-.brand-sub {
-    padding-left: 0.75rem;
-    border-left: 1px solid var(--line-strong);
-    color: var(--muted);
-    font-size: 0.8rem;
-}
-
-.site-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.2rem;
-}
-
-.site-nav a {
-    display: inline-block;
-    padding: 0.4rem 0.7rem;
-    border-radius: var(--radius);
-    color: var(--muted);
-    font-size: 0.9rem;
-    text-decoration: none;
-}
-
-.site-nav a:hover {
-    background: var(--nav-hover);
-    color: var(--ink);
-}
-
-.site-nav a.is-active {
-    background: var(--ink);
-    color: var(--paper);
-}
-
-.site-nav form {
-    margin: 0;
-}
-
-.site-nav button {
-    display: inline-block;
-    padding: 0.4rem 0.7rem;
-    border: 0;
-    border-radius: var(--radius);
-    background: transparent;
-    color: var(--muted);
-    font: inherit;
-    font-size: 0.9rem;
-    cursor: pointer;
-}
-
-.site-nav button:hover {
-    background: var(--nav-hover);
-    color: var(--ink);
 }
 
 /* Isi halaman */
@@ -479,10 +384,6 @@ p {
 @media (max-width: 640px) {
     .shell {
         width: min(100% - 1.5rem, 68rem);
-    }
-
-    .brand-sub {
-        display: none;
     }
 
     .page-head {
