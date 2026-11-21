@@ -12,16 +12,16 @@ class AuthenticationTest extends TestCase
 
     public function test_login_screen_can_be_rendered(): void
     {
-        $response = $this->get('/login');
+        $response = $this->get(route('login', absolute: false));
 
         $response->assertStatus(200);
     }
 
-    public function test_users_can_authenticate_using_the_login_screen(): void
+    public function test_admin_can_authenticate_using_the_login_screen(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->admin()->create();
 
-        $response = $this->post('/login', [
+        $response = $this->post(route('login', absolute: false), [
             'email' => $user->email,
             'password' => 'password',
         ]);
@@ -30,11 +30,25 @@ class AuthenticationTest extends TestCase
         $response->assertRedirect(route('dashboard', absolute: false));
     }
 
+    public function test_non_admin_users_can_not_authenticate(): void
+    {
+        $user = User::factory()->create(['role' => User::ROLE_USER]);
+
+        $response = $this->from(route('login', absolute: false))->post(route('login', absolute: false), [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertGuest();
+        $response->assertRedirect(route('login', absolute: false));
+        $response->assertSessionHasErrors('email');
+    }
+
     public function test_users_can_not_authenticate_with_invalid_password(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->admin()->create();
 
-        $this->post('/login', [
+        $this->post(route('login', absolute: false), [
             'email' => $user->email,
             'password' => 'wrong-password',
         ]);
@@ -44,7 +58,7 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_logout(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->admin()->create();
 
         $response = $this->actingAs($user)->post('/logout');
 

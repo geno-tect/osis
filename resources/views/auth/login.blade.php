@@ -1,4 +1,11 @@
 <x-guest-layout>
+    <div class="mb-6">
+        <h1 class="text-lg font-medium text-gray-900 dark:text-gray-100">Login Admin</h1>
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            Hanya admin yang dapat masuk untuk mengelola data OSIS.
+        </p>
+    </div>
+
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 

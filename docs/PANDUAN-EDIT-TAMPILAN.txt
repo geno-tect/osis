@@ -4,38 +4,111 @@ PANDUAN SISTEM OSIS: RINGKASAN DAN CARA AMAN MENGEDIT TAMPILAN
 
 Lokasi project : C:\xampp\htdocs\pweb\laptop 6
 Tanggal dibuat : 18 November 2026
-Diperbarui     : 19 November 2026
+Diperbarui     : 20 November 2026
 Tujuan         : ringkasan pekerjaan dan panduan belajar mengedit tampilan
                  tanpa merusak login, role, atau data.
+Repo GitHub    : https://github.com/geno-tect/osis.git (branch main)
+Commit terakhir: d6041ba - 19 November 2026 - "hapus tombol kembali ke daftar di form"
+Catatan file   : panduan ini disimpan di folder Documents dan tidak ikut
+                 di-commit atau di-push ke GitHub.
 
-Catatan pembaruan:
-- Header memakai nama OSKA PASIM dengan menu Dashboard dan Anggota OSIS.
-- Fitur hapus anggota tersedia di halaman daftar dan dashboard admin.
-- Tombol tambah cepat di header sudah dihapus; tombol Tambah anggota tetap
-  ada di halaman daftar.
+
+======================================================================
+0. PEMBARUAN 20 NOVEMBER 2026
+======================================================================
+
+Bagian ini merangkum keadaan terbaru. Isi panduan lama tetap dipertahankan
+supaya catatan belajarnya tidak hilang.
+
+A. Header halaman sekarang
+   - Merek: OSKA PASIM, dengan logo public/img/logo-osis-dikanan.png.
+   - Submerek "Sistem data anggota".
+   - Menu tengah: Dashboard (khusus admin) dan Anggota OSIS.
+   - Ikon profil ada di kanan, lalu tombol Keluar.
+   - Nama pengguna (dulu "Test User") dan ikon tambah duplikat sudah dihapus.
+   - Navbar dipakai bersama oleh halaman OSIS dan dashboard Breeze
+     (public/css/navbar.css).
+
+B. Fitur hapus anggota (khusus admin)
+   - Route: DELETE /osis/{id}, nama route osis.destroy.
+   - Tombol Hapus ada di /osis dan di tabel dashboard admin.
+   - Sebelum hapus, browser menampilkan konfirmasi.
+   - Setelah hapus, kembali ke halaman asal dengan pesan sukses.
+   - Tamu yang mencoba DELETE diarahkan ke halaman login.
+   - Akun non-admin tidak bisa login, jadi tidak ada lagi akses user biasa.
+   - File utama: OsisController@destroy, routes/web.php,
+     resources/views/osis/index.blade.php,
+     resources/views/components/dashboard-summary.blade.php.
+
+C. Perubahan tampilan kecil
+   - Kolom Aksi di tabel OSIS sekarang rata tengah.
+   - Tombol "Kembali ke daftar" di atas form create/edit sudah dihapus.
+     Tombol Batal tetap ada di bawah form.
+   - CSS: public/css/osis.css dan public/css/navbar.css.
+
+D. Status pengujian dan repository
+   - php artisan test: 37 test lulus, 107 assertion.
+   - Database db_osis: 10 tabel (2 tabel aplikasi + 8 tabel bawaan Laravel).
+   - Isi database saat ini: 1 akun admin dan 2 anggota OSIS.
+   - README.md sudah ditulis ulang sesuai aplikasi ini.
+   - Salinan panduan ada di docs/PANDUAN-EDIT-TAMPILAN.txt.
+   - .env.example memakai MySQL dan database db_osis.
+   - Perubahan akses publik belum di-commit atau di-push. Commit terakhir
+     di Git tetap d6041ba.
+
+E. Dokumentasi lain
+   - File "Daftar-Isi-Proyek-Sistem-OSIS.txt" di folder Documents memuat
+     daftar lengkap tabel, kolom, route, controller, view, CSS, dan tools.
+   - File "Perancangan-Sistem-OSIS.drawio" di folder Documents memuat
+     diagram alur akses dan database. Buka dengan draw.io.
+
+F. Akses publik dan login admin (terbaru)
+   - Halaman /osis bisa dibuka tanpa login.
+   - Halaman / diarahkan ke /osis.
+   - Tamu hanya melihat daftar anggota. Tidak ada tombol tambah/edit/hapus.
+   - Registrasi publik dihapus. Membuka /register menghasilkan 404.
+   - Login hanya untuk admin. Akun non-admin ditolak saat login.
+   - /dashboard dan semua route pengelolaan tetap memakai auth + admin.
+   - Akun 123@test.com sudah dihapus dari database db_osis.
+   - Header tamu tidak menampilkan tombol login. Path login admin sengaja
+     tidak ditautkan dari halaman publik. Cara aksesnya ada di
+     Daftar-Isi-Proyek-Sistem-OSIS.txt bagian 12.
+   - File yang diubah: routes/web.php, routes/auth.php,
+     AuthenticatedSessionController.php, layouts/osis.blade.php,
+     layouts/navigation.blade.php, osis/index.blade.php, auth/login.blade.php,
+     README.md, dan test terkait.
+   - File yang dihapus: app/Http/Controllers/Auth/RegisteredUserController.php
+     dan resources/views/auth/register.blade.php.
+   - Perancangan alur ada di C:\Users\user\Documents\
+     Perancangan-Sistem-OSIS.drawio (buka dengan draw.io).
 
 
 ======================================================================
 1. RINGKASAN YANG SUDAH JADI
 ======================================================================
 
-- Login, register, logout, dan profile memakai Laravel Breeze.
+- Login admin, logout, reset password, dan profile memakai Laravel Breeze.
+- Registrasi publik sudah dihapus. Akun admin dibuat lewat seeder atau Tinker.
+- Halaman /osis bersifat publik dan bisa dibuka tanpa login.
 - Dashboard admin menampilkan data asli dari tabel osis: total anggota,
   jumlah sekbid, dan 5 anggota terbaru.
-- Halaman OSIS punya CRUD: daftar, tambah, edit.
-- Ada dua role: admin dan user.
-- Admin bisa tambah/edit anggota. User hanya bisa melihat.
-- Dashboard sekarang hanya untuk admin. User yang membuka /dashboard
-  dialihkan ke /osis.
-- Menu Dashboard disembunyikan dari navigasi user.
-- Logo Laravel di navigasi dashboard sudah diganti icon home dari Iconoir.
+- Halaman daftar OSIS bersifat baca saja untuk tamu.
+- Admin bisa tambah/edit/hapus anggota. Tamu hanya bisa melihat.
+- Dashboard hanya untuk admin. Tamu yang membuka /dashboard diarahkan ke login.
+- Menu Dashboard hanya muncul untuk admin.
+- Header memakai merek OSKA PASIM dan ikon profil di kanan untuk admin.
+- Tamu tidak melihat tombol login di header. Path login admin bersifat
+  khusus dan hanya dicatat di Daftar-Isi-Proyek-Sistem-OSIS.txt.
+- Kolom Aksi di tabel OSIS rata tengah.
+- Tombol "Kembali ke daftar" di atas form sudah dihapus; Batal tetap di bawah.
+- Logo di navbar sudah memakai logo OSKA PASIM, bukan logo Laravel.
 - Halaman OSIS memakai layout dan CSS sendiri, terpisah dari Breeze.
-- Test terakhir: 32 test lulus, 83 assertion.
+- Test terakhir: 37 test lulus, 107 assertion.
 
 Akun yang ada:
 
   Admin : test@example.com / password
-  User  : 123@test.com /12345678
+  User  : tidak ada. Akun 123@test.com sudah dihapus.
 
 
 ======================================================================
@@ -45,23 +118,25 @@ Akun yang ada:
 Project ini punya dua gaya halaman yang berbeda. Ini yang bikin bingung
 kalau mau edit. Jangan campur keduanya.
 
-A. Halaman Breeze (login, register, dashboard admin, profile)
+A. Halaman Breeze (login admin, dashboard admin, profile)
    - Teknologi : Blade + Tailwind + Alpine
    - CSS        : class Tailwind di file Blade + resources/css/app.css
    - Perlu build: ya, jalankan npm run build
 
-B. Halaman OSIS (/osis, create, edit)
+B. Halaman OSIS (/osis publik; create/edit khusus admin)
    - Teknologi : Blade + CSS biasa
-   - CSS        : public/css/osis.css
+   - CSS        : public/css/osis.css dan public/css/navbar.css
    - Perlu build: tidak, langsung terpakai
 
-C. Landing page /
-   - Teknologi : welcome page bawaan Laravel
-   - CSS        : campuran inline dan @vite
-   - Perlu build: tidak untuk edit teks
+C. Halaman /
+   - / diarahkan ke /osis.
+   - welcome.blade.php tidak dipakai lagi.
+   - Perlu build: tidak.
 
 Jadi:
 
+- Tamu tidak perlu login untuk melihat /osis.
+- Halaman create/edit hanya bisa dibuka admin.
 - Mau ubah halaman OSIS: edit public/css/osis.css.
 - Mau ubah dashboard atau login: edit class Tailwind di file Blade,
   lalu jalankan npm run build.
@@ -74,8 +149,8 @@ Jadi:
 resources/views/
   layouts/
     app.blade.php            <- kerangka Breeze: head, font, Vite, nav, $slot
-    guest.blade.php          <- kerangka login/register: logo, font, $slot
-    navigation.blade.php     <- navbar Breeze: menu admin/user, dropdown, mobile
+    guest.blade.php          <- kerangka login admin: logo, font, $slot
+    navigation.blade.php     <- navbar dashboard Breeze (halaman OSIS punya header sendiri di osis.blade.php)
     osis.blade.php           <- kerangka halaman OSIS: nav, CSS, JS, @yield
 
   components/
@@ -84,26 +159,30 @@ resources/views/
     ...                          <- komponen Breeze (nav-link, dropdown, input, dll)
 
   auth/
-    login.blade.php          <- form login
-    register.blade.php       <- form register
+    login.blade.php          <- form login admin
     forgot-password.blade.php
     reset-password.blade.php
     confirm-password.blade.php
     verify-email.blade.php
 
   osis/
-    index.blade.php          <- daftar anggota, tampilan admin vs user
-    create.blade.php         <- form tambah anggota
-    edit.blade.php           <- form edit anggota
+    index.blade.php          <- daftar publik, tampilan admin vs tamu
+    create.blade.php         <- form tambah anggota (admin)
+    edit.blade.php           <- form edit anggota (admin)
 
   profile/                   <- halaman profil Breeze
   dashboard.blade.php        <- dashboard khusus admin
-  welcome.blade.php          <- landing page bawaan Laravel
+  welcome.blade.php          <- tidak dipakai; / diarahkan ke /osis
   errors/403.blade.php       <- halaman "Akses ditolak"
 
+  Catatan: view auth/register.blade.php dan RegisteredUserController sudah
+  dihapus karena registrasi publik dinonaktifkan.
+
 public/
-  css/osis.css               <- semua styling halaman OSIS
+  css/osis.css               <- styling konten halaman OSIS
+  css/navbar.css             <- styling header/navbar (dipakai OSIS + Breeze)
   js/osis.js                 <- cegah form terkirim dua kali
+  img/logo-osis-dikanan.png  <- logo OSKA PASIM
   build/                     <- hasil build, jangan diedit manual
 
 resources/
@@ -114,6 +193,10 @@ tailwind.config.js           <- font, path scan, plugin Tailwind
 vite.config.js               <- daftar file yang di-build
 postcss.config.js            <- konfigurasi PostCSS untuk Tailwind
 package.json                 <- script build/dev
+
+README.md                    <- ringkasan project, instalasi, hak akses
+docs/PANDUAN-EDIT-TAMPILAN.txt <- salinan panduan ini di dalam repo
+.env.example                 <- contoh konfigurasi MySQL db_osis
 
 
 ======================================================================
@@ -134,9 +217,11 @@ package.json                 <- script build/dev
 
 - Navbar halaman OSIS
   -> resources/views/layouts/osis.blade.php
+  -> public/css/navbar.css
 
 - Navbar dashboard Breeze
   -> resources/views/layouts/navigation.blade.php
+  -> public/css/navbar.css
 
 - Head, font, icon, Vite dashboard
   -> resources/views/layouts/app.blade.php
@@ -144,9 +229,14 @@ package.json                 <- script build/dev
 - Head, font, logo login
   -> resources/views/layouts/guest.blade.php
 
-- Form login/register
+- Form login admin
   -> resources/views/auth/login.blade.php
-  -> resources/views/auth/register.blade.php
+  -> app/Http/Controllers/Auth/AuthenticatedSessionController.php
+
+- Aturan akses publik dan registrasi ditutup
+  -> routes/web.php
+  -> routes/auth.php
+  -> app/Http/Controllers/Auth/AuthenticatedSessionController.php
 
 - Dashboard admin
   -> resources/views/dashboard.blade.php
@@ -160,8 +250,13 @@ package.json                 <- script build/dev
 - Font Tailwind
   -> tailwind.config.js + link font di layout
 
-- Icon home/Iconoir
+- Ikon profil dan logo navbar
   -> resources/views/layouts/navigation.blade.php
+  -> resources/views/layouts/osis.blade.php
+  -> public/css/navbar.css
+
+- Iconoir (CDN)
+  -> resources/views/layouts/app.blade.php
 
 - Izin/role/akses
   -> routes/web.php
@@ -170,6 +265,14 @@ package.json                 <- script build/dev
 
 - Validasi CRUD
   -> app/Http/Controllers/OsisController.php
+
+- Tombol dan konfirmasi hapus
+  -> resources/views/osis/index.blade.php
+  -> resources/views/components/dashboard-summary.blade.php
+  -> app/Http/Controllers/OsisController.php (method destroy)
+
+- Aturan siapa yang boleh hapus
+  -> routes/web.php (grup middleware auth + admin)
 
 - Struktur database
   -> migration baru, jangan edit migration lama
@@ -181,7 +284,7 @@ package.json                 <- script build/dev
 
 Ada tiga tempat font. Jangan cuma ganti satu.
 
-A. Halaman Breeze: login, register, dashboard, profile
+A. Halaman Breeze: login admin, dashboard, profile
    Sekarang memakai font Figtree dari Bunny Fonts.
 
    1. Buka resources/views/layouts/app.blade.php, cari:
@@ -245,6 +348,12 @@ A. Halaman OSIS
    --focus: #9a6a1e;
    --radius: 4px;
 
+   Variabel lain: --paper, --surface, --line, --line-strong, --table-head,
+   --row-hover, --input-bg, --success-*, --danger-*, --font-body.
+
+   Navbar punya variabel sendiri di public/css/navbar.css:
+   --nav-ink, --nav-slate, --nav-teal, --nav-line, --nav-brand-*.
+
    Kalau mau ganti tema, cukup ubah variabel ini. Contoh:
 
    --accent: #1d4ed8;
@@ -257,6 +366,7 @@ A. Halaman OSIS
    - .btn, .btn--primary, .btn--ghost: tombol.
    - .alert--success, .alert--error: pesan.
    - .table-wrap, .data-table: tabel.
+   - .data-table .actions: kolom Aksi rata tengah.
    - .form-card, .field, .field-row: form.
    - Bagian bawah ada media query untuk layar kecil.
 
@@ -283,6 +393,7 @@ B. Halaman Breeze/Tailwind
 A. Aman untuk belajar
 
    - public/css/osis.css
+   - public/css/navbar.css
    - Teks di resources/views/osis/*.blade.php
    - Class Tailwind di dashboard.blade.php
    - Teks dan class di layouts/navigation.blade.php
@@ -333,19 +444,24 @@ A. Blade
    - Jangan hapus @csrf di form. Form akan ditolak.
    - Di osis/edit.blade.php, jangan hapus @method('PUT'). Update tidak
      akan jalan.
+   - Di form hapus, jangan hapus @csrf dan @method('DELETE'). Hapus akan
+     ditolak atau salah method.
    - Jangan ubah nama field id_osis, nama, kelas, jurusan, sekbid tanpa
      mengubah validasi di controller.
-   - Jangan hapus x-data, @click, atau x-show di navigation.blade.php.
-     Dropdown dan menu mobile akan mati.
+   - Jangan hapus form logout dan @csrf di navigation.blade.php.
+     Tombol Keluar tidak akan berfungsi.
 
 B. Izin dan role
 
-   - Jangan hapus @if (Auth::user()->isAdmin()) di navigasi. User akan
+   - Jangan hapus @if (Auth::user()?->isAdmin()) di navigasi. Tamu akan
      melihat link Dashboard lagi.
-   - Jangan hapus @if ($isAdmin) di osis/index.blade.php. User akan
-     melihat tombol tambah/edit, walaupun backend tetap menolak.
+   - Jangan hapus @if ($isAdmin) di osis/index.blade.php. Tamu akan
+     melihat tombol tambah/edit/hapus, walaupun backend tetap menolak.
    - Jangan hapus middleware admin dari route create/store/edit/update.
+     Route delete (osis.destroy) juga wajib tetap di grup admin.
      Controller tidak mengecek role sendiri.
+   - Jangan hapus pengecekan isAdmin() di AuthenticatedSessionController.
+     Tanpa itu, akun non-admin bisa ikut login.
    - Jangan ubah nilai role admin di database menjadi teks lain.
      isAdmin() bergantung pada string itu.
 
@@ -357,6 +473,8 @@ C. Database
    - Jangan jalankan php artisan db:seed berkali-kali. Bisa bentrok email
      test@example.com.
    - Kalau mau menambah kolom, buat migration baru lalu php artisan migrate.
+   - Data yang dihapus lewat tombol Hapus tidak bisa dikembalikan. Tidak ada
+     soft delete atau tempat sampah. Backup database sebelum uji coba.
 
 D. Build dan asset
 
@@ -384,6 +502,8 @@ F. Tampilan
    - Halaman OSIS belum punya mode gelap.
    - Tabel OSIS memang bisa discroll ke samping di HP. Itu disengaja lewat
      .table-wrap.
+   - Konfirmasi hapus memakai window.confirm bawaan browser, bukan modal
+     custom. Teksnya ada di onsubmit dua view (index OSIS dan dashboard).
    - Iconoir dimuat lewat CDN @main, belum dikunci versinya. Kalau CDN
      berubah, icon bisa hilang. Untuk produksi, sebaiknya pakai versi
      tertentu atau simpan file CSS-nya sendiri.
@@ -394,7 +514,7 @@ G. File yang masih dipakai
      Jangan hapus.
    - components/dashboard-summary.blade.php dipakai dashboard admin.
      Jangan hapus sembarangan.
-   - layouts/guest.blade.php hanya untuk login/register. Mengubah
+   - layouts/guest.blade.php hanya untuk login admin. Mengubah
      layouts/app.blade.php tidak akan mengubah halaman login.
 
 
@@ -402,8 +522,14 @@ G. File yang masih dipakai
 9. ALUR KERJA AMAN UNTUK BELAJAR
 ======================================================================
 
-1. Backup dulu file yang mau diubah. Project ini belum pakai Git, jadi
-   paling aman copy jadi .bak, atau mulai git init.
+1. Backup dulu file yang mau diubah. Project ini sudah memakai Git dan
+   GitHub (branch main). Cara aman:
+
+   git status
+   git add .
+   git commit -m "pesan perubahan"
+
+   Kalau ragu, copy file yang mau diubah menjadi .bak dulu.
 
 2. Ubah satu bagian kecil saja.
 
@@ -424,12 +550,14 @@ G. File yang masih dipakai
 
 7. Cek halaman ini satu per satu:
 
-   - /login
-   - /dashboard sebagai admin
-   - /dashboard sebagai user, harus pindah ke /osis
-   - /osis sebagai admin dan user
-   - /osis/create sebagai admin (200) dan user (403)
-   - /profile
+   - / sebagai tamu, harus redirect ke /osis
+   - /osis sebagai tamu, status 200, tanpa tombol tambah/edit/hapus
+   - /dashboard sebagai tamu, harus redirect ke halaman login admin
+   - halaman login admin dengan akun admin, harus berhasil
+   - halaman login admin dengan akun non-admin, harus ditolak
+   - /dashboard sebagai admin, status 200
+   - /osis/create sebagai tamu redirect login, sebagai admin 200
+   - /profile sebagai admin
    - /osis/{id}/edit sebagai admin
 
 8. Kalau ada error, buka:
@@ -441,14 +569,20 @@ G. File yang masih dipakai
 10. SISA HAL KECIL YANG BELUM SERAGAM
 ======================================================================
 
-- welcome.blade.php masih menampilkan link Dashboard untuk semua user yang
-  sudah login. Kalau user biasa klik, dia akan dialihkan ke /osis. Kalau
-  mau benar-benar bersih, link itu perlu dibuat khusus admin.
+- welcome.blade.php tidak dipakai lagi karena / diarahkan ke /osis.
+  File ini bisa dihapus nanti kalau tidak diperlukan.
 
-- Logo di halaman login masih logo Laravel. Yang diganti icon home baru
-  navbar dashboard.
+- Login admin memakai path khusus. Jangan menambahkan tombol atau link
+  ke path itu di halaman publik. Cara akses ada di
+  Daftar-Isi-Proyek-Sistem-OSIS.txt bagian 12.
+
+- Logo di halaman login masih logo Laravel. Navbar aplikasi sudah memakai
+  logo OSKA PASIM.
 
 - Label login masih bahasa Inggris: Email, Password, Log in.
+
+- Konfirmasi hapus masih memakai window.confirm bawaan browser, belum modal
+  yang seragam dengan desain OSIS.
 
 - Halaman OSIS belum punya mode gelap.
 
@@ -498,15 +632,16 @@ Langkah:
    cd "C:\xampp\htdocs\pweb\laptop 6"
    php artisan serve
 
-3. Buka http://127.0.0.1:8000/login
+3. Buka path login admin. Path lengkapnya ada di
+   Daftar-Isi-Proyek-Sistem-OSIS.txt bagian 12.
 
 4. Login dengan akun admin di atas.
 
 5. Admin akan masuk ke http://127.0.0.1:8000/dashboard dan melihat menu
    Dashboard.
 
-Kalau login sebagai user biasa, akan diarahkan ke
-http://127.0.0.1:8000/osis, dan menu Dashboard tidak muncul.
+Tidak ada login user biasa. Tamu langsung bisa membuka /osis tanpa login.
+Akun non-admin akan ditolak saat mencoba login.
 
 
 ======================================================================
@@ -528,28 +663,242 @@ Lalu:
 
 Atau promosikan akun yang sudah ada:
 
-  \App\Models\User::where('email', '123@test.com')->update(['role' => 'admin']);
+  \App\Models\User::where('email', 'contoh@email.com')->update(['role' => 'admin']);
 
 
 ======================================================================
 14. HASIL PENGECEKAN TERAKHIR
 ======================================================================
 
-- php artisan test: 32 test lulus, 83 assertion.
+- php artisan test: 37 test lulus, 107 assertion.
+- Tamu membuka /: dialihkan ke /osis.
+- Tamu membuka /osis: 200, daftar tampil, tanpa tombol tambah/edit/hapus.
+- Tamu membuka /dashboard, /osis/create, atau mengirim DELETE: dialihkan
+  ke halaman login admin.
+- Tamu membuka /register: 404.
 - Admin login lalu buka /dashboard: 200, dashboard tampil.
-- User login: diarahkan ke /dashboard lalu otomatis ke /osis, status 200.
-- User membuka /dashboard langsung: dialihkan ke /osis.
-- User membuka /osis/create: 403.
-- Data OSIS tetap 1 baris, tidak ada yang berubah.
+- Akun non-admin mencoba login: ditolak, tetap tamu, muncul pesan error.
+- Admin membuka /osis/create dan /osis/{id}/edit: 200.
+- Admin menghapus anggota dari /osis dan dashboard: berhasil, muncul pesan
+  sukses, data terhapus.
+- Database db_osis saat pengecekan: 1 admin, 2 anggota OSIS, 5 migration.
+  Test memakai SQLite in-memory, jadi tidak mengubah data MySQL.
+
+
+======================================================================
+15. DETAIL FITUR HAPUS ANGGOTA
+======================================================================
+
+A. Alur
+
+   1. Admin membuka /osis atau /dashboard.
+   2. Klik Hapus pada baris anggota.
+   3. Browser menampilkan konfirmasi.
+   4. Form mengirim POST dengan @csrf dan @method('DELETE') ke /osis/{id}.
+   5. Route osis.destroy memanggil OsisController@destroy.
+   6. Controller mencari data, menghapus, lalu redirect kembali dengan
+      session('success').
+   7. Pesan sukses tampil di halaman asal.
+
+B. Kenapa aman
+
+   - Route berada di grup middleware ['auth', 'admin'].
+   - Tamu diarahkan ke halaman login sebelum controller dijalankan.
+   - Akun non-admin tidak bisa login, jadi tidak ada sesi user biasa.
+   - Tombol hapus hanya dirender untuk admin.
+   - Controller memakai findOrFail, jadi ID yang tidak ada menghasilkan 404.
+   - Konfirmasi mencegah klik tidak sengaja.
+
+C. Kalau mau mengubah teks konfirmasi
+
+   Edit onsubmit di:
+   - resources/views/osis/index.blade.php
+   - resources/views/components/dashboard-summary.blade.php
+
+   Contoh:
+
+   onsubmit="return confirm('Yakin ingin menghapus data ini?')"
+
+D. Kalau mau mengubah pesan sukses
+
+   Edit string di OsisController@destroy:
+
+   'Data OSIS berhasil dihapus!'
+
+
+======================================================================
+16. REPOSITORY DAN DOKUMENTASI
+======================================================================
+
+Repository : https://github.com/geno-tect/osis.git
+Branch     : main
+Commit     : d6041ba (19 November 2026)
+Working tree: ada perubahan belum di-commit (akses publik, login admin
+             dengan path khusus, registrasi dihapus, README, test).
+
+File dokumentasi di repo:
+  README.md (sudah diperbarui)
+  docs/PANDUAN-EDIT-TAMPILAN.txt (masih versi lama)
+
+File dokumentasi di komputer:
+  C:\Users\user\Documents\Panduan-Edit-Tampilan-Sistem-OSIS.txt
+  C:\Users\user\Documents\Daftar-Isi-Proyek-Sistem-OSIS.txt
+  C:\Users\user\Documents\Perancangan-Sistem-OSIS.drawio
+
+Ketiga file di folder Documents hanya untuk catatan pribadi dan tidak
+di-commit atau di-push ke GitHub. File .drawio bisa dibuka dengan draw.io.
+
+Perintah Git yang sering dipakai:
+
+  git status
+  git diff
+  git add .
+  git commit -m "pesan perubahan"
+  git push origin main
+
+Jangan commit .env, vendor, node_modules, atau public/build.
 
 
 ======================================================================
 CATATAN AKHIR
 ======================================================================
 
-File ini hanya dokumentasi. Tidak ada file project yang diubah saat file
-.txt ini dibuat.
+File ini hanya dokumentasi. Perubahan kode untuk akses publik dan login
+admin dicatat di bagian 0 dan 15. File .drawio adalah diagram terpisah,
+bukan bagian dari aplikasi.
+
+Daftar lengkap tabel, kolom, route, controller, view, CSS, dan tools ada di
+Daftar-Isi-Proyek-Sistem-OSIS.txt di folder Documents yang sama.
 
 Kalau ingin mengedit tampilan, mulai dari bagian yang paling aman:
 public/css/osis.css. Setelah paham, baru naik ke Blade, Tailwind, font,
 lalu terakhir route, controller, middleware, dan migration.
+
+
+======================================================================
+17. CARA KERJA SISTEM ASPIRASI
+======================================================================
+
+Sistem Kotak Aspirasi memungkinkan siswa atau warga sekolah menyampaikan
+aspirasi, saran, keluhan, atau ide secara langsung melalui website.
+
+A. Alur Pengiriman oleh Pengguna (Siswa / Publik):
+   1. Pengguna membuka menu "Aspirasi" di navbar atau membuka URL /aspirasi.
+   2. Di halaman tersebut terdapat formulir aspirasi dengan 3 kolom:
+      - Kategori (Wajib): Dipilih lewat dropdown (Fasilitas, Kegiatan,
+        Organisasi, Akademik, atau Lainnya).
+      - Isi Aspirasi (Wajib): Minimal 20 karakter dan maksimal 2000
+        karakter agar pesan yang dikirim bermakna dan jelas.
+      - Nama Pengirim (Opsional): Kolom ini boleh dikosongkan jika siswa
+        ingin mengirim secara ANONIM (rahasia). Jika diisi, nama pengirim
+        akan tercatat.
+   3. Pengguna menekan tombol "Kirim aspirasi".
+   4. Browser mengirim data secara aman (dilindungi token @csrf).
+   5. Jika berhasil, sistem menampilkan notifikasi sukses hijau bertuliskan:
+      "Aspirasi terkirim. Terima kasih."
+
+B. Keamanan & Pembatasan (Anti-Spam):
+   - Sistem dilindungi pembatas laju (Rate Limiting) throttle:5,1.
+   - Artinya: satu alamat IP hanya boleh mengirim maksimal 5 kali per menit.
+     Hal ini mencegah spam atau bot membanjiri database.
+
+C. Penyimpanan di Database:
+   - Data aspirasi disimpan di database pada tabel aspirations.
+   - Kolom yang disimpan:
+     * id         : ID unik data aspirasi.
+     * kategori   : Kategori yang dipilih siswa.
+     * pesan      : Isi teks pesan aspirasi.
+     * nama       : Nama pengirim (berisi NULL jika dikirim anonim).
+     * created_at : Waktu dan tanggal aspirasi dikirim.
+     * updated_at : Waktu pembaruan.
+
+D. Cara Admin Melihat Pesan Aspirasi:
+   - Lewat phpMyAdmin:
+     1. Buka http://localhost/phpmyadmin
+     2. Pilih database db_osis di sebelah kiri.
+     3. Klik tabel aspirations.
+     4. Semua pesan aspirasi yang masuk beserta waktu kirimnya akan
+        terlihat di tabel tersebut.
+   - Lewat Terminal / Tinker:
+     Jalankan:
+       php artisan tinker
+     Lalu ketik:
+       App\Models\Aspiration::latest()->get();
+
+E. File yang Mengatur Fitur Aspirasi:
+   - Route      : routes/web.php (GET & POST /aspirasi)
+   - Controller : app/Http/Controllers/AspirationController.php
+   - Model      : app/Models/Aspiration.php
+   - Database   : database/migrations/2026_11_21_000001_create_aspirations_table.php
+   - Tampilan   : resources/views/aspirasi/index.blade.php
+   - Teks/Opsi  : config/beranda.php (pada array 'aspiration')
+   - CSS        : public/css/beranda.css
+
+
+======================================================================
+18. PANDUAN PENGURUS & NAMA ANGGOTA OSIS (AGAR TIDAK BINGUNG)
+======================================================================
+
+Sebelumnya nama pengurus dan anggota terasa membingungkan karena ada dua
+bagian berbeda yang belum terhubung. Sekarang sistem sudah dirapikan:
+
+Ada DUA KELOMPOK nama di dalam website ini:
+
+KELOMPOK 1: BADAN PENGURUS HARIAN (BPH)
+- Berisi 4 pimpinan utama:
+  1. Ketua Umum
+  2. Wakil Ketua
+  3. Sekretaris
+  4. Bendahara
+- Ditampilkan dalam bentuk kartu pimpinan di halaman Beranda bagian
+  "Struktur Pengurus".
+- CARA EDIT NYA (Menjawab masalah2.img):
+  Buka file: config/beranda.php
+  Cari baris 'bph' => [ ... ] (sekitar baris 80-104).
+  Kamu cukup mengganti tulisan di dalam tanda kutip:
+  - '[Nama Ketua]'     -> Ganti dengan nama asli Ketua Umum.
+  - '[Nama Wakil]'     -> Ganti dengan nama asli Wakil Ketua.
+  - '[Nama Sekretaris]'-> Ganti dengan nama asli Sekretaris.
+  - '[Nama Bendahara]' -> Ganti dengan nama asli Bendahara.
+  Huruf inisial avatar (K, W, S, B) juga bisa disesuaikan dengan huruf
+  depan nama masing-masing.
+
+KELOMPOK 2: DATA ANGGOTA OSIS (DARI DATABASE)
+- Berisi seluruh anggota OSIS per seksi bidang, kelas, dan jurusan.
+- Disimpan di database MySQL tabel osis.
+- CARA EDIT NYA:
+  Login sebagai admin di panel admin (/dashboard) atau halaman /osis,
+  lalu gunakan tombol Tambah Anggota, Edit, atau Hapus.
+- PENAMPILAN DI BERANDA:
+  Sekarang seluruh data anggota dari database ini otomatis tampil di
+  Beranda tepat di bawah kartu BPH ("Daftar Anggota OSIS").
+  Pengunjung beranda bisa langsung melihat siapa saja anggota OSIS yang
+  aktif dan mengklik "Lihat tabel lengkap" untuk melihat tabel detail di /osis.
+
+
+======================================================================
+19. PEMBARUAN 21 NOVEMBER 2026 (SESUAI PERMINTAAN USER)
+======================================================================
+
+1. Anggota OSIS di Beranda:
+   - Controller beranda (HomeController) sekarang mengambil data anggota
+     dari model Osis (Osis::orderBy('nama')->get()).
+   - Beranda sekarang menampilkan kartu "Daftar Anggota OSIS" dari database.
+   - Menu "Anggota OSIS" ditambahkan di navbar header dan footer.
+
+2. Penghapusan Bagian Agenda Terdekat (Screenshot hapus-ini.img):
+   - Bagian "Agenda terdekat" / "Kegiatan yang perlu kamu tahu" beserta 3
+     kartu event contoh sudah dihapus dari beranda.blade.php.
+   - Tombol "Kalender event" di hero banner dihapus.
+
+3. Panduan Edit BPH (Screenshot masalah2.img):
+   - Dicatat lengkap pada Bagian 18 di atas (diedit via config/beranda.php).
+
+4. Penghapusan Bagian Program Kerja (Screenshot hapus3.img):
+   - Bagian "Program kerja per seksi bidang" (tab 01 sampai 10) sudah
+     dihapus dari beranda.blade.php.
+   - Tombol "Lihat program kerja" di hero diganti menjadi "Lihat Anggota OSIS".
+   - Tautan menu navigasi "Program Kerja" diganti menjadi "Anggota OSIS".
+
+5. Status Test:
+   - php artisan test: 46 test lulus, 139 assertion (100% PASS).

@@ -1,14 +1,24 @@
 <?php
 
+use App\Http\Controllers\AspirationController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NewsController;
 use App\Http\Controllers\OsisController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Osis;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index'])->name('beranda');
+
+Route::get('/aspirasi', [AspirationController::class, 'index'])->name('aspirasi.index');
+Route::post('/aspirasi', [AspirationController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('aspirasi.store');
+
+Route::get('/berita/{slug}', [NewsController::class, 'show'])->name('berita.show');
+
+Route::get('/osis', [OsisController::class, 'index'])->name('osis.index');
 
 Route::get('/dashboard', function (Request $request) {
     if (! $request->user()->isAdmin()) {
@@ -26,8 +36,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    Route::get('/osis', [OsisController::class, 'index'])->name('osis.index');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {

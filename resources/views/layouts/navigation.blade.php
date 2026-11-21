@@ -1,7 +1,7 @@
 <header class="site-header">
     <div class="header-inner">
         <div class="header-start">
-            <a class="brand" href="{{ Auth::user()->isAdmin() ? route('dashboard') : route('osis.index') }}">
+            <a class="brand" href="{{ Auth::user()?->isAdmin() ? route('dashboard') : route('osis.index') }}">
                 <img class="brand-logo" src="{{ asset('img/logo-osis-dikanan.png') }}" alt="" width="50" height="50">
                 <span class="brand-mark">OSKA PASIM</span>
                 <span class="brand-sub">Sistem data anggota</span>
@@ -9,10 +9,12 @@
         </div>
 
         <nav class="site-nav" aria-label="Navigasi utama">
-            <a href="{{ route('dashboard') }}"
-               @class(['is-active' => request()->routeIs('dashboard')])>
-                Dashboard
-            </a>
+            @if (Auth::user()?->isAdmin())
+                <a href="{{ route('dashboard') }}"
+                   @class(['is-active' => request()->routeIs('dashboard')])>
+                    Dashboard
+                </a>
+            @endif
             <a href="{{ route('osis.index') }}"
                @class(['is-active' => request()->routeIs('osis.*')])>
                 Anggota OSIS

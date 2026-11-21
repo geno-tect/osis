@@ -22,6 +22,43 @@ class OsisRoleTest extends TestCase
         ]);
     }
 
+    public function test_guest_can_view_member_list(): void
+    {
+        $this->anggota();
+
+        $this->get('/osis')
+            ->assertOk()
+            ->assertSee('Anggota Uji')
+            ->assertDontSee('Tambah anggota')
+            ->assertDontSee('Edit')
+            ->assertDontSee('Hapus')
+            ->assertDontSee('Login Admin')
+            ->assertDontSee('Keluar');
+    }
+
+    public function test_guest_is_redirected_from_management_routes(): void
+    {
+        $this->get('/osis/create')->assertRedirect(route('login', absolute: false));
+
+        $this->post('/osis', [
+            'id_osis' => 'OSIS-2',
+            'nama' => 'Anggota Baru',
+            'kelas' => 'X',
+            'jurusan' => 'RPL',
+            'sekbid' => 'Sekbid 2',
+        ])->assertRedirect(route('login', absolute: false));
+
+        $this->put('/osis/1', [
+            'id_osis' => 'OSIS-1',
+            'nama' => 'Diubah',
+            'kelas' => 'XII',
+            'jurusan' => 'RPL',
+            'sekbid' => 'Sekbid 1',
+        ])->assertRedirect(route('login', absolute: false));
+
+        $this->delete('/osis/1')->assertRedirect(route('login', absolute: false));
+    }
+
     public function test_admin_dashboard_shows_management_controls(): void
     {
         $admin = User::factory()->admin()->create();

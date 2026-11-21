@@ -3,7 +3,7 @@
 @section('title', 'Daftar Anggota OSIS')
 
 @section('content')
-    @php $isAdmin = auth()->user()->isAdmin(); @endphp
+    @php $isAdmin = auth()->user()?->isAdmin() ?? false; @endphp
 
     <div class="page-head">
         <div class="page-head__text">
@@ -11,7 +11,7 @@
             @if ($isAdmin)
                 <p class="lede">Data pengurus OSIS yang tercatat. Tambah atau ubah data lewat tombol di halaman ini.</p>
             @else
-                <p class="lede">Data pengurus OSIS yang tercatat. Akun kamu hanya bisa melihat data.</p>
+                <p class="lede">Data pengurus OSIS yang tercatat. Daftar ini bisa dilihat tanpa login.</p>
             @endif
         </div>
 
