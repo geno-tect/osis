@@ -1,8 +1,8 @@
 # Beranda Publik OSKA PASIM
 
-Dokumen ini menjelaskan halaman publik baru di project Laravel OSIS SMK Pasim
-Plus Kota Sukabumi. Halaman `/osis` yang lama tetap dipakai sebagai daftar
-anggota.
+Dokumen ini menjelaskan halaman publik di project Laravel OSIS SMK Pasim Plus
+Kota Sukabumi. Halaman daftar anggota `/osis` yang lama sudah dihapus; seluruh
+data anggota tampil di beranda.
 
 Status: pratinjau desain. Nama kabinet, pengurus, agenda, berita, dan tautan
 sosial masih berupa contoh yang ditandai di halaman. Jangan menganggap isinya
@@ -16,10 +16,12 @@ sebagai data resmi sebelum diganti.
 | `/aspirasi` | GET | Formulir kotak aspirasi (route `aspirasi.index`) |
 | `/aspirasi` | POST | Simpan aspirasi, dibatasi `throttle:5,1` (route `aspirasi.store`) |
 | `/berita/{slug}` | GET | Detail artikel contoh (route `berita.show`) |
-| `/osis` | GET | Daftar anggota lama, tidak berubah |
+| `/osis` | GET | Halaman lama, dialihkan ke `/#anggota` |
 
-`/` tidak lagi mengarah ke `/osis`. Tautan merek di layout lama juga sudah
-diarahkan ke beranda, dan menu "Beranda" ditambahkan di layout `/osis`.
+Seluruh data anggota tampil di bagian `#anggota` pada beranda. Tidak ada lagi
+halaman daftar anggota terpisah. Tautan merek di layout lama diarahkan ke
+beranda. Menu "Beranda" ada di navigasi panel Laravel
+(`layouts/navigation.blade.php`).
 
 ## Sumber isi
 
@@ -181,10 +183,10 @@ Test PHPUnit:
 php artisan test
 ```
 
-Status terakhir: 46 test lulus, 139 assertion. Cakupan baru mencakup route
-beranda, section yang dituju navigasi, artikel yang ada dan tidak ada,
-validasi form, penyimpanan aspirasi dengan atau tanpa nama, serta penolakan
-kategori yang tidak dikenal.
+Status terakhir: 49 test lulus, 155 assertion. Cakupan baru mencakup route
+beranda, data anggota di beranda, pengalihan halaman `/osis` lama, section yang
+dituju navigasi, artikel yang ada dan tidak ada, validasi form, penyimpanan
+aspirasi dengan atau tanpa nama, serta penolakan kategori yang tidak dikenal.
 
 Pemeriksaan browser lokal juga dilakukan untuk:
 

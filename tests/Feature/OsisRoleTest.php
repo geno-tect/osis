@@ -22,18 +22,25 @@ class OsisRoleTest extends TestCase
         ]);
     }
 
-    public function test_guest_can_view_member_list(): void
+    public function test_guest_sees_members_on_landing_page(): void
     {
         $this->anggota();
 
-        $this->get('/osis')
+        $this->get('/')
             ->assertOk()
+            ->assertSee('Daftar Anggota OSIS')
             ->assertSee('Anggota Uji')
+            ->assertSee('OSIS-1')
             ->assertDontSee('Tambah anggota')
             ->assertDontSee('Edit')
             ->assertDontSee('Hapus')
             ->assertDontSee('Login Admin')
             ->assertDontSee('Keluar');
+    }
+
+    public function test_old_member_list_redirects_to_landing_page(): void
+    {
+        $this->get('/osis')->assertRedirect('/#anggota');
     }
 
     public function test_guest_is_redirected_from_management_routes(): void
@@ -68,7 +75,9 @@ class OsisRoleTest extends TestCase
             ->get('/dashboard')
             ->assertOk()
             ->assertSee('Dashboard admin')
+            ->assertSee('Anggota Uji')
             ->assertSee('Tambah anggota')
+            ->assertSee('Edit')
             ->assertSee('Hapus');
     }
 
@@ -78,29 +87,40 @@ class OsisRoleTest extends TestCase
 
         $this->actingAs($user)
             ->get('/dashboard')
-            ->assertRedirect('/osis');
+            ->assertRedirect('/');
     }
 
-    public function test_admin_sees_member_management_links(): void
+    public function test_admin_dashboard_lists_all_members(): void
     {
         $admin = User::factory()->admin()->create();
-        $this->anggota();
+
+        for ($i = 1; $i <= 6; $i++) {
+            Osis::create([
+                'id_osis' => 'OSIS-'.$i,
+                'nama' => 'Anggota '.$i,
+                'kelas' => 'XI',
+                'jurusan' => 'RPL',
+                'sekbid' => 'Sekbid 1',
+            ]);
+        }
 
         $this->actingAs($admin)
-            ->get('/osis')
+            ->get('/dashboard')
             ->assertOk()
+            ->assertSee('Anggota 1')
+            ->assertSee('Anggota 6')
             ->assertSee('Tambah anggota')
             ->assertSee('Edit')
             ->assertSee('Hapus');
     }
 
-    public function test_user_sees_read_only_member_list(): void
+    public function test_non_admin_sees_read_only_members_on_landing_page(): void
     {
         $user = User::factory()->create();
         $this->anggota();
 
         $this->actingAs($user)
-            ->get('/osis')
+            ->get('/')
             ->assertOk()
             ->assertSee('Anggota Uji')
             ->assertDontSee('Tambah anggota')
@@ -153,6 +173,49 @@ class OsisRoleTest extends TestCase
         $this->assertDatabaseHas('osis', [
             'id' => $anggota->id,
             'nama' => 'Anggota Uji',
+        ]);
+    }
+
+    public function test_admin_can_store_member(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        $this->actingAs($admin)
+            ->post('/osis', [
+                'id_osis' => 'OSIS-2',
+                'nama' => 'Anggota Baru',
+                'kelas' => 'X',
+                'jurusan' => 'RPL',
+                'sekbid' => 'Sekbid 2',
+            ])
+            ->assertRedirect('/dashboard')
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseHas('osis', [
+            'id_osis' => 'OSIS-2',
+            'nama' => 'Anggota Baru',
+        ]);
+    }
+
+    public function test_admin_can_update_member(): void
+    {
+        $admin = User::factory()->admin()->create();
+        $anggota = $this->anggota();
+
+        $this->actingAs($admin)
+            ->put("/osis/{$anggota->id}", [
+                'id_osis' => 'OSIS-1',
+                'nama' => 'Anggota Diubah',
+                'kelas' => 'XII',
+                'jurusan' => 'RPL',
+                'sekbid' => 'Sekbid 1',
+            ])
+            ->assertRedirect('/dashboard')
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseHas('osis', [
+            'id' => $anggota->id,
+            'nama' => 'Anggota Diubah',
         ]);
     }
 

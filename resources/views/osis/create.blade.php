@@ -115,7 +115,7 @@
 
         <div class="form-actions">
             <button class="btn btn--primary" type="submit">Simpan anggota</button>
-            <a class="btn btn--ghost" href="{{ route('osis.index') }}">Batal</a>
+            <a class="btn btn--ghost" href="{{ route('dashboard') }}">Batal</a>
         </div>
     </form>
 @endsection

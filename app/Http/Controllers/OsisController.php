@@ -7,13 +7,6 @@ use Illuminate\Http\Request;
 
 class OsisController extends Controller
 {
-    public function index()
-    {
-        $osisList = Osis::all();
-
-        return view('osis.index', compact('osisList'));
-    }
-
     public function create()
     {
         return view('osis.create');
@@ -32,7 +25,7 @@ class OsisController extends Controller
         Osis::create($validate);
 
         return redirect()
-            ->route('osis.index')
+            ->route('dashboard')
             ->with('success', 'Data OSIS berhasil disimpan!');
     }
 
@@ -48,7 +41,7 @@ class OsisController extends Controller
         $osis = Osis::findOrFail($id);
 
         $validate = $request->validate([
-            'id_osis' => 'required|string|max:50|unique:osis,id_osis,' . $osis->id,
+            'id_osis' => 'required|string|max:50|unique:osis,id_osis,'.$osis->id,
             'nama' => 'required|string|max:100',
             'kelas' => 'required|string|max:50',
             'jurusan' => 'required|string|max:100',
@@ -58,7 +51,7 @@ class OsisController extends Controller
         $osis->update($validate);
 
         return redirect()
-            ->route('osis.index')
+            ->route('dashboard')
             ->with('success', 'Data OSIS berhasil diperbarui!');
     }
 
@@ -68,7 +61,7 @@ class OsisController extends Controller
 
         $osis->delete();
 
-        return back(fallback: route('osis.index'))
+        return back(fallback: route('dashboard'))
             ->with('success', 'Data OSIS berhasil dihapus!');
     }
 }

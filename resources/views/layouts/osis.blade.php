@@ -21,17 +21,12 @@
             </div>
 
             <nav class="site-nav" aria-label="Navigasi utama">
-                <a href="{{ route('beranda') }}">Beranda</a>
                 @if (auth()->user()?->isAdmin())
                     <a href="{{ route('dashboard') }}"
                        @class(['is-active' => request()->routeIs('dashboard')])>
                         Dashboard
                     </a>
                 @endif
-                <a href="{{ route('osis.index') }}"
-                   @class(['is-active' => request()->routeIs('osis.*')])>
-                    Anggota OSIS
-                </a>
             </nav>
 
             <div class="header-auth">

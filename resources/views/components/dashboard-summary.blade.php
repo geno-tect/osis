@@ -1,7 +1,7 @@
 @props([
     'totalAnggota',
     'totalSekbid',
-    'anggotaTerbaru',
+    'anggotaList',
 ])
 
 <div class="space-y-6">
@@ -30,19 +30,14 @@
     <div class="overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
         <div class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 px-5 py-4 dark:border-gray-700">
             <div>
-                <h2 class="font-semibold text-gray-800 dark:text-gray-200">Anggota terbaru</h2>
+                <h2 class="font-semibold text-gray-800 dark:text-gray-200">Data anggota</h2>
                 <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
-                    Lima data terakhir yang ditambahkan.
+                    Semua anggota yang tercatat di database.
                 </p>
             </div>
-
-            <a href="{{ route('osis.index') }}"
-               class="text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">
-                Lihat semua
-            </a>
         </div>
 
-        @if ($anggotaTerbaru->isEmpty())
+        @if ($anggotaList->isEmpty())
             <div class="px-5 py-10 text-center">
                 <p class="font-medium text-gray-800 dark:text-gray-200">Belum ada anggota.</p>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
@@ -75,7 +70,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                        @foreach ($anggotaTerbaru as $item)
+                        @foreach ($anggotaList as $item)
                             <tr>
                                 <td class="whitespace-nowrap px-5 py-3 text-sm text-gray-800 dark:text-gray-200">
                                     {{ $item->nama }}

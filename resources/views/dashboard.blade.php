@@ -29,7 +29,7 @@
             <x-dashboard-summary
                 :total-anggota="$totalAnggota"
                 :total-sekbid="$totalSekbid"
-                :anggota-terbaru="$anggotaTerbaru"
+                :anggota-list="$anggotaList"
             />
         </div>
     </div>

@@ -124,10 +124,6 @@
                             <h3 class="subheading">Daftar Anggota OSIS</h3>
                             <p class="section-lede">Anggota resmi yang tercatat di dalam sistem database OSIS.</p>
                         </div>
-                        <a class="button button--outline button--small" href="{{ route('osis.index') }}">
-                            Lihat tabel lengkap
-                            <x-site-icon name="arrow-right" :size="16" />
-                        </a>
                     </div>
                 </div>
 
@@ -139,7 +135,7 @@
                                 <div class="member-info">
                                     <span class="member-sekbid">{{ $item->sekbid }}</span>
                                     <h4 class="member-name">{{ $item->nama }}</h4>
-                                    <p class="member-meta">{{ $item->kelas }} &middot; {{ $item->jurusan }}</p>
+                                    <p class="member-meta">ID {{ $item->id_osis }} &middot; {{ $item->kelas }} &middot; {{ $item->jurusan }}</p>
                                 </div>
                             </article>
                         @endforeach
@@ -148,7 +144,6 @@
                     <div class="empty-state">
                         <strong>Belum ada anggota di database.</strong>
                         <p>Anggota OSIS yang ditambahkan melalui panel admin akan langsung tampil di sini.</p>
-                        <a class="button button--sky button--small" style="margin-top: 0.75rem;" href="{{ route('osis.index') }}">Buka Halaman Anggota</a>
                     </div>
                 @endif
             </div>

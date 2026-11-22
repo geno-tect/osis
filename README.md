@@ -1,10 +1,9 @@
 # Sistem Data Anggota OSIS (OSKA PASIM)
 
-Aplikasi web OSIS SMK Pasim Plus Kota Sukabumi. Ada dua bagian publik: beranda
-informasi di `/` dan daftar anggota di `/osis`. Halaman daftar anggota bisa
-dilihat tanpa login. Login hanya dipakai admin untuk mengelola data. Tampilan
-publik memakai Blade dan CSS custom, sedangkan dashboard admin memakai Laravel
-Breeze.
+Aplikasi web OSIS SMK Pasim Plus Kota Sukabumi. Beranda publik di `/` memuat
+informasi OSIS sekaligus seluruh data anggota. Data anggota bisa dilihat tanpa
+login. Login hanya dipakai admin untuk mengelola data. Tampilan publik memakai
+Blade dan CSS custom, sedangkan dashboard admin memakai Laravel Breeze.
 
 ## Fitur
 
@@ -14,21 +13,21 @@ Breeze.
 - Form `/aspirasi` menyimpan pesan ke tabel `aspirations`. Nama boleh
   dikosongkan dan pengiriman dibatasi 5 kali per menit.
 - Detail artikel contoh tersedia di `/berita/{slug}`.
-- Halaman `/osis` bersifat publik dan bisa dibuka tanpa akun.
-- Tamu hanya bisa melihat daftar anggota. Tidak ada tombol tambah, edit, atau
+- Seluruh data anggota tampil di beranda dan bisa dibuka tanpa akun. Tidak ada
+  halaman daftar anggota terpisah.
+- Tamu hanya bisa melihat data anggota. Tidak ada tombol tambah, edit, atau
   hapus untuk tamu.
 - Login hanya untuk admin.
 - Registrasi publik dinonaktifkan. Akun admin dibuat lewat seeder atau Tinker.
 - Admin dapat menambah, mengubah, dan menghapus anggota.
-- Dashboard admin menampilkan total anggota, jumlah sekbid, dan 5 anggota
-  terbaru.
-- Halaman `/` tidak lagi diarahkan ke `/osis`. Beranda baru memakai layout
-  terpisah di `resources/views/layouts/public.blade.php`.
+- Dashboard admin menampilkan total anggota, jumlah sekbid, dan tabel seluruh
+  anggota yang bisa langsung diedit atau dihapus.
+- Beranda memakai layout terpisah di `resources/views/layouts/public.blade.php`.
 - Role disimpan di kolom `role` pada tabel `users`. Route pengelolaan tetap
   dilindungi middleware `auth` dan `admin`.
 - Pencarian bawaan browser tetap bisa dipakai melalui `Ctrl + F`; tidak ada
   kotak pencarian aplikasi.
-- Halaman daftar anggota memakai layout dan CSS sendiri (`osis.css` dan
+- Form tambah dan edit anggota memakai layout dan CSS sendiri (`osis.css` dan
   `navbar.css`), terpisah dari Tailwind Breeze.
 
 ## Teknologi
@@ -50,7 +49,7 @@ Breeze.
 | `/` (beranda) | Ya | Ya |
 | `/aspirasi` (form) | Ya | Ya |
 | `/berita/{slug}` | Ya | Ya |
-| `/osis` (daftar) | Ya | Ya |
+| `/osis` (halaman lama) | Dialihkan ke `/#anggota` | Dialihkan ke `/#anggota` |
 | Path login admin (khusus) | Ya | Ya (sudah login diarahkan) |
 | `/register` | 404 (dinonaktifkan) | 404 |
 | `/dashboard` | Dialihkan ke path login | Ya |
@@ -94,8 +93,8 @@ npm run build
 php artisan serve
 ```
 
-Buka `http://127.0.0.1:8000`. Halaman awal menampilkan beranda publik. Daftar
-anggota ada di `/osis`.
+Buka `http://127.0.0.1:8000`. Halaman awal menampilkan beranda publik beserta
+seluruh data anggota.
 
 ## Akun default
 
@@ -148,9 +147,9 @@ resources/views/beranda.blade.php           halaman beranda
 resources/views/aspirasi/index.blade.php    form aspirasi
 resources/views/berita/show.blade.php       detail artikel
 resources/views/components/site-icon.blade.php ikon SVG
-resources/views/layouts/osis.blade.php      kerangka halaman OSIS publik
+resources/views/layouts/osis.blade.php      kerangka form tambah/edit anggota
 resources/views/layouts/navigation.blade.php navbar Breeze/admin
-resources/views/osis/                       daftar publik, tambah, edit
+resources/views/osis/                       form tambah dan edit anggota
 resources/views/dashboard.blade.php         dashboard admin
 resources/views/components/dashboard-summary.blade.php
 
@@ -203,18 +202,20 @@ Test memakai SQLite in-memory, jadi tidak menyentuh database `db_osis`.
 php artisan test
 ```
 
-Status terakhir: 46 test lulus, 139 assertion.
+Status terakhir: 49 test lulus, 155 assertion.
 
 Cakupan penting:
 
-- Route `/` menampilkan beranda, bukan redirect ke `/osis`.
+- Route `/` menampilkan beranda dengan seluruh data anggota.
+- Halaman `/osis` lama dialihkan ke bagian anggota di beranda.
 - Section yang dituju navigasi beranda benar-benar ada.
 - Artikel contoh bisa dibuka dan slug yang tidak ada mengembalikan 404.
 - Form aspirasi menolak isian kosong atau terlalu pendek.
 - Aspirasi tersimpan dengan nama maupun tanpa nama.
-- Tamu bisa membuka `/osis` dan tidak melihat tombol pengelolaan.
+- Tamu bisa melihat data anggota di beranda tanpa tombol pengelolaan.
 - Tamu yang membuka route admin diarahkan ke login.
 - Admin bisa login dan mengelola data.
+- Dashboard admin menampilkan seluruh anggota.
 - Akun non-admin ditolak saat login.
 - Registrasi `/register` mengembalikan 404.
 - Admin bisa menghapus anggota; user yang sudah login tidak bisa.
@@ -226,7 +227,7 @@ Cakupan penting:
 - Setelah clone, jalankan `composer install`, `npm install`, dan
   `npm run build`.
 - Jangan mengedit file di `public/build` secara manual; itu hasil build.
-- Halaman OSIS bisa diakses publik, jadi pastikan data anggota memang boleh
+- Data anggota tampil publik di beranda, jadi pastikan datanya memang boleh
   ditampilkan.
 - Jalankan `php artisan migrate` untuk membuat tabel `aspirations` sebelum
   form aspirasi dipakai di database MySQL.

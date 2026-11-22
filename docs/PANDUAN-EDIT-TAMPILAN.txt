@@ -12,6 +12,12 @@ Commit terakhir: d6041ba - 19 November 2026 - "hapus tombol kembali ke daftar di
 Catatan file   : panduan ini disimpan di folder Documents dan tidak ikut
                  di-commit atau di-push ke GitHub.
 
+CATATAN 22 NOVEMBER 2026:
+Halaman publik /osis sudah dihapus. Seluruh data anggota tampil di beranda (/).
+Alamat /osis sekarang dialihkan ke /#anggota. Pengelolaan anggota dilakukan
+dari dashboard admin. Semua penyebutan /osis sebagai halaman publik di panduan
+lama di bawah adalah arsip.
+
 
 ======================================================================
 0. PEMBARUAN 20 NOVEMBER 2026
@@ -37,7 +43,6 @@ B. Fitur hapus anggota (khusus admin)
    - Tamu yang mencoba DELETE diarahkan ke halaman login.
    - Akun non-admin tidak bisa login, jadi tidak ada lagi akses user biasa.
    - File utama: OsisController@destroy, routes/web.php,
-     resources/views/osis/index.blade.php,
      resources/views/components/dashboard-summary.blade.php.
 
 C. Perubahan tampilan kecil
@@ -206,8 +211,8 @@ docs/PANDUAN-EDIT-TAMPILAN.txt <- salinan panduan ini di dalam repo
 - Warna, font, jarak, tombol halaman OSIS
   -> public/css/osis.css
 
-- Teks halaman daftar anggota
-  -> resources/views/osis/index.blade.php
+- Teks tabel data anggota di dashboard
+  -> resources/views/components/dashboard-summary.blade.php
 
 - Form tambah anggota
   -> resources/views/osis/create.blade.php
@@ -267,7 +272,6 @@ docs/PANDUAN-EDIT-TAMPILAN.txt <- salinan panduan ini di dalam repo
   -> app/Http/Controllers/OsisController.php
 
 - Tombol dan konfirmasi hapus
-  -> resources/views/osis/index.blade.php
   -> resources/views/components/dashboard-summary.blade.php
   -> app/Http/Controllers/OsisController.php (method destroy)
 
@@ -455,8 +459,8 @@ B. Izin dan role
 
    - Jangan hapus @if (Auth::user()?->isAdmin()) di navigasi. Tamu akan
      melihat link Dashboard lagi.
-   - Jangan hapus @if ($isAdmin) di osis/index.blade.php. Tamu akan
-     melihat tombol tambah/edit/hapus, walaupun backend tetap menolak.
+   - Tombol tambah/edit/hapus hanya ada di dashboard admin
+     (dashboard-summary.blade.php). Beranda publik tetap baca saja.
    - Jangan hapus middleware admin dari route create/store/edit/update.
      Route delete (osis.destroy) juga wajib tetap di grup admin.
      Controller tidak mengecek role sendiri.
@@ -596,8 +600,9 @@ Itu bukan error, cuma belum diseragamkan.
 1. CSS OSIS: ubah --accent, --radius, dan --font-display di
    public/css/osis.css. Ini paling aman dan langsung terlihat.
 
-2. Teks dan struktur OSIS: edit osis/index.blade.php dan
-   layouts/osis.blade.php. Belajar @if, @foreach, dan {{ }}.
+2. Teks dan struktur form anggota: edit osis/create.blade.php,
+   osis/edit.blade.php, dan layouts/osis.blade.php. Belajar @if, @foreach,
+   dan {{ }}.
 
 3. Tailwind dashboard: ganti class warna di dashboard.blade.php, lalu
    npm run build.
@@ -712,7 +717,6 @@ B. Kenapa aman
 C. Kalau mau mengubah teks konfirmasi
 
    Edit onsubmit di:
-   - resources/views/osis/index.blade.php
    - resources/views/components/dashboard-summary.blade.php
 
    Contoh:
@@ -867,13 +871,12 @@ KELOMPOK 2: DATA ANGGOTA OSIS (DARI DATABASE)
 - Berisi seluruh anggota OSIS per seksi bidang, kelas, dan jurusan.
 - Disimpan di database MySQL tabel osis.
 - CARA EDIT NYA:
-  Login sebagai admin di panel admin (/dashboard) atau halaman /osis,
-  lalu gunakan tombol Tambah Anggota, Edit, atau Hapus.
+  Login sebagai admin di panel admin (/dashboard), lalu gunakan tombol
+  Tambah Anggota, Edit, atau Hapus pada tabel data anggota.
 - PENAMPILAN DI BERANDA:
-  Sekarang seluruh data anggota dari database ini otomatis tampil di
-  Beranda tepat di bawah kartu BPH ("Daftar Anggota OSIS").
-  Pengunjung beranda bisa langsung melihat siapa saja anggota OSIS yang
-  aktif dan mengklik "Lihat tabel lengkap" untuk melihat tabel detail di /osis.
+  Seluruh data anggota dari database ini otomatis tampil di beranda tepat
+  di bawah kartu BPH ("Daftar Anggota OSIS"). Pengunjung beranda bisa
+  langsung melihat semua anggota tanpa membuka halaman lain.
 
 
 ======================================================================

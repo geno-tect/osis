@@ -1,5 +1,5 @@
 ## ANTISLOP DELIVERY GATE REPORT — OSKA PASIM PUBLIC LANDING PAGE
-Date: 2026-11-21 | Mode: DURING (session override) | Source: session override
+Date: 2026-11-22 | Mode: DURING (session override) | Source: session override
 
 ### Block 1: Hard Gate (all answers = no)
 
@@ -85,11 +85,11 @@ All Hard Gate items are PASS (every answer = no). All Purpose-Gate techniques ha
 - `public/js/beranda.js` — nav, tabs, form state, reduced motion
 - `docs/BERANDA.md` — design read with dials
 - `axe-*.json` — WCAG contrast reports (all violations resolved)
-- Playwright click-through recordings (74/74 checks passed)
-- `php artisan test` — 46 tests, 139 assertions all passing
+- Playwright checks: `/osis` redirects to `/#anggota`, all members render on the landing page, dashboard CRUD works, and layouts stay overflow-free from 320 to 1280 px
+- `php artisan test` — 49 tests, 155 assertions all passing
 
 The deliverable meets the antislop Delivery Gate requirements for PASS.
 
-**Note:** `/osis` route and admin Breeze area remain separately styled. This gate covers only the new public landing page at `/`.
+**Note:** The old public `/osis` page has been removed and now redirects to `/#anggota`; the admin area remains separately styled. This gate covers the public landing page at `/`.
 
 Tidak ada file yang di-commit atau di-push ke GitHub. All changes are local only.

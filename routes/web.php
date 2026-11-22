@@ -18,17 +18,17 @@ Route::post('/aspirasi', [AspirationController::class, 'store'])
 
 Route::get('/berita/{slug}', [NewsController::class, 'show'])->name('berita.show');
 
-Route::get('/osis', [OsisController::class, 'index'])->name('osis.index');
+Route::get('/osis', fn () => redirect('/#anggota'));
 
 Route::get('/dashboard', function (Request $request) {
     if (! $request->user()->isAdmin()) {
-        return redirect()->route('osis.index');
+        return redirect()->route('beranda');
     }
 
     return view('dashboard', [
         'totalAnggota' => Osis::count(),
         'totalSekbid' => Osis::query()->distinct()->count('sekbid'),
-        'anggotaTerbaru' => Osis::latest()->take(5)->get(),
+        'anggotaList' => Osis::latest()->get(),
     ]);
 })->middleware('auth')->name('dashboard');
 

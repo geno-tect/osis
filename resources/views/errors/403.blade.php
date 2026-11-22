@@ -13,6 +13,6 @@
     </div>
 
     <p>
-        <a class="btn btn--primary" href="{{ route('osis.index') }}">Kembali ke daftar anggota</a>
+        <a class="btn btn--primary" href="{{ route('beranda') }}">Kembali ke beranda</a>
     </p>
 @endsection

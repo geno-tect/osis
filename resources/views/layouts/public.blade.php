@@ -115,7 +115,6 @@
                 <a href="{{ route('beranda') }}#struktur">Anggota OSIS</a>
                 <a href="{{ route('beranda') }}#berita">Berita</a>
                 <a href="{{ route('aspirasi.index') }}">Kotak Aspirasi</a>
-                <a href="{{ route('osis.index') }}">Data Lengkap Anggota</a>
             </nav>
 
             <div class="footer-contact">
