@@ -36,11 +36,7 @@
                 <span class="hero-orbit" aria-hidden="true"></span>
 
                 <div class="hero-frame">
-                    <div class="hero-frame__inner">
-                        <img class="hero-frame__logo" src="{{ asset('img/logo-osis-dikanan.png') }}" alt="" width="76" height="76">
-                        <p class="hero-frame__title">Contoh foto kegiatan</p>
-                        <p class="hero-frame__hint">Ganti dengan dokumentasi 4:5</p>
-                    </div>
+                    <img class="hero-frame__image" src="{{ asset('img/hero-gambar.jpg') }}" alt="Dokumentasi OSIS" width="385" height="519">
 
                     <figcaption class="hero-caption">
                         <span class="hero-caption__kicker">Sekretariat OSIS</span>
@@ -48,6 +44,57 @@
                     </figcaption>
                 </div>
             </figure>
+        </div>
+    </section>
+
+    <section class="agenda-section" id="agenda" aria-labelledby="agenda-title" data-nav-match="agenda">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <p class="section-kicker">Agenda</p>
+                    <h2 id="agenda-title">Kegiatan yang akan datang</h2>
+                </div>
+                <p class="section-lede">Tiga kegiatan terdekat dari kabinet. Buka detail untuk melihat waktu dan tempat.</p>
+            </div>
+
+            <div class="agenda-grid">
+                @forelse ($content['events'] as $event)
+                    <article class="event-card">
+                        <div class="event-media">
+                            <img src="{{ asset($event['image']) }}" alt="" width="640" height="360" loading="lazy">
+                        </div>
+
+                        <div class="event-card__top">
+                            <time class="event-date" datetime="{{ $event['date_iso'] }}">
+                                <span class="event-date__day">{{ $event['day'] }}</span>
+                                <span class="event-date__month">
+                                    {{ $event['month'] }}
+                                    <span class="event-date__year">{{ $event['year'] }}</span>
+                                </span>
+                            </time>
+                            <div class="event-tags">
+                                <span class="chip status--{{ $event['status_tone'] }}">{{ $event['status'] }}</span>
+                            </div>
+                        </div>
+
+                        <h3>{{ $event['title'] }}</h3>
+                        <p class="event-description">{{ $event['description'] }}</p>
+
+                        <details class="event-details">
+                            <summary>
+                                <span>Detail kegiatan</span>
+                                <x-site-icon name="chevron-down" :size="16" class="event-details__chevron" />
+                            </summary>
+                            <p>{{ $event['detail'] }}</p>
+                        </details>
+                    </article>
+                @empty
+                    <div class="empty-state">
+                        <strong>Belum ada agenda.</strong>
+                        <p>Kegiatan akan tampil di sini setelah ditambahkan.</p>
+                    </div>
+                @endforelse
+            </div>
         </div>
     </section>
 
@@ -96,14 +143,30 @@
             <div class="bph-block">
                 <h3 class="subheading">Badan Pengurus Harian (BPH)</h3>
 
-                @if (count($content['bph']))
+                @php
+                    $bphFromDb = isset($osisList)
+                        ? $osisList->whereIn('jabatan', ['Ketua Umum', 'Wakil Ketua', 'Sekretaris', 'Bendahara'])
+                            ->sortBy(function ($o) {
+                                $urutan = ['Ketua Umum' => 1, 'Wakil Ketua' => 2, 'Sekretaris' => 3, 'Bendahara' => 4];
+                                return $urutan[$o->jabatan] ?? 99;
+                            })
+                            ->values()
+                        : collect();
+                @endphp
+
+                @if ($bphFromDb->isNotEmpty())
                     <div class="bph-grid">
-                        @foreach ($content['bph'] as $person)
-                            <article class="bph-card{{ $person['is_lead'] ? ' bph-card--lead' : '' }}">
-                                <span class="bph-avatar" aria-hidden="true">{{ $person['initial'] }}</span>
+                        @foreach ($bphFromDb as $person)
+                            <article class="bph-card{{ $loop->first ? ' bph-card--lead' : '' }}">
+                                {{-- Gambar jika ada, else inisial --}}
+                                @if ($person->foto)
+                                    <span class="bph-avatar" aria-hidden="true"><img src="{{ asset('storage/osis/' . $person->foto) }}" alt="" width="40" height="40"></span>
+                                @else
+                                    <span class="bph-avatar" aria-hidden="true">{{ mb_substr($person->nama, 0, 1) }}</span>
+                                @endif
                                 <div>
-                                    <p class="bph-role">{{ $person['role'] }}</p>
-                                    <p class="bph-name">{{ $person['name'] }}</p>
+                                    <p class="bph-role">{{ $person->jabatan }}</p>
+                                    <p class="bph-name">{{ $person->nama }}</p>
                                 </div>
                             </article>
                         @endforeach
@@ -111,7 +174,7 @@
                 @else
                     <div class="empty-state">
                         <strong>Data pengurus belum tersedia.</strong>
-                        <p>Nama dan jabatan akan tampil di sini setelah ditambahkan.</p>
+                        <p>Nama dan jabatan akan tampil di sini setelah ditambahkan melalui panel admin.</p>
                     </div>
                 @endif
             </div>
@@ -165,8 +228,12 @@
                     <article class="news-card">
                         <a class="news-card__link" href="{{ route('berita.show', $article['slug']) }}" aria-label="Baca liputan: {{ $article['title'] }}">
                             <div class="news-media" aria-hidden="true">
-                                <span class="news-media__ring"></span>
-                                <span class="news-media__label">Foto liputan</span>
+                                @if (!empty($article['image']))
+                                    <img src="{{ asset($article['image']) }}" alt="" class="news-media__img" width="640" height="360" loading="lazy">
+                                @else
+                                    <span class="news-media__ring"></span>
+                                    <span class="news-media__label">Foto liputan</span>
+                                @endif
                             </div>
 
                             <div class="news-card__body">

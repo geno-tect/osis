@@ -131,14 +131,12 @@
                     @if ($site['contact']['email'])
                         <a class="footer-email" href="mailto:{{ $site['contact']['email'] }}">{{ $site['contact']['email'] }}</a>
                     @endif
-                    <span class="footer-small">{{ $site['contact']['note'] }}</span>
                 </address>
             </div>
         </div>
 
         <div class="container footer-bottom">
             <p>&copy; {{ now()->year }} OSKA PASIM. Semua hak dilindungi.</p>
-            <p>{{ $site['preview_note'] }}</p>
         </div>
     </footer>
 </body>

@@ -332,7 +332,8 @@ p {
     color: var(--danger);
 }
 
-.field input {
+.field input,
+.field select {
     width: 100%;
     min-height: 2.6rem;
     padding: 0.55rem 0.75rem;
@@ -344,17 +345,24 @@ p {
     font-size: 0.95rem;
 }
 
-.field input:hover {
+.field select {
+    cursor: pointer;
+}
+
+.field input:hover,
+.field select:hover {
     border-color: var(--muted);
 }
 
-.field input:focus {
+.field input:focus,
+.field select:focus {
     border-color: var(--accent);
     outline: 2px solid var(--focus);
     outline-offset: 1px;
 }
 
-.field input[aria-invalid="true"] {
+.field input[aria-invalid="true"],
+.field select[aria-invalid="true"] {
     border-color: var(--danger);
 }
 
@@ -437,4 +445,38 @@ p {
     .btn {
         transition: none;
     }
+}
+
+.foto-preview {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    background: var(--row-hover);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+}
+
+.foto-preview-img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+}
+
+.foto-preview-desc {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.dashboard-foto-thumb {
+    width: 36px;
+    height: 36px;
+    object-fit: cover;
+    border-radius: 6px;
+    display: inline-block;
+    vertical-align: middle;
 }

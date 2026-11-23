@@ -29,8 +29,12 @@
     <article class="article">
         <div class="container">
             <div class="article-media" aria-hidden="true">
-                <span class="news-media__ring"></span>
-                <span class="news-media__label">Foto liputan</span>
+                @if (!empty($article['image']))
+                    <img src="{{ asset($article['image']) }}" alt="" class="article-media__img" width="1280" height="720">
+                @else
+                    <span class="news-media__ring"></span>
+                    <span class="news-media__label">Foto liputan</span>
+                @endif
             </div>
 
             <div class="article-body">

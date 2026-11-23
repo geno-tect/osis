@@ -18,7 +18,7 @@ class OsisRoleTest extends TestCase
             'nama' => 'Anggota Uji',
             'kelas' => 'XI',
             'jurusan' => 'RPL',
-            'sekbid' => 'Sekbid 1',
+            'sekbid' => 'Akademik',
         ]);
     }
 
@@ -52,7 +52,7 @@ class OsisRoleTest extends TestCase
             'nama' => 'Anggota Baru',
             'kelas' => 'X',
             'jurusan' => 'RPL',
-            'sekbid' => 'Sekbid 2',
+            'sekbid' => 'Seni',
         ])->assertRedirect(route('login', absolute: false));
 
         $this->put('/osis/1', [
@@ -60,7 +60,7 @@ class OsisRoleTest extends TestCase
             'nama' => 'Diubah',
             'kelas' => 'XII',
             'jurusan' => 'RPL',
-            'sekbid' => 'Sekbid 1',
+            'sekbid' => 'Akademik',
         ])->assertRedirect(route('login', absolute: false));
 
         $this->delete('/osis/1')->assertRedirect(route('login', absolute: false));
@@ -100,7 +100,7 @@ class OsisRoleTest extends TestCase
                 'nama' => 'Anggota '.$i,
                 'kelas' => 'XI',
                 'jurusan' => 'RPL',
-                'sekbid' => 'Sekbid 1',
+                'sekbid' => 'Akademik',
             ]);
         }
 
@@ -148,7 +148,7 @@ class OsisRoleTest extends TestCase
                 'nama' => 'Anggota Baru',
                 'kelas' => 'X',
                 'jurusan' => 'RPL',
-                'sekbid' => 'Sekbid 2',
+                'sekbid' => 'Seni',
             ])
             ->assertForbidden();
 
@@ -166,7 +166,7 @@ class OsisRoleTest extends TestCase
                 'nama' => 'Diubah',
                 'kelas' => 'XII',
                 'jurusan' => 'RPL',
-                'sekbid' => 'Sekbid 1',
+                'sekbid' => 'Akademik',
             ])
             ->assertForbidden();
 
@@ -186,7 +186,7 @@ class OsisRoleTest extends TestCase
                 'nama' => 'Anggota Baru',
                 'kelas' => 'X',
                 'jurusan' => 'RPL',
-                'sekbid' => 'Sekbid 2',
+                'sekbid' => 'Seni',
             ])
             ->assertRedirect('/dashboard')
             ->assertSessionHas('success');
@@ -195,6 +195,35 @@ class OsisRoleTest extends TestCase
             'id_osis' => 'OSIS-2',
             'nama' => 'Anggota Baru',
         ]);
+    }
+
+    public function test_create_form_lists_sekbid_options(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        $this->actingAs($admin)
+            ->get('/osis/create')
+            ->assertOk()
+            ->assertSee('Keagamaan')
+            ->assertSee('Kesehatan');
+    }
+
+    public function test_admin_must_choose_a_valid_sekbid(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        $this->actingAs($admin)
+            ->from('/osis/create')
+            ->post('/osis', [
+                'id_osis' => 'OSIS-3',
+                'nama' => 'Anggota Baru',
+                'kelas' => 'X',
+                'jurusan' => 'RPL',
+                'sekbid' => 'Sekbid Palsu',
+            ])
+            ->assertSessionHasErrors('sekbid');
+
+        $this->assertDatabaseMissing('osis', ['id_osis' => 'OSIS-3']);
     }
 
     public function test_admin_can_update_member(): void
@@ -208,7 +237,7 @@ class OsisRoleTest extends TestCase
                 'nama' => 'Anggota Diubah',
                 'kelas' => 'XII',
                 'jurusan' => 'RPL',
-                'sekbid' => 'Sekbid 1',
+                'sekbid' => 'Akademik',
             ])
             ->assertRedirect('/dashboard')
             ->assertSessionHas('success');

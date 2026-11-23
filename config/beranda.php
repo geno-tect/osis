@@ -1,14 +1,7 @@
 <?php
 
 return [
-    /*
-    |--------------------------------------------------------------------------
-    | Identitas kabinet
-    |--------------------------------------------------------------------------
-    | Nilai bertanda [kurung siku] adalah contoh. Ganti dengan data resmi
-    | sebelum halaman dipublikasikan.
-    */
-    'cabinet' => '[Nama Kabinet]',
+    'cabinet' => 'kelompok 6',
     'period' => '2026/2027',
     'school' => 'SMK Pasim Plus',
     'city' => 'Kota Sukabumi',
@@ -34,7 +27,8 @@ return [
             'description' => 'Ruang bersama untuk membahas arah kerja kabinet dan menampung usulan dari tiap kelas.',
             'status' => 'Pendaftaran dibuka',
             'status_tone' => 'amber',
-            'detail' => 'Waktu dan tempat: [diisi panitia].',
+            'detail' => 'Waktu dan tempat: lapang depan.',
+            'image' => 'img/gambar-1.jpeg',
         ],
         [
             'day' => '12',
@@ -46,7 +40,8 @@ return [
             'description' => 'Pekan kegiatan seni dan olahraga antar kelas, ditutup dengan panggung karya siswa.',
             'status' => 'Segera dibuka',
             'status_tone' => 'sky',
-            'detail' => 'Waktu dan tempat: [diisi panitia].',
+            'detail' => 'Waktu dan tempat: lapang baru.',
+            'image' => 'img/gambar-2.jpeg',
         ],
         [
             'day' => '24',
@@ -58,14 +53,15 @@ return [
             'description' => 'Kerja bersama membersihkan area sekolah dan mengumpulkan donasi untuk lingkungan sekitar.',
             'status' => 'Undangan',
             'status_tone' => 'slate',
-            'detail' => 'Waktu dan tempat: [diisi panitia].',
+            'detail' => 'Waktu dan tempat: sekolah.',
+            'image' => 'img/gambar-3.jpeg',
         ],
     ],
 
     'about' => [
-        'title' => 'OSIS yang bekerja di antara siswa dan sekolah.',
+        'title' => 'OSIS SMK Pasim Plus',
         'paragraphs' => [
-            'OSIS SMK Pasim Plus adalah wadah organisasi siswa untuk menyalurkan ide, minat, dan kepedulian. Kabinet [Nama Kabinet] bekerja lewat sepuluh seksi bidang yang menyentuh kegiatan akademik, seni, olahraga, sosial, dan lingkungan.',
+            'OSIS SMK Pasim Plus adalah wadah organisasi siswa untuk menyalurkan ide, minat, dan kepedulian. Kabinet kelompok 6 bekerja lewat sepuluh seksi bidang yang menyentuh kegiatan akademik, seni, olahraga, sosial, dan lingkungan.',
             'Kami ingin informasi kegiatan mudah ditemukan, aspirasi mudah dikirim, dan setiap program punya alasan yang jelas.',
         ],
         'vision' => 'Menjadi ruang terbuka bagi setiap siswa untuk menyampaikan ide, mengambil peran, dan merasakan dampak dari kegiatan sekolah.',
@@ -204,6 +200,7 @@ return [
             'date_label' => '18 November 2026',
             'title' => 'Class meeting: satu pekan, satu cerita',
             'excerpt' => 'Tiga hari penuh pertandingan, sorak kelas, dan kerja panitia yang rapi. Ini catatan singkat dari lapangan.',
+            'image' => 'img/gambar-1.jpeg',
             'body' => [
                 'Lapangan sekolah berubah jadi arena selama tiga hari. Ada turnamen futsal, voli, dan estafet yang membuat kelas saling menyemangati dari pinggir lapangan.',
                 'Panitia dari sekbid olahraga menyiapkan jadwal pertandingan dan papan skor. Beberapa siswa dari kelas lain ikut membantu menjaga ketertiban dan membagikan air minum.',
@@ -217,6 +214,7 @@ return [
             'date_label' => '16 November 2026',
             'title' => 'Hari Guru: ruang untuk berterima kasih',
             'excerpt' => 'Pesan singkat dari siswa, mading bertuliskan tangan, dan foto bersama di taman sekolah.',
+            'image' => 'img/gambar-2.jpeg',
             'body' => [
                 'Pagi dimulai dengan upacara singkat dan pesan dari perwakilan siswa. Setelah itu, kelas-kelas menyiapkan kejutan kecil untuk guru wali kelas.',
                 'Mading di koridor diisi tulisan tangan siswa. Ada juga sesi foto bersama di taman sekolah yang berlangsung sampai jam istirahat.',
@@ -230,6 +228,7 @@ return [
             'date_label' => '9 November 2026',
             'title' => 'Bakti sosial: dari kelas ke lingkungan sekitar',
             'excerpt' => 'Buku, alat tulis, dan waktu siswa dikumpulkan untuk satu tujuan yang sama.',
+            'image' => 'img/gambar-3.jpeg',
             'body' => [
                 'Kegiatan dimulai dari pengumpulan buku dan alat tulis di setiap kelas. Hasilnya dirapikan oleh panitia sebelum diserahkan ke perpustakaan sekolah.',
                 'Siswa dari beberapa sekbid bekerja bersama menyortir sumbangan dan mengecek kondisi barang. Kegiatan berlangsung di aula pada Sabtu pagi.',
@@ -261,9 +260,8 @@ return [
     ],
 
     'social' => [
-        ['label' => 'Instagram', 'icon' => 'instagram', 'url' => null],
-        ['label' => 'TikTok', 'icon' => 'tiktok', 'url' => null],
-        ['label' => 'YouTube', 'icon' => 'youtube', 'url' => null],
+        ['label' => 'Instagram', 'icon' => 'instagram', 'url' => 'https://www.instagram.com/osis.smkpasim//'],
+        ['label' => 'YouTube', 'icon' => 'youtube', 'url' => 'https://www.youtube.com/@PASIMChannel'],
     ],
 
     'contact' => [
@@ -271,9 +269,6 @@ return [
             'SMK Pasim Plus',
             'Kota Sukabumi, Jawa Barat',
         ],
-        'note' => 'Alamat lengkap dan kontak resmi menyusul.',
         'email' => null,
     ],
-
-    'preview_note' => 'Pratinjau desain. Nama kabinet, pengurus, agenda, berita, dan tautan sosial masih berupa contoh.',
 ];

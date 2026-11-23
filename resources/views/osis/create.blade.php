@@ -27,7 +27,7 @@
         </div>
     @endif
 
-    <form class="form-card" action="{{ route('osis.store') }}" method="POST" data-submit-once>
+    <form class="form-card" action="{{ route('osis.store') }}" method="POST" enctype="multipart/form-data" data-submit-once>
         @csrf
 
         <div class="field">
@@ -99,18 +99,48 @@
 
         <div class="field">
             <label for="sekbid">Sekbid <span class="req" aria-hidden="true">*</span></label>
-            <input
-                type="text"
+            <select
                 id="sekbid"
                 name="sekbid"
-                value="{{ old('sekbid') }}"
-                maxlength="100"
+                class="select"
                 required
                 @if ($errors->has('sekbid')) aria-invalid="true" aria-describedby="sekbid-error" @endif
             >
+                <option value="">-- Pilih sekbid --</option>
+                @foreach ($sekbidOptions as $sekbid)
+                    <option value="{{ $sekbid }}" @selected(old('sekbid') === $sekbid)>{{ $sekbid }}</option>
+                @endforeach
+            </select>
             @error('sekbid')
                 <p class="field-error" id="sekbid-error">{{ $message }}</p>
             @enderror
+        </div>
+
+        <div class="field">
+            <label for="jabatan">Jabatan</label>
+            <select name="jabatan" id="jabatan" class="select">
+                <option value="">-- Pilih jabatan (opsional) --</option>
+                <option value="Ketua Umum">Ketua Umum</option>
+                <option value="Wakil Ketua">Wakil Ketua</option>
+                <option value="Sekretaris">Sekretaris</option>
+                <option value="Bendahara">Bendahara</option>
+                <option value="Anggota">Anggota</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="foto">Foto <span class="optional">(opsional)</span></label>
+            <input
+                type="file"
+                id="foto"
+                name="foto"
+                accept="image/jpeg, image/png, image/jpg"
+                @if ($errors->has('foto')) aria-invalid="true" aria-describedby="foto-error" @endif
+            >
+            @error('foto')
+                <p class="field-error" id="foto-error">{{ $message }}</p>
+            @enderror
+            <p class="hint">Format: JPG, PNG. Maksimal 5MB. Foto akan di-resize otomatis.</p>
         </div>
 
         <div class="form-actions">

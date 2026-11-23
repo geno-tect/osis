@@ -62,7 +62,10 @@
                                 Jurusan
                             </th>
                             <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">
-                                Sekbid
+                                Jabatan
+                            </th>
+                            <th scope="col" class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">
+                                Foto
                             </th>
                             <th scope="col" class="px-5 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400">
                                 Aksi
@@ -85,7 +88,14 @@
                                     {{ $item->jurusan }}
                                 </td>
                                 <td class="whitespace-nowrap px-5 py-3 text-sm text-gray-500 dark:text-gray-400">
-                                    {{ $item->sekbid }}
+                                    {{ $item->jabatan ?? 'Anggota' }}
+                                </td>
+                                <td class="whitespace-nowrap px-5 py-3 text-sm text-gray-500 dark:text-gray-400">
+                                    @if ($item->foto)
+                                        <img src="{{ asset('storage/osis/' . $item->foto) }}" alt="Foto" class="dashboard-foto-thumb" width="40">
+                                    @else
+                                        <span class="text-gray-400">—</span>
+                                    @endif
                                 </td>
                                 <td class="whitespace-nowrap px-5 py-3 text-right text-sm">
                                     <div class="flex items-center justify-end gap-3">

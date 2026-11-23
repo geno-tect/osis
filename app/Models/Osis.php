@@ -14,5 +14,7 @@ class Osis extends Model
         'kelas',
         'jurusan',
         'sekbid',
+        'jabatan',
+        'foto',
     ];
 }

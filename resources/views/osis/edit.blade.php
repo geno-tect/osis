@@ -21,7 +21,7 @@
         </div>
     @endif
 
-    <form class="form-card" action="{{ route('osis.update', $osis->id) }}" method="POST" data-submit-once>
+    <form class="form-card" action="{{ route('osis.update', $osis->id) }}" method="POST" enctype="multipart/form-data" data-submit-once>
         @csrf
         @method('PUT')
 
@@ -93,18 +93,59 @@
 
         <div class="field">
             <label for="sekbid">Sekbid <span class="req" aria-hidden="true">*</span></label>
-            <input
-                type="text"
+            <select
                 id="sekbid"
                 name="sekbid"
-                value="{{ old('sekbid', $osis->sekbid) }}"
-                maxlength="100"
+                class="select"
                 required
                 @if ($errors->has('sekbid')) aria-invalid="true" aria-describedby="sekbid-error" @endif
             >
+                <option value="">-- Pilih sekbid --</option>
+                @foreach ($sekbidOptions as $sekbid)
+                    <option value="{{ $sekbid }}" @selected(old('sekbid', $osis->sekbid) === $sekbid)>{{ $sekbid }}</option>
+                @endforeach
+            </select>
             @error('sekbid')
                 <p class="field-error" id="sekbid-error">{{ $message }}</p>
             @enderror
+            @if ($osis->sekbid && !in_array($osis->sekbid, $sekbidOptions, true))
+                <p class="hint">Sekbid lama: {{ $osis->sekbid }}. Pilih sekbid baru dari daftar.</p>
+            @endif
+        </div>
+
+        <div class="field">
+            <label for="jabatan">Jabatan</label>
+            <select name="jabatan" id="jabatan" class="select">
+                <option value="">-- Pilih jabatan (opsional) --</option>
+                <option value="Ketua Umum" {{ $osis->jabatan == 'Ketua Umum' ? 'selected' : '' }}>Ketua Umum</option>
+                <option value="Wakil Ketua" {{ $osis->jabatan == 'Wakil Ketua' ? 'selected' : '' }}>Wakil Ketua</option>
+                <option value="Sekretaris" {{ $osis->jabatan == 'Sekretaris' ? 'selected' : '' }}>Sekretaris</option>
+                <option value="Bendahara" {{ $osis->jabatan == 'Bendahara' ? 'selected' : '' }}>Bendahara</option>
+                <option value="Anggota" {{ $osis->jabatan == 'Anggota' ? 'selected' : '' }}>Anggota</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="foto">Foto</label>
+            @if ($osis->foto)
+                <div class="foto-preview" id="foto-preview-box">
+                    <img src="{{ asset('storage/osis/' . $osis->foto) }}" alt="Foto {{$osis->nama}}" class="foto-preview-img">
+                    <p class="foto-preview-desc">Foto saat ini</p>
+                    <button type="button" class="btn btn--ghost btn--small hapus-foto" id="btn-hapus-foto" title="Hapus foto">Hapus</button>
+                    <input type="hidden" name="hapus_foto" id="hapus_foto" value="0">
+                </div>
+            @endif
+            <input
+                type="file"
+                id="foto"
+                name="foto"
+                accept="image/jpeg, image/png, image/jpg"
+                @if ($errors->has('foto')) aria-invalid="true" aria-describedby="foto-error" @endif
+            >
+            @error('foto')
+                <p class="field-error" id="foto-error">{{ $message }}</p>
+            @enderror
+            <p class="hint">Format: JPG, PNG. Maksimal 5MB. Biarkan kosong jika tidak mengganti foto.</p>
         </div>
 
         <div class="form-actions">
@@ -112,4 +153,20 @@
             <a class="btn btn--ghost" href="{{ route('dashboard') }}">Batal</a>
         </div>
     </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const btnHapus = document.getElementById('btn-hapus-foto');
+            if (btnHapus) {
+                btnHapus.addEventListener('click', function() {
+                    if (confirm('Yakin ingin menghapus foto ini?')) {
+                        const hapusInput = document.getElementById('hapus_foto');
+                        if (hapusInput) hapusInput.value = '1';
+                        const previewBox = document.getElementById('foto-preview-box');
+                        if (previewBox) previewBox.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
 @endsection

@@ -14,6 +14,9 @@ class BerandaTest extends TestCase
         $response = $this->get('/');
 
         $response->assertOk()
+            ->assertSee('id="agenda"', false)
+            ->assertSee('class="event-media"', false)
+            ->assertSee('Musyawarah besar OSIS')
             ->assertSee('id="tentang"', false)
             ->assertSee('id="struktur"', false)
             ->assertSee('id="anggota"', false)
