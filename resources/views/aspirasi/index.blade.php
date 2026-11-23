@@ -97,7 +97,6 @@
                         <button class="button button--amber" type="submit" data-submit-button>
                             <span data-submit-label>Kirim aspirasi</span>
                         </button>
-                        <p class="form-footnote">Nama tidak wajib diisi.</p>
                     </div>
                 </form>
             @endif
@@ -108,7 +107,7 @@
             <ul class="aside-list">
                 @foreach ($content['aspiration']['privacy_points'] as $point)
                     <li>
-                        <x-site-icon name="check" :size="18" />
+                        
                         <span>{{ $point }}</span>
                     </li>
                 @endforeach

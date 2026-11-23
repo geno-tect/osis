@@ -105,7 +105,6 @@
                         @endif
                     @endforeach
                 </div>
-                <p class="footer-small">Tautan media sosial menyusul.</p>
             </div>
 
             <nav class="footer-nav" aria-label="Tautan cepat">
@@ -136,7 +135,7 @@
         </div>
 
         <div class="container footer-bottom">
-            <p>&copy; {{ now()->year }} OSKA PASIM. Semua hak dilindungi.</p>
+            <p>&copy; {{ now()->year }} kelompok 6.</p>
         </div>
     </footer>
 </body>

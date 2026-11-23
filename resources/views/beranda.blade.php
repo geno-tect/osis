@@ -20,20 +20,18 @@
 
                 <div class="hero-actions">
                     <a class="button button--sky" href="#struktur">Lihat Anggota OSIS</a>
-                    <a class="button button--outline" href="{{ route('aspirasi.index') }}">
-                        <x-site-icon name="check" :size="18" />
+                    <a class="button button--outline" href="{{ route('aspirasi.index') }}"> 
                         Kirim aspirasi
                     </a>
                 </div>
 
                 <p class="hero-note">
-                    <x-site-icon name="check" :size="17" />
+                    
                     {{ $content['hero']['note'] }}
                 </p>
             </div>
 
             <figure class="hero-figure">
-                <span class="hero-orbit" aria-hidden="true"></span>
 
                 <div class="hero-frame">
                     <img class="hero-frame__image" src="{{ asset('img/hero-gambar.jpg') }}" alt="Dokumentasi OSIS" width="385" height="519">
@@ -54,7 +52,6 @@
                     <p class="section-kicker">Agenda</p>
                     <h2 id="agenda-title">Kegiatan yang akan datang</h2>
                 </div>
-                <p class="section-lede">Tiga kegiatan terdekat dari kabinet. Buka detail untuk melihat waktu dan tempat.</p>
             </div>
 
             <div class="agenda-grid">
@@ -119,13 +116,10 @@
                 <ul class="mission-list">
                     @foreach ($content['about']['missions'] as $mission)
                         <li>
-                            <x-site-icon name="check" :size="18" />
                             <span>{{ $mission }}</span>
                         </li>
                     @endforeach
                 </ul>
-
-                <p class="content-note">Draf redaksi. Ganti dengan rumusan resmi kabinet.</p>
             </div>
         </div>
     </section>
@@ -220,7 +214,7 @@
                     <p class="section-kicker">Berita &amp; dokumentasi</p>
                     <h2 id="berita-title">Catatan kegiatan terbaru</h2>
                 </div>
-                <p class="section-lede">Liputan singkat dari kegiatan sekolah, lengkap dengan kategori dan tanggal terbit.</p>
+                
             </div>
 
             <div class="news-grid">
@@ -239,7 +233,7 @@
                             <div class="news-card__body">
                                 <div class="news-meta">
                                     <span class="chip">{{ $article['category'] }}</span>
-                                    <span class="sample-tag">Contoh</span>
+                            
                                     <time datetime="{{ $article['date'] }}">{{ $article['date_label'] }}</time>
                                 </div>
 
@@ -274,7 +268,6 @@
                 <ul class="aspiration-facts">
                     @foreach ($content['aspiration']['facts'] as $fact)
                         <li>
-                            <x-site-icon name="check" :size="18" />
                             <span>{{ $fact }}</span>
                         </li>
                     @endforeach

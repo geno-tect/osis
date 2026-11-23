@@ -72,33 +72,6 @@ return [
         ],
     ],
 
-    'bph' => [
-        [
-            'role' => 'Ketua Umum',
-            'name' => '[Nama Ketua]',
-            'initial' => 'K',
-            'is_lead' => true,
-        ],
-        [
-            'role' => 'Wakil Ketua',
-            'name' => '[Nama Wakil]',
-            'initial' => 'W',
-            'is_lead' => false,
-        ],
-        [
-            'role' => 'Sekretaris',
-            'name' => '[Nama Sekretaris]',
-            'initial' => 'S',
-            'is_lead' => false,
-        ],
-        [
-            'role' => 'Bendahara',
-            'name' => '[Nama Bendahara]',
-            'initial' => 'B',
-            'is_lead' => false,
-        ],
-    ],
-
     'sekbid' => [
         [
             'number' => '01',
