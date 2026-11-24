@@ -130,17 +130,16 @@
 
         <div class="field">
             <label for="foto">Foto <span class="optional">(opsional)</span></label>
-            <input
-                type="file"
-                id="foto"
-                name="foto"
-                accept="image/jpeg, image/png, image/jpg"
-                @if ($errors->has('foto')) aria-invalid="true" aria-describedby="foto-error" @endif
-            >
+            <label class="foto-upload" for="foto" data-foto-dropzone>
+                <img class="foto-upload-preview" data-foto-preview alt="Pratinjau foto" hidden>
+                <span class="foto-upload-copy"><strong>Pilih gambar</strong> atau seret ke sini<br><small>JPG atau PNG, maksimal 5 MB</small></span>
+                <input class="foto-upload-input" type="file" id="foto" name="foto" accept="image/jpeg,image/png,image/jpg" data-foto-input
+                    @if ($errors->has('foto')) aria-invalid="true" aria-describedby="foto-error" @endif>
+            </label>
             @error('foto')
                 <p class="field-error" id="foto-error">{{ $message }}</p>
             @enderror
-            <p class="hint">Format: JPG, PNG. Maksimal 5MB. Foto akan di-resize otomatis.</p>
+            <p class="hint">Klik area di atas untuk memilih foto dari perangkat.</p>
         </div>
 
         <div class="form-actions">

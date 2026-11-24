@@ -1,0 +1,257 @@
+﻿PANDUAN ALUR SEMUA FUNGSI APLIKASI OSIS
+=======================================
+
+Dokumen ini menjelaskan alur berdasarkan kode project saat ini. Nama route dan file ditulis agar alur bisa ditelusuri kembali. Aplikasi memakai Laravel, Blade, dan database.
+
+DAFTAR FITUR
+------------
+1. Beranda dan konten informasi
+2. Kirim aspirasi dan pembacaan aspirasi oleh admin
+3. Login admin, dashboard, dan pembatasan akses
+4. Kelola data anggota OSIS
+5. Kelola agenda kegiatan
+6. Kelola berita dan halaman detail berita
+7. Profil akun
+8. Lupa/reset password, ubah password, konfirmasi password, verifikasi email, logout
+9. Database, model, dan data awal
+10. Halaman yang belum tersedia
+
+1. BERANDA DAN INFORMASI PUBLIK
+-------------------------------
+URL: GET /
+Route: beranda
+Kode utama: HomeController.index, resources/views/beranda.blade.php, config/beranda.php
+
+Urutan kerja:
+1. Pengunjung membuka halaman utama.
+2. HomeController memeriksa apakah tabel OSIS tersedia. Jika ada, semua anggota diambil urut nama; jika belum ada, daftar kosong.
+3. Agenda diambil melalui Event.upcoming(): hanya tanggal hari ini atau setelah hari ini, urut tanggal terdekat lebih dahulu. Jika tabel belum ada, daftar kosong.
+4. Semua berita diambil dengan tanggal berita terbaru lebih dahulu. Jika tabel berita belum ada, daftar kosong.
+5. Konfigurasi config/beranda.php ikut dikirim ke tampilan. Isinya antara lain nama sekolah/kabinet, hero, visi-misi, sepuluh sekbid, konten contoh berita/agenda, kategori aspirasi, media sosial, dan kontak.
+6. Blade merender bagian halaman publik. Data anggota, agenda, dan berita berasal dari database; beberapa bagian profil dan konten desain berasal dari konfigurasi.
+
+Fungsi pendukung:
+- GET /osis mengalihkan pengunjung ke /#anggota.
+- GET /berita/{slug} membuka berita tertentu (alur detail ada pada bagian berita).
+- Asset CSS/JS mempercantik dan memberi interaksi tampilan, tetapi penyimpanan data dilakukan backend.
+
+2. ASPIRASI: SISWA MENGIRIM SAMPAI ADMIN MEMBACA
+------------------------------------------------
+URL form: GET /aspirasi (aspirasi.index)
+URL kirim: POST /aspirasi (aspirasi.store), batas 5 kiriman per menit per aturan throttle route.
+Kode: AspirationController.index/store, Model Aspiration, komponen dashboard-summary.
+
+Alur siswa:
+1. Siswa membuka halaman aspirasi. Tampilan menerima konfigurasi beranda, termasuk kategori yang valid dan teks privasi.
+2. Siswa memilih kategori (Akademik, Kegiatan, Fasilitas, Kesejahteraan, atau Lainnya), menulis pesan, dan boleh mengisi nama atau membiarkannya kosong.
+3. Form mengirim kategori, pesan, dan nama dengan POST.
+4. Backend memvalidasi: kategori wajib dan harus ada di konfigurasi; pesan wajib berupa teks 20 sampai 2.000 karakter; nama opsional, teks maksimal 100 karakter.
+5. Jika validasi gagal, Laravel kembali ke form beserta pesan kesalahan/isian lama. Data belum disimpan.
+6. Jika lolos, Aspiration::create menyimpan kategori, pesan, nama (nullable), serta timestamp ke tabel aspirations.
+7. Pengirim dialihkan kembali ke halaman aspirasi dengan notifikasi berhasil.
+
+Alur admin membaca:
+1. Admin login lalu membuka dashboard.
+2. Route dashboard memastikan sesi login. Pengguna terautentikasi yang bukan admin dialihkan ke beranda.
+3. Query mengambil semua aspirasi terbaru dahulu (latest, berdasarkan created_at).
+4. dashboard-summary menampilkan total aspirasi dan tabel berisi tanggal/jam masuk, kategori, nama, dan isi pesan. Nama kosong ditampilkan sebagai “Anonim”.
+5. Pesan hanya ditampilkan di dashboard admin, bukan di halaman publik. Saat ini tidak ada fungsi balas, ubah status, edit, atau hapus aspirasi dari antarmuka.
+
+Catatan privasi akurat sesuai implementasi: pengisian nama boleh kosong, tetapi jika siswa mengisi nama maka nama tersebut disimpan dan terlihat bagi admin. Form tidak meminta login.
+
+3. LOGIN ADMIN DAN DASHBOARD
+----------------------------
+URL login: GET/POST /panel-oska (route bernama login)
+URL dashboard: GET /dashboard
+Kode: AuthenticatedSessionController, LoginRequest, routes/web.php, EnsureUserIsAdmin.
+
+Alur login:
+1. Pengunjung membuka /panel-oska dan menerima form login.
+2. Saat form dikirim, LoginRequest memvalidasi email dan password, lalu membatasi percobaan berdasarkan email+IP. Maksimal lima kegagalan sebelum rate limit.
+3. Laravel mencoba mencocokkan kredensial.
+4. Jika salah, muncul validasi gagal. Jika benar tetapi role bukan admin, sesi login langsung dikeluarkan dan error “Akun ini bukan admin” dikembalikan.
+5. Jika benar dan role admin, session ID diperbarui dan diarahkan ke intended URL atau dashboard.
+
+Alur dashboard:
+1. Middleware auth menolak pengguna tanpa login dan mengarahkannya ke login.
+2. Closure dashboard mengecek User.isAdmin(). Jika bukan admin, kembali ke beranda.
+3. Dashboard mengambil jumlah anggota, jumlah sekbid unik, seluruh anggota terbaru dahulu, semua agenda (tanggal terbaru dahulu), jumlah agenda mendatang, semua berita (tanggal terbaru dahulu), dan semua aspirasi terbaru dahulu.
+4. Tampilan merender ringkasan dan tabel agenda, berita, aspirasi, serta anggota. Tombol tambah/edit/hapus hanya tersedia dari area admin.
+5. Route tambah/ubah/hapus berita, agenda, dan anggota dilindungi middleware auth + admin. Middleware admin menghasilkan HTTP 403 bila role tidak sesuai.
+
+Catatan role: helper User.isAdmin() hanya memeriksa apakah kolom role bernilai “admin”. Jalur registrasi publik tidak didefinisikan di routes/auth.php; pembuatan admin dilakukan melalui mekanisme database/seeder atau pengelolaan akun di luar halaman publik.
+
+4. KELOLA ANGGOTA OSIS
+----------------------
+Daftar anggota ditampilkan di beranda dan dashboard.
+Route admin: GET /osis/create, POST /osis, GET /osis/{id}/edit, PUT /osis/{id}, DELETE /osis/{id}.
+Kode: OsisController; tabel/model Osis; form resources/views/osis.
+
+Tambah anggota:
+1. Admin memilih “Tambah anggota” di dashboard.
+2. Form mengambil daftar sekbid dari config/beranda.php.
+3. Admin mengisi ID OSIS, nama, kelas, jurusan, sekbid; jabatan dan foto opsional.
+4. Backend memastikan ID unik (maks. 50 karakter), nama wajib (100), kelas wajib (50), jurusan wajib (100), sekbid wajib dan termasuk daftar konfigurasi, jabatan maksimal 50, foto JPG/PNG/JPEG maksimal 5.048 KB.
+5. Jabatan kosong diberi nilai “Anggota”. Jika ada foto, nama file dibuat dari nama anggota + waktu saat ini, lalu disimpan di storage disk public folder osis.
+6. Data dibuat pada tabel osis, lalu admin kembali ke dashboard dengan notifikasi berhasil.
+
+Edit anggota:
+1. Admin membuka tombol Edit pada baris anggota. Sistem mencari berdasarkan id database; jika tidak ada, halaman 404.
+2. Form menampilkan data tersimpan.
+3. Backend memvalidasi data dengan aturan serupa, tetapi ID boleh tetap milik anggota itu sendiri.
+4. Jika hapus_foto dicentang, file foto lama dihapus dan kolom foto dikosongkan.
+5. Jika foto baru dikirim, file lama dihapus lalu file baru disimpan. Jika tidak ada file baru/perintah hapus, foto lama dipertahankan.
+6. Jabatan kosong saat edit mempertahankan jabatan yang lama.
+7. Data diperbarui, lalu kembali ke dashboard dengan notifikasi.
+
+Hapus anggota:
+1. Admin memilih Hapus dan diminta konfirmasi oleh browser.
+2. DELETE /osis/{id} mencari record. Jika ada foto, file di storage dihapus.
+3. Record dihapus dari database, lalu halaman kembali ke dashboard dengan notifikasi.
+
+Daftar anggota publik di beranda mengambil semua record urut nama. Dashboard menampilkan semua record dengan aksi edit/hapus.
+
+5. KELOLA AGENDA KEGIATAN
+-------------------------
+Route admin: GET /agenda/create, POST /agenda, GET /agenda/{event}/edit, PUT /agenda/{event}, DELETE /agenda/{event}.
+Kode: EventController, Model Event, form events/_form.blade.php.
+
+Tambah agenda:
+1. Admin memilih “Tambah agenda”.
+2. Admin mengisi judul, tanggal, deskripsi, status, warna status, detail opsional, dan gambar opsional.
+3. Backend memvalidasi judul wajib maks. 150 karakter; tanggal valid; deskripsi wajib maks. 5.000; status wajib maks. 50; status_tone harus amber/sky/slate; detail opsional maks. 5.000; gambar JPG/PNG/JPEG/WEBP maks. 5 MB.
+4. Gambar yang diunggah disimpan di disk public folder events dan path-nya masuk database.
+5. Record agenda dibuat. Admin kembali ke dashboard dengan pesan berhasil.
+
+Edit agenda:
+1. Model binding mencari agenda berdasarkan ID; halaman edit berisi data lama.
+2. Setelah form dikirim, field divalidasi kembali.
+3. Gambar baru menggantikan gambar lama (file lama dihapus); perintah remove_image menghapus gambar lama dan menyimpan null; tanpa keduanya gambar lama tetap.
+4. Record diperbarui dan admin kembali ke dashboard.
+
+Hapus agenda:
+1. Admin memilih Hapus dan mengonfirmasi dialog.
+2. Jika path gambar merupakan unggahan internal storage/events, file dihapus.
+3. Record dihapus dari tabel events dan kembali ke dashboard.
+
+Tampilan agenda publik hanya menggunakan agenda dengan start_date >= hari ini, urut paling dekat lebih dahulu. Dashboard admin melihat semua agenda; agenda lewat tetap dapat dikelola dan ditandai “lewat”. Status dan status_tone adalah isian admin, tidak berubah otomatis mengikuti tanggal.
+
+6. KELOLA BERITA DAN MEMBACA BERITA
+-----------------------------------
+Route admin: GET /dashboard/berita/create, POST /dashboard/berita, GET /dashboard/berita/{news}/edit, PUT /dashboard/berita/{news}, DELETE /dashboard/berita/{news}.
+Halaman publik: GET /berita/{slug}.
+Kode: NewsAdminController, NewsController, Model News, form news/_form.blade.php.
+
+Tambah berita:
+1. Admin membuka form Tambah berita dari dashboard.
+2. Isian: judul, slug opsional, kategori, tanggal, ringkasan, isi, gambar opsional.
+3. Jika slug kosong, sistem membentuk slug dari judul. Jika sudah dipakai, sistem menambah akhiran angka agar unik. Saat judul tidak berubah pada edit dan slug kosong, slug lama dipertahankan.
+4. Validasi: judul wajib maks. 180; slug wajib/unik, huruf-angka/tanda hubung/garis bawah, maks. 180; kategori wajib maks. 80; tanggal valid; ringkasan wajib maks. 2.000; isi wajib maks. 20.000; gambar JPG/PNG/JPEG/WEBP maks. 5 MB.
+5. Isi dipisah menjadi paragraf menggunakan baris kosong, dirapikan, lalu disimpan sebagai array JSON.
+6. Gambar disimpan di disk public folder news; path-nya disimpan pada record.
+7. Record dibuat, lalu admin kembali ke dashboard.
+
+Edit/hapus berita:
+1. Admin membuka edit melalui model binding.
+2. Validasi dan konversi isi paragraf dilakukan lagi.
+3. Gambar baru menggantikan gambar lama; remove_image menghapus gambar; tanpa perubahan gambar lama dipakai.
+4. Update menyimpan perubahan dan kembali ke dashboard.
+5. Hapus menghapus file unggahan internal folder news jika ada, kemudian record berita dihapus.
+
+Baca berita:
+1. Pengunjung memilih berita dari beranda; URL membawa slug.
+2. NewsController mencari berita dengan slug itu. Jika tidak ditemukan, Laravel menampilkan 404.
+3. Tanggal dibuat label bahasa Indonesia, data artikel dipaketkan (slug, kategori, tanggal, judul, ringkasan, gambar, paragraf).
+4. Blade berita.show menampilkan artikel. Berita tidak perlu login untuk dibaca.
+
+7. PROFIL AKUN
+---------------
+Route: auth GET /profile, PATCH /profile, DELETE /profile.
+Kode: ProfileController, ProfileUpdateRequest, tampilan profile.
+
+Lihat/edit profil:
+1. Pengguna login membuka /profile; form menampilkan user aktif.
+2. Saat update, nama wajib maks. 255; email wajib, format email valid, huruf kecil, maks. 255, dan harus unik kecuali email milik sendiri.
+3. Data tervalidasi diisikan ke model lalu disimpan.
+4. Jika email berubah, email_verified_at dikosongkan agar perlu diverifikasi ulang.
+5. Pengguna kembali ke halaman profil dengan status berhasil.
+
+Hapus akun:
+1. Pengguna mengisi password saat ini.
+2. Jika password tidak cocok, penghapusan ditolak dan error ditampilkan.
+3. Jika cocok, aplikasi logout, menghapus record user, membatalkan session, mengganti token CSRF, lalu mengarahkan ke /.
+
+8. FITUR KEAMANAN AKUN
+----------------------
+Semua route di bagian ini memakai fitur autentikasi Laravel. Form antarmuka berada di resources/views/auth.
+
+Lupa password:
+1. Guest membuka GET /forgot-password.
+2. Form mengirim email ke POST /forgot-password.
+3. Email divalidasi, lalu Password::sendResetLink meminta Laravel mengirim link reset melalui konfigurasi mail.
+4. Berhasil: status link terkirim; gagal: error untuk email ditampilkan.
+
+Reset password:
+1. Pengguna membuka link GET /reset-password/{token}; halaman membawa token.
+2. Form mengirim token, email, password baru, dan konfirmasi ke POST /reset-password.
+3. Sistem validasi token/email/password dan menggunakan broker reset Laravel.
+4. Jika berhasil, password user diganti, remember_token diacak, event PasswordReset dipicu, dan pengguna kembali ke halaman login. Jika gagal, error ditampilkan.
+
+Ubah password saat login:
+1. Dari profil, pengguna mengirim password saat ini, password baru, dan konfirmasi melalui PUT /password.
+2. Password saat ini harus cocok; password baru mengikuti aturan Password::defaults dan harus sama dengan konfirmasi.
+3. Password baru disimpan sebagai hash; halaman kembali dengan status berhasil.
+
+Konfirmasi password:
+1. GET /confirm-password menampilkan form.
+2. POST /confirm-password mencocokkan password input dengan password akun yang sedang login.
+3. Jika cocok, waktu konfirmasi disimpan di session dan pengguna diarahkan ke halaman tujuan sebelumnya atau dashboard. Jika tidak, error password ditampilkan.
+
+Verifikasi email:
+1. GET /verify-email menampilkan prompt jika email belum terverifikasi; jika sudah, lanjut ke intended/dashboard.
+2. POST /email/verification-notification mengirim ulang notifikasi jika belum terverifikasi. Route dibatasi enam kali per menit.
+3. Link bertanda tangan GET /verify-email/{id}/{hash} memeriksa identitas/hash (signed), membatasi enam kali per menit, lalu menandai email verified dan memicu event Verified.
+4. Setelah itu pengguna diarahkan ke intended/dashboard dengan penanda verified=1.
+
+Logout:
+1. POST /logout mengeluarkan user dari guard web.
+2. Session dibatalkan dan token CSRF diperbarui.
+3. Browser diarahkan ke beranda.
+
+9. DATABASE, MODEL, DAN DATA AWAL
+---------------------------------
+- Aspiration menyimpan kategori, pesan, nama opsional, timestamps. Fillable membatasi field yang boleh dibuat massal.
+- Osis menyimpan ID OSIS, nama, kelas, jurusan, sekbid, jabatan, nama/path foto.
+- Event menyimpan judul, tanggal, deskripsi, status, warna status, detail, gambar. Cast tanggal mengubah start_date menjadi objek tanggal.
+- News menyimpan slug unik, kategori, tanggal, judul, ringkasan, gambar, dan body JSON. Cast mengubah date menjadi tanggal dan body menjadi array.
+- User menyimpan nama, email, password hash, role. Password dan remember_token disembunyikan saat serialisasi.
+- Migrasi membangun tabel. Migrasi events/news juga menyalin contoh awal dari config/beranda ketika tabel dibuat.
+- DatabaseSeeder membuat akun admin test@example.com hanya jika belum ada, lalu memanggil EventSeeder dan NewsSeeder.
+- EventSeeder tidak melakukan apa-apa jika tabel events sudah berisi data. NewsSeeder menambah tiap slug contoh jika belum ada (firstOrCreate).
+
+10. FUNGSI YANG BELUM ADA / BATASAN ALUR
+---------------------------------------
+- Tidak ada form registrasi publik. Login hanya menerima akun admin.
+- Aspirasi belum punya aksi balas, label dibaca/belum dibaca, edit, atau hapus.
+- Belum ada unggah gambar untuk aspirasi.
+- Tidak ada route API khusus dalam daftar routes yang ditinjau.
+- Daftar agenda publik menyembunyikan tanggal lampau, tetapi berita publik memuat seluruh berita yang ada.
+- Konten visi/misi, sekbid, kontak, dan teks hero dikelola lewat config/beranda.php, tidak lewat dashboard.
+- Beberapa data awal berita/agenda hanya contoh konfigurasi/seeder; isi dapat diganti admin dari dashboard setelah ada di database.
+
+PETA FILE UTAMA
+---------------
+routes/web.php                         Route publik, dashboard, CRUD admin, profil
+routes/auth.php                        Route login dan keamanan akun
+app/Http/Controllers/HomeController.php Beranda
+app/Http/Controllers/AspirationController.php Aspirasi
+app/Http/Controllers/OsisController.php Anggota
+app/Http/Controllers/EventController.php Agenda
+app/Http/Controllers/NewsAdminController.php CRUD berita
+app/Http/Controllers/NewsController.php Detail berita publik
+app/Http/Controllers/ProfileController.php Profil
+app/Http/Controllers/Auth/              Login dan fungsi keamanan akun
+app/Http/Middleware/EnsureUserIsAdmin.php Pemeriksaan role admin
+app/Models/                             Model dan aturan penyimpanan
+resources/views/                        Form dan tampilan Blade
+config/beranda.php                      Konten publik dan opsi kategori/sekbid

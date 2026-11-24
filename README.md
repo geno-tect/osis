@@ -7,9 +7,9 @@ Blade dan CSS custom, sedangkan dashboard admin memakai Laravel Breeze.
 
 ## Fitur
 
-- Halaman `/` adalah beranda publik: agenda, visi/misi, Badan Pengurus Harian,
-  tab Sekbid 1-10, berita contoh, dan banner aspirasi. Isi diatur di
-  `config/beranda.php`.
+- Halaman `/` adalah beranda publik: agenda dari database, visi/misi, Badan
+  Pengurus Harian, tab Sekbid 1-10, berita contoh, dan banner aspirasi.
+  Informasi profil berada di `config/beranda.php`.
 - Form `/aspirasi` menyimpan pesan ke tabel `aspirations`. Nama boleh
   dikosongkan dan pengiriman dibatasi 5 kali per menit.
 - Detail artikel contoh tersedia di `/berita/{slug}`.
@@ -22,6 +22,9 @@ Blade dan CSS custom, sedangkan dashboard admin memakai Laravel Breeze.
 - Admin dapat menambah, mengubah, dan menghapus anggota.
 - Dashboard admin menampilkan total anggota, jumlah sekbid, dan tabel seluruh
   anggota yang bisa langsung diedit atau dihapus.
+- Admin dapat menambah, mengedit, dan menghapus agenda/kegiatan melalui
+  dashboard. Agenda hari ini dan mendatang tampil di beranda; agenda lampau
+  tetap tersimpan dan dapat dikelola.
 - Beranda memakai layout terpisah di `resources/views/layouts/public.blade.php`.
 - Role disimpan di kolom `role` pada tabel `users`. Route pengelolaan tetap
   dilindungi middleware `auth` dan `admin`.
@@ -132,10 +135,12 @@ Atau promosikan akun yang sudah ada:
 app/Http/Controllers/HomeController.php     beranda publik
 app/Http/Controllers/NewsController.php     detail artikel contoh
 app/Http/Controllers/AspirationController.php form dan simpan aspirasi
+app/Http/Controllers/EventController.php  CRUD agenda/kegiatan
 app/Http/Controllers/OsisController.php     CRUD + hapus anggota
 app/Http/Controllers/Auth/                  login dan reset password
 app/Http/Middleware/EnsureUserIsAdmin.php   penjaga route admin
 app/Models/Aspiration.php                   model aspirasi
+app/Models/Event.php                        model agenda/kegiatan
 app/Models/Osis.php                         model data anggota
 app/Models/User.php                         role dan isAdmin()
 config/beranda.php                          seluruh isi beranda
@@ -160,6 +165,7 @@ public/js/beranda.js                        menu, tab, dan state form
 public/js/osis.js                           cegah submit ganda
 
 database/migrations/                        struktur database
+database/seeders/EventSeeder.php             data awal agenda, idempotent
 tests/Feature/BerandaTest.php               test beranda dan artikel
 tests/Feature/AspirationTest.php            test validasi dan simpan aspirasi
 tests/Feature/OsisRoleTest.php              test akses publik, role, CRUD
@@ -170,13 +176,12 @@ Registrasi publik sudah dihapus. File `RegisteredUserController` dan view
 
 ## Mengedit tampilan
 
-Panduan tampilan versi lama ada di
-[`docs/PANDUAN-EDIT-TAMPILAN.txt`](docs/PANDUAN-EDIT-TAMPILAN.txt). Panduan
-beranda baru ada di [`docs/BERANDA.md`](docs/BERANDA.md). Catatan terbaru
-disimpan lokal di folder Documents.
 Ringkasnya:
 
-- Isi beranda (kabinet, agenda, BPH, Sekbid, berita, sosial): `config/beranda.php`.
+- Isi profil beranda (kabinet, BPH, Sekbid, berita, sosial): `config/beranda.php`.
+- Agenda/kegiatan: tabel `events`, dikelola dari dashboard admin. Data agenda
+  contoh lama disalin saat migration; `EventSeeder` mengisi contoh hanya saat
+  tabel agenda masih kosong.
 - Tampilan beranda, form aspirasi, dan artikel: `public/css/beranda.css`.
 - Menu, tab, dan state form: `public/js/beranda.js`.
 - Warna, font, tombol, tabel halaman OSIS: `public/css/osis.css`.

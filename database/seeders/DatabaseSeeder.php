@@ -17,10 +17,14 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'role' => User::ROLE_ADMIN,
-        ]);
+        if (! User::query()->where('email', 'test@example.com')->exists()) {
+            User::factory()->admin()->create([
+                'name' => 'Test User',
+                'email' => 'test@example.com',
+            ]);
+        }
+
+        $this->call(EventSeeder::class);
+        $this->call(NewsSeeder::class);
     }
 }

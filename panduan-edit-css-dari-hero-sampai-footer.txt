@@ -1,0 +1,188 @@
+﻿PANDUAN EDIT CSS PROJECT OSIS
+============================
+
+Tujuan
+------
+Panduan ini menunjukkan file CSS mana yang mengatur tiap halaman dan bagian visual, dari hero sampai footer, cara menemukan selector, lalu cara mengubah warna, ukuran, jarak, gambar, dan tampilan mobile tanpa mengubah fungsi aplikasi.
+
+PETA TIGA FILE CSS
+------------------
+1. public/css/beranda.css (2.478 baris)
+   Dipakai oleh layouts/public.blade.php. Mengatur beranda publik, header publik, hero, agenda, tentang/visi-misi, struktur dan anggota, berita, ajakan aspirasi, footer publik, halaman form aspirasi, halaman detail berita, serta aturan responsive halaman publik.
+
+2. public/css/navbar.css (331 baris)
+   Dipakai oleh layouts/osis.blade.php bersama osis.css. Mengatur header/navbar khusus halaman manajemen OSIS: logo dan nama brand, tautan dashboard, tombol profil/logout, tombol navigasi, warna mode gelap, dan responsive header.
+
+3. public/css/osis.css (514 baris)
+   Dipakai oleh layouts/osis.blade.php bersama navbar.css. Mengatur halaman tambah/edit anggota: latar, kontainer, judul, tombol, alert, tabel, form, upload foto, dan footer kecil halaman admin.
+
+PENTING: dashboard admin memakai layouts/app.blade.php dan resources/css/app.css/Tailwind. Tampilan dashboard tidak terutama diatur oleh tiga file di atas. Untuk mengubah dashboard, cari class Tailwind langsung di resources/views/dashboard.blade.php atau components/dashboard-summary.blade.php.
+
+CARA MENEMUKAN BAGIAN YANG MAU DIEDIT
+--------------------------------------
+1. Buka halaman yang terlihat di browser.
+2. Klik kanan bagian itu > Inspect/Periksa. Di panel Elements, pilih elemen visualnya.
+3. Lihat nama class HTML, misalnya hero-figure atau event-card.
+4. Cari nama class tersebut dengan Ctrl+F di file CSS atau jalankan rg -n "hero-figure" public/css/beranda.css.
+5. Edit deklarasi CSS pada selector yang cocok. Selector class memakai titik: .hero-figure. Selector ID memakai #: #struktur.
+6. Perhatikan aturan responsive di bagian bawah file: nilai desktop dapat ditimpa pada breakpoint mobile.
+7. Simpan, refresh browser. Jika belum berubah, lakukan hard refresh (Ctrl+F5) untuk mengosongkan cache CSS.
+
+Jangan menambahkan titik pada atribut HTML. Di HTML ditulis class="hero-figure", di CSS ditulis .hero-figure.
+
+PETA BERANDA.CSS: DARI HEADER SAMPAI FOOTER
+-------------------------------------------
+Rentang berikut adalah perkiraan area berdasarkan susunan saat dokumen dibuat. Cari nama selector bila nomor baris berubah.
+
+A. Dasar tampilan dan komponen umum — sekitar baris 1–372
+- :root (baris 1): variabel warna, font, radius, bayangan, dan ukuran yang dipakai bersama.
+- html/body (sekitar 54–130): warna dasar, font, ukuran teks, perilaku scroll.
+- .container dan .section (sekitar 202–215): lebar konten, jarak bagian halaman, latar variasi.
+- .section-head, .section-kicker, .section-lede: judul dan intro section.
+- .button, .button--sky, .button--outline, .button--amber, .button--white: tombol dan variasinya.
+Cara ubah warna global: ubah variabel di :root jika memang warna itu dipakai luas. Untuk satu tombol/section saja, ubah selector spesifik agar komponen lain tidak ikut.
+
+B. Header / navigasi beranda — sekitar baris 373–592
+- .site-header, .header-bar: pita header dan susunan isi.
+- .brand, .brand-logo, .brand-name, .brand-sub: logo dan nama OSIS.
+- .desktop-nav dan turunannya: tautan navigasi desktop, hover, serta tanda menu aktif.
+- .header-actions, .nav-toggle, .mobile-menu: tombol dan menu navigasi mobile.
+Catatan: halaman publik menggunakan CSS ini, bukan navbar.css. Menu mobile punya aturan [hidden]; jangan menghapus aturan visibility jika ingin tombol menu tetap bekerja.
+
+C. Hero / bagian pembuka — sekitar baris 593–780
+Selector utama: .hero, .hero-grid, .hero-copy, .hero-badge, .hero h1, .hero-title__line, .hero-title__line--accent, .hero-lede, .hero-actions, .hero-figure, .hero-frame, .hero-frame__image, .hero-caption.
+- Tinggi/lebar kolom dan posisi teks/gambar: .hero-grid.
+- Ukuran/jarak judul: .hero h1 dan .hero-title__line.
+- Ukuran gambar, crop, sudut: .hero-frame__image (periksa object-fit/object-position).
+- Bentuk bingkai/dekorasi: .hero-frame, pseudo-element .hero-frame::before, .hero-orbit.
+- Isi tulisan hero berasal dari resources/views/beranda.blade.php dan config/beranda.php. Kalau ingin mengganti kalimat, ubah konten PHP/Blade; CSS hanya mengubah tampilannya.
+
+D. Agenda kegiatan — sekitar baris 781–971
+Selector: .agenda-section, .agenda-grid, .event-card, .event-media, .event-date, .event-tags, .chip, .status--amber/sky/slate, .event-card h3, .event-description, .event-details.
+- Jumlah/lebar kolom: .agenda-grid.
+- Kartu dan jarak: .event-card.
+- Thumbnail/crop: .event-media img.
+- Label status: .status--amber, .status--sky, .status--slate.
+- Detail buka-tutup memakai elemen HTML details/summary; jangan mengganti display/aturan open sembarangan.
+
+E. Tentang, visi, dan misi — sekitar baris 972–1040
+Selector: .about-grid, .about-copy, .vision-panel, .panel-label, .vision-quote, .mission-list.
+Grid/kolom diatur .about-grid; panel kutipan visi di .vision-panel; daftar misi di .mission-list.
+
+F. Struktur pengurus dan daftar anggota — sekitar baris 1041–1203
+Selector BPH: .bph-block, .bph-grid, .bph-card, .bph-card--lead, .bph-avatar, .bph-role, .bph-name.
+Selector daftar anggota: .members-block, .members-head, .members-grid, .member-card, .member-avatar, .member-info, .member-sekbid, .member-name, .member-meta.
+- Layout kartu BPH: .bph-grid.
+- Layout anggota database: .members-grid.
+- Perbedaan kartu pemimpin pertama: .bph-card--lead.
+Foto/inisial berasal dari data Blade; CSS mengatur ukuran/crop, bukan memilih foto.
+
+G. Penjelajah program kerja sekbid — sekitar baris 1204–1355
+Selector: .program-block, .sekbid-explorer, .sekbid-tabs, .sekbid-tab, .sekbid-panel, .sekbid-panel__intro, .sekbid-panel__body, .program-list, .sekbid-hint.
+Tab aktif memakai atribut aria-selected="true". Jangan menghapus selector status aktif; JavaScript mengubah atribut itu saat tab dipilih.
+
+H. Berita — sekitar baris 1356–1496
+Selector: .news-grid, .news-card, .news-card__link, .news-media, .news-media__img, .news-card__body, .news-meta, .news-card h3, .news-card__cta.
+- Grid kartu: .news-grid.
+- Gambar kartu: .news-media dan .news-media__img.
+- Judul/teks: .news-card__body, .news-card h3.
+- Hover/focus: selector :hover, :focus-visible, :focus-within di area ini.
+
+I. Ajakan aspirasi di beranda — sekitar baris 1497–1576
+Selector: .aspiration-section, .aspiration-band, .aspiration-orbit, .aspiration-copy, .aspiration-band h2, .aspiration-facts.
+Ini adalah panel CTA di halaman utama. Form aspirasi penuh ada pada kelompok selector form di bawah, bukan bagian ini.
+
+J. Footer publik — sekitar baris 1577–1761
+Selector: .site-footer, .footer-grid, .footer-brand__link, .footer-logo, .footer-brand__name, .footer-brand__sub, .footer-brand__copy, .social-row, .social-link, .footer-heading, .footer-nav, .footer-contact, .footer-address-line, .footer-email, .footer-bottom.
+- Kolom footer: .footer-grid.
+- Logo/nama: .footer-brand... dan .footer-logo.
+- Link sosial: .social-row dan .social-link.
+- Navigasi/kontak: .footer-nav dan .footer-contact.
+- Garis/konten paling bawah: .footer-bottom.
+Teks/link footer dirender layouts/public.blade.php dan config/beranda.php; CSS tidak mengganti alamat atau URL.
+
+K. Halaman aspirasi dan detail berita — sekitar baris 1762–2186
+- Judul halaman/breadcrumb: .page-hero, .breadcrumb, .page-lede.
+- Layout form: .aspiration-layout, .aspiration-main, .form-card, .field, .form-actions.
+- Error dan status berhasil: .field-error, .form-alert, .success-card.
+- Panel petunjuk form: .aspiration-aside, .aside-list, .aside-note.
+- Detail artikel: .article-hero, .article-meta, .article, .article-media, .article-body, .back-link.
+- Keadaan daftar kosong: .empty-state.
+
+L. Responsive / layar kecil — sekitar baris 2187–2478
+Breakpoint yang ada: max-width 1100, 1024, 960, 900, 720, 560, 400; juga min-width 1025 dan prefers-reduced-motion.
+Jika kolom bertumpuk atau font berubah pada HP, cari breakpoint yang relevan di bagian bawah file. Aturan yang ditulis belakangan dapat menimpa aturan desktop. Ubah desktop di selector utama dan ubah pengecualian HP di media query yang sesuai.
+
+PETA NAVBAR.CSS: HEADER HALAMAN MANAJEMEN
+----------------------------------------
+- :root baris 1 dst.: palet/warna/font khusus navbar halaman OSIS (variabel --nav-* dan --nav-brand-*).
+- .site-header sekitar baris 14: latar header.
+- .header-inner, .header-start: tinggi, padding, dan susunan.
+- .brand, .brand-logo, .brand-mark, .brand-sub: identitas/logo.
+- .site-nav dan link-nya: navigasi dashboard dan indikator aktif.
+- .header-auth, .icon-btn, .pill: profil dan tombol keluar.
+- @media prefers-color-scheme: dark sekitar baris 195: variasi mode gelap.
+- @media max-width 1300/1000/520/400 sekitar baris 240–324: responsivitas header.
+- prefers-reduced-motion sekitar baris 325: mengurangi animasi untuk preferensi aksesibilitas.
+Navbar ini dimuat oleh layouts/osis.blade.php, khusus form tambah/edit anggota. Jangan mengubah .site-header di sini untuk mengubah header beranda; header publik ada di beranda.css.
+
+PETA OSIS.CSS: FORM DAN TABEL MANAJEMEN ANGGOTA
+----------------------------------------------
+- :root baris 1–24: variabel --paper, --surface, --ink, --accent, --line, warna status, radius, font.
+- Reset dan body sekitar baris 26–75: box sizing, latar, font, link, heading, fokus.
+- .shell, .main, .page-head, .lede sekitar baris 77–121: lebar konten dan judul halaman.
+- .btn, .btn--primary, .btn--ghost sekitar baris 122–162: tombol form.
+- .alert sekitar baris 163–194: pesan sukses/error.
+- .table-wrap, .data-table, .empty-state sekitar baris 195–301: tabel data dan keadaan kosong.
+- .form-card, .field, input/select, .field-row, .form-actions sekitar baris 302–386: formulir anggota.
+- .site-footer sekitar baris 387: footer kecil halaman form.
+- @media max-width 640 sekitar baris 406: layout HP.
+- prefers-reduced-motion sekitar baris 434.
+- .foto-preview, .foto-upload, .foto-upload-preview, .foto-upload-copy sekitar baris 440–506: tampilan pratinjau/unggah foto.
+- .dashboard-foto-thumb sekitar baris 507: thumbnail foto yang dipakai pada tabel dashboard bila elemen tersebut memakai class itu.
+
+CARA MENGUBAH HAL YANG UMUM
+---------------------------
+Ganti warna satu bagian:
+  .hero { background: #warna-baru; }
+Untuk warna seluruh tema, cari variabel di :root dan ubah variabel terkait.
+
+Ganti jarak dalam satu komponen:
+  .hero-grid { gap: 3rem; }
+Ubah properti yang sudah ada sebelum menambahkan duplikat baru. Jika ada dua deklarasi selector sama, deklarasi yang lebih akhir dapat menang.
+
+Ganti ukuran judul:
+  .hero h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); }
+Gunakan clamp agar ukuran tetap menyesuaikan lebar layar.
+
+Atur crop gambar:
+  .hero-frame__image { object-fit: cover; object-position: center 35%; }
+Jika gambarnya salah, ubah sumber gambar di Blade/data, bukan properti CSS.
+
+Atur jumlah kolom:
+  .news-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+Pastikan ada aturan di media query HP agar kolom tidak terlalu sempit.
+
+Contoh penyesuaian mobile:
+  @media (max-width: 720px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-figure { max-width: 28rem; }
+  }
+Gunakan breakpoint yang sudah ada bila mungkin supaya aturan responsive tetap terkumpul.
+
+CARA KERJA AMAN
+---------------
+1. Tentukan halaman dan bagian: publik beranda/aspirasi/berita -> beranda.css; form anggota -> osis.css; navbar form anggota -> navbar.css; dashboard -> app.css/Tailwind.
+2. Cari class pada Blade atau lewat Inspect. Jangan menebak nama selector.
+3. Ubah satu kelompok kecil properti, simpan, lalu refresh halaman yang sesuai.
+4. Periksa desktop dan lebar HP. Coba juga hover/focus, tab sekbid, menu mobile, dan error/success form jika perubahan menyentuh status tersebut.
+5. Bila perubahan tidak terlihat: pastikan file CSS benar-benar dimuat oleh layout; hard refresh; periksa apakah ada deklarasi lain atau media query yang menimpa; periksa typo selector.
+6. Hindari menghapus outline focus, aturan [hidden], state aria-selected, atau prefers-reduced-motion. Aturan ini berpengaruh ke aksesibilitas dan interaksi.
+7. Untuk teks, data, foto, tautan, atau jumlah item, edit Blade/config/database melalui fungsi yang sesuai. CSS mengatur presentasi saja.
+
+CEK FILE LAYOUT
+---------------
+- resources/views/layouts/public.blade.php memuat public/css/beranda.css dan js/beranda.js.
+- resources/views/layouts/osis.blade.php memuat public/css/osis.css dan public/css/navbar.css serta js/osis.js.
+- Dashboard memakai layouts/app.blade.php. CSS-nya dibangun dari resources/css/app.css dan Tailwind; dua CSS OSIS di atas tidak otomatis mengatur dashboard.
+- Nama class dapat dicari di resources/views/beranda.blade.php, aspirasi/index.blade.php, berita/show.blade.php, osis/create.blade.php, dan osis/edit.blade.php.

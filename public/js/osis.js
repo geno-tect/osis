@@ -42,3 +42,40 @@ window.addEventListener('pageshow', () => {
         }
     });
 });
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[data-foto-dropzone]').forEach((dropzone) => {
+        const input = dropzone.querySelector('[data-foto-input]');
+        const preview = dropzone.querySelector('[data-foto-preview]');
+        if (!input || !preview) return;
+
+        const showFile = (file) => {
+            if (!file || !file.type.startsWith('image/')) return;
+            preview.src = URL.createObjectURL(file);
+            preview.hidden = false;
+            const copy = dropzone.querySelector('.foto-upload-copy');
+            if (copy) copy.innerHTML = '<strong>Foto siap diunggah</strong><br><small>' + file.name.replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])) + '</small>';
+            const hapusFoto = document.getElementById('hapus_foto');
+            if (hapusFoto) hapusFoto.value = '0';
+            const fotoLama = document.getElementById('foto-preview-box');
+            if (fotoLama) fotoLama.style.display = 'none';
+        };
+
+        input.addEventListener('change', () => showFile(input.files[0]));
+        ['dragenter', 'dragover'].forEach((eventName) => dropzone.addEventListener(eventName, (event) => {
+            event.preventDefault();
+            dropzone.classList.add('is-dragging');
+        }));
+        ['dragleave', 'drop'].forEach((eventName) => dropzone.addEventListener(eventName, (event) => {
+            event.preventDefault();
+            dropzone.classList.remove('is-dragging');
+        }));
+        dropzone.addEventListener('drop', (event) => {
+            const file = event.dataTransfer.files[0];
+            if (!file) return;
+            const transfer = new DataTransfer();
+            transfer.items.add(file);
+            input.files = transfer.files;
+            showFile(file);
+        });
+    });
+});

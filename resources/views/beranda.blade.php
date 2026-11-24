@@ -24,11 +24,6 @@
                         Kirim aspirasi
                     </a>
                 </div>
-
-                <p class="hero-note">
-                    
-                    {{ $content['hero']['note'] }}
-                </p>
             </div>
 
             <figure class="hero-figure">
@@ -55,35 +50,37 @@
             </div>
 
             <div class="agenda-grid">
-                @forelse ($content['events'] as $event)
+                @forelse ($agendaList as $event)
                     <article class="event-card">
                         <div class="event-media">
-                            <img src="{{ asset($event['image']) }}" alt="" width="640" height="360" loading="lazy">
+                            <img src="{{ asset($event->image ?: 'img/gambar-1.jpeg') }}" alt="" width="640" height="360" loading="lazy">
                         </div>
 
                         <div class="event-card__top">
-                            <time class="event-date" datetime="{{ $event['date_iso'] }}">
-                                <span class="event-date__day">{{ $event['day'] }}</span>
+                            <time class="event-date" datetime="{{ $event->start_date->toDateString() }}">
+                                <span class="event-date__day">{{ $event->start_date->format('d') }}</span>
                                 <span class="event-date__month">
-                                    {{ $event['month'] }}
-                                    <span class="event-date__year">{{ $event['year'] }}</span>
+                                    {{ $event->start_date->locale('id')->translatedFormat('M') }}
+                                    <span class="event-date__year">{{ $event->start_date->format('Y') }}</span>
                                 </span>
                             </time>
                             <div class="event-tags">
-                                <span class="chip status--{{ $event['status_tone'] }}">{{ $event['status'] }}</span>
+                                <span class="chip status--{{ $event->status_tone }}">{{ $event->status }}</span>
                             </div>
                         </div>
 
-                        <h3>{{ $event['title'] }}</h3>
-                        <p class="event-description">{{ $event['description'] }}</p>
+                        <h3>{{ $event->title }}</h3>
+                        <p class="event-description">{{ $event->description }}</p>
 
-                        <details class="event-details">
-                            <summary>
-                                <span>Detail kegiatan</span>
-                                <x-site-icon name="chevron-down" :size="16" class="event-details__chevron" />
-                            </summary>
-                            <p>{{ $event['detail'] }}</p>
-                        </details>
+                        @if ($event->detail)
+                            <details class="event-details">
+                                <summary>
+                                    <span>Detail kegiatan</span>
+                                    <x-site-icon name="chevron-down" :size="16" class="event-details__chevron" />
+                                </summary>
+                                <p>{{ $event->detail }}</p>
+                            </details>
+                        @endif
                     </article>
                 @empty
                     <div class="empty-state">
@@ -218,12 +215,12 @@
             </div>
 
             <div class="news-grid">
-                @forelse ($content['news'] as $article)
+                @forelse ($newsList as $article)
                     <article class="news-card">
-                        <a class="news-card__link" href="{{ route('berita.show', $article['slug']) }}" aria-label="Baca liputan: {{ $article['title'] }}">
+                        <a class="news-card__link" href="{{ route('berita.show', $article->slug) }}" aria-label="Baca liputan: {{ $article->title }}">
                             <div class="news-media" aria-hidden="true">
-                                @if (!empty($article['image']))
-                                    <img src="{{ asset($article['image']) }}" alt="" class="news-media__img" width="640" height="360" loading="lazy">
+                                @if ($article->image)
+                                    <img src="{{ asset($article->image) }}" alt="" class="news-media__img" width="640" height="360" loading="lazy">
                                 @else
                                     <span class="news-media__ring"></span>
                                     <span class="news-media__label">Foto liputan</span>
@@ -232,13 +229,13 @@
 
                             <div class="news-card__body">
                                 <div class="news-meta">
-                                    <span class="chip">{{ $article['category'] }}</span>
+                                <span class="chip">{{ $article->category }}</span>
                             
-                                    <time datetime="{{ $article['date'] }}">{{ $article['date_label'] }}</time>
+                                    <time datetime="{{ $article->date->toDateString() }}">{{ $article->date->locale('id')->translatedFormat('j F Y') }}</time>
                                 </div>
 
-                                <h3>{{ $article['title'] }}</h3>
-                                <p>{{ $article['excerpt'] }}</p>
+                                <h3>{{ $article->title }}</h3>
+                                <p>{{ $article->excerpt }}</p>
                                 <span class="news-card__cta">Baca liputan</span>
                             </div>
                         </a>

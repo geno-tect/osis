@@ -785,9 +785,13 @@ section[id],
 }
 
 .agenda-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    display: flex;
+    justify-content: flex-start;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
     gap: 1rem;
+    overflow-x: auto;
+    padding: 0.15rem 1.25rem 1rem;
 }
 
 .event-card {
@@ -799,6 +803,7 @@ section[id],
     border-radius: var(--radius-card);
     background: var(--white);
     box-shadow: var(--shadow-soft);
+    flex: 0 0 calc((100% - 2rem) / 3);
 }
 
 .event-media {
@@ -1349,20 +1354,21 @@ section[id],
 
 
 .news-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
-    gap: 1.25rem;
+    display: flex;
+    justify-content: flex-start;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    gap: 1rem;
+    overflow-x: auto;
+    padding: 0.15rem 1.25rem 1rem;
 }
 
 .news-card {
+    flex: 0 0 calc((100% - 2rem) / 3);
     overflow: hidden;
     border: 1px solid var(--line);
     border-radius: var(--radius-card);
     background: var(--white);
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        border-color 0.2s ease;
 }
 
 .news-card__link {
@@ -1485,8 +1491,6 @@ section[id],
 @media (hover: hover) and (pointer: fine) {
     .news-card:hover {
         border-color: var(--sky-200);
-        transform: translateY(-4px);
-        box-shadow: var(--shadow-lift);
     }
 }
 
@@ -2267,16 +2271,16 @@ a.social-link:hover {
 }
 
 @media (max-width: 960px) {
-    .agenda-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .event-card:last-child {
-        grid-column: 1 / -1;
+    .event-card {
+        flex-basis: calc((100% - 1rem) / 2);
     }
 }
 
 @media (max-width: 900px) {
+    .news-card {
+        flex-basis: calc((100% - 1rem) / 2);
+    }
+
     .section-head {
         display: block;
     }
@@ -2321,12 +2325,12 @@ a.social-link:hover {
         flex: 1 1 auto;
     }
 
-    .agenda-grid {
-        grid-template-columns: 1fr;
+    .event-card {
+        flex-basis: 86%;
     }
 
-    .event-card:last-child {
-        grid-column: auto;
+    .agenda-grid {
+        padding-inline: 1rem;
     }
 
     .bph-grid {
@@ -2356,7 +2360,11 @@ a.social-link:hover {
     }
 
     .news-grid {
-        grid-template-columns: 1fr;
+        padding-inline: 1rem;
+    }
+
+    .news-card {
+        flex-basis: 86%;
     }
 
     .article-hero h1 {

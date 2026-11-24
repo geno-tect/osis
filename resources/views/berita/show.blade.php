@@ -17,7 +17,6 @@
 
             <div class="article-meta">
                 <span class="chip">{{ $article['category'] }}</span>
-                <span class="sample-tag">Contoh</span>
                 <time datetime="{{ $article['date'] }}">{{ $article['date_label'] }}</time>
             </div>
 
@@ -38,8 +37,6 @@
             </div>
 
             <div class="article-body">
-                <p class="article-sample-note">Contoh artikel untuk pratinjau desain. Ganti dengan liputan resmi sebelum publikasi.</p>
-
                 @foreach ($article['body'] as $paragraph)
                     <p>{{ $paragraph }}</p>
                 @endforeach

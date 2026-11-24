@@ -19,7 +19,7 @@
     --danger-line: #ddb6b0;
     --focus: #9a6a1e;
     --radius: 4px;
-    --font-display: Georgia, 'Times New Roman', serif;
+    --font-display: Georgia, 'jakarta sans', serif;
     --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
 }
 
@@ -96,8 +96,6 @@ p {
     color: var(--paper);
 }
 
-/* Isi halaman */
-
 .main {
     padding-block: clamp(2rem, 5vw, 3.25rem) 4.5rem;
 }
@@ -162,8 +160,6 @@ p {
     color: var(--ink);
 }
 
-/* Pesan sukses dan error */
-
 .alert {
     margin-bottom: 1.5rem;
     padding: 0.8rem 1rem;
@@ -195,8 +191,6 @@ p {
     background: var(--danger-bg);
     color: var(--danger);
 }
-
-/* Tabel data */
 
 .table-wrap {
     overflow-x: auto;
@@ -305,8 +299,6 @@ p {
     font-size: 0.85rem;
 }
 
-/* Formulir */
-
 .form-card {
     max-width: 44rem;
     padding: clamp(1.25rem, 4vw, 2rem);
@@ -392,8 +384,6 @@ p {
     border-top: 1px solid var(--line);
 }
 
-/* Footer */
-
 .site-footer {
     padding-block: 1.25rem;
     border-top: 1px solid var(--line);
@@ -470,6 +460,48 @@ p {
     margin: 0;
     font-size: 0.85rem;
     color: var(--muted);
+}
+
+.foto-upload {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 6.5rem;
+    padding: 1rem;
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--radius);
+    background: var(--input-bg);
+    cursor: pointer;
+    transition: border-color 150ms ease, background 150ms ease;
+}
+
+.foto-upload:hover,
+.foto-upload:focus-within,
+.foto-upload.is-dragging {
+    border-color: var(--accent);
+    background: var(--row-hover);
+}
+
+.foto-upload-preview {
+    width: 4.5rem;
+    height: 4.5rem;
+    flex: 0 0 auto;
+    object-fit: cover;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+}
+
+.foto-upload-copy { color: var(--ink); line-height: 1.6; }
+.foto-upload-copy strong { color: var(--accent); }
+.foto-upload-copy small { color: var(--muted); }
+.foto-upload-input {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
 }
 
 .dashboard-foto-thumb {

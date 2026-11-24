@@ -121,7 +121,6 @@ class OsisController extends Controller
     {
         $osis = Osis::findOrFail($id);
 
-        // Hapus foto jika ada
         if ($osis->foto) {
             Storage::disk('public')->delete('osis/' . $osis->foto);
         }

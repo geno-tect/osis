@@ -129,23 +129,22 @@
             <label for="foto">Foto</label>
             @if ($osis->foto)
                 <div class="foto-preview" id="foto-preview-box">
-                    <img src="{{ asset('storage/osis/' . $osis->foto) }}" alt="Foto {{$osis->nama}}" class="foto-preview-img">
+                    <img src="{{ asset('storage/osis/' . $osis->foto) }}" alt="Foto {{$osis->nama}}" class="foto-preview-img" data-foto-current>
                     <p class="foto-preview-desc">Foto saat ini</p>
                     <button type="button" class="btn btn--ghost btn--small hapus-foto" id="btn-hapus-foto" title="Hapus foto">Hapus</button>
                     <input type="hidden" name="hapus_foto" id="hapus_foto" value="0">
                 </div>
             @endif
-            <input
-                type="file"
-                id="foto"
-                name="foto"
-                accept="image/jpeg, image/png, image/jpg"
-                @if ($errors->has('foto')) aria-invalid="true" aria-describedby="foto-error" @endif
-            >
+            <label class="foto-upload" for="foto" data-foto-dropzone>
+                <img class="foto-upload-preview" data-foto-preview alt="Pratinjau foto baru" hidden>
+                <span class="foto-upload-copy"><strong>Pilih gambar</strong> atau seret ke sini<br><small>JPG atau PNG, maksimal 5 MB</small></span>
+                <input class="foto-upload-input" type="file" id="foto" name="foto" accept="image/jpeg,image/png,image/jpg" data-foto-input
+                    @if ($errors->has('foto')) aria-invalid="true" aria-describedby="foto-error" @endif>
+            </label>
             @error('foto')
                 <p class="field-error" id="foto-error">{{ $message }}</p>
             @enderror
-            <p class="hint">Format: JPG, PNG. Maksimal 5MB. Biarkan kosong jika tidak mengganti foto.</p>
+            <p class="hint">Pilih foto baru untuk mengganti foto saat ini. Biarkan kosong jika tidak ingin mengubahnya.</p>
         </div>
 
         <div class="form-actions">
