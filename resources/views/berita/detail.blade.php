@@ -42,7 +42,7 @@
                 @endforeach
 
                 <a class="back-link" href="{{ route('beranda') }}#berita">
-                    <x-site-icon name="arrow-left" :size="18" />
+                    <x-ikon-situs name="arrow-left" :size="18" />
                     Kembali ke berita
                 </a>
             </div>

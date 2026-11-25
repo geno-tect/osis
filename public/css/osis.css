@@ -35,6 +35,7 @@ html {
 
 body {
     margin: 0;
+    min-width: 1024px;
     border-top: 4px solid var(--accent);
     background: var(--paper);
     color: var(--ink);
@@ -401,34 +402,6 @@ p {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
-}
-
-@media (max-width: 640px) {
-    .shell {
-        width: min(100% - 1.5rem, 68rem);
-    }
-
-    .page-head {
-        align-items: flex-start;
-    }
-
-    .page-head .btn {
-        width: 100%;
-    }
-
-    .field-row {
-        grid-template-columns: 1fr;
-        gap: 0;
-    }
-
-    .data-table {
-        min-width: 40rem;
-    }
-
-    .data-table th,
-    .data-table td {
-        padding: 0.7rem 0.8rem;
-    }
 }
 
 @media (prefers-reduced-motion: reduce) {

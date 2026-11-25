@@ -2,7 +2,7 @@
 
 @section('title', 'Beranda')
 @section('page', 'beranda')
-@section('meta_description', 'Informasi resmi OSIS SMK Pasim Plus Kota Sukabumi: profil pengurus, daftar anggota, berita kegiatan sekolah, dan kotak aspirasi siswa.')
+@section('meta_description', 'Informasi resmi OSIS: profil pengurus, daftar anggota, berita kegiatan sekolah, dan kotak aspirasi siswa.')
 
 @section('content')
     <section class="hero" id="beranda" aria-labelledby="hero-title" data-nav-match="beranda">
@@ -29,7 +29,7 @@
             <figure class="hero-figure">
 
                 <div class="hero-frame">
-                    <img class="hero-frame__image" src="{{ asset('img/hero-gambar.jpg') }}" alt="Dokumentasi OSIS" width="385" height="519">
+                    <img class="hero-frame__image" src="{{ asset('img/pasim.png') }}" alt="Dokumentasi OSIS" width="385" height="519">
 
                     <figcaption class="hero-caption">
                         <span class="hero-caption__kicker">Sekretariat OSIS</span>
@@ -53,32 +53,32 @@
                 @forelse ($agendaList as $event)
                     <article class="event-card">
                         <div class="event-media">
-                            <img src="{{ asset($event->image ?: 'img/gambar-1.jpeg') }}" alt="" width="640" height="360" loading="lazy">
+                            <img src="{{ asset($event->gambar ?: 'img/gambar-1.jpeg') }}" alt="" width="640" height="360" loading="lazy">
                         </div>
 
                         <div class="event-card__top">
-                            <time class="event-date" datetime="{{ $event->start_date->toDateString() }}">
-                                <span class="event-date__day">{{ $event->start_date->format('d') }}</span>
+                            <time class="event-date" datetime="{{ $event->tanggal_mulai->toDateString() }}">
+                                <span class="event-date__day">{{ $event->tanggal_mulai->format('d') }}</span>
                                 <span class="event-date__month">
-                                    {{ $event->start_date->locale('id')->translatedFormat('M') }}
-                                    <span class="event-date__year">{{ $event->start_date->format('Y') }}</span>
+                                    {{ $event->tanggal_mulai->locale('id')->translatedFormat('M') }}
+                                    <span class="event-date__year">{{ $event->tanggal_mulai->format('Y') }}</span>
                                 </span>
                             </time>
                             <div class="event-tags">
-                                <span class="chip status--{{ $event->status_tone }}">{{ $event->status }}</span>
+                                <span class="chip status--{{ $event->warna_status }}">{{ $event->status }}</span>
                             </div>
                         </div>
 
-                        <h3>{{ $event->title }}</h3>
-                        <p class="event-description">{{ $event->description }}</p>
+                        <h3>{{ $event->judul }}</h3>
+                        <p class="event-description">{{ $event->deskripsi }}</p>
 
-                        @if ($event->detail)
+                        @if ($event->rincian)
                             <details class="event-details">
                                 <summary>
                                     <span>Detail kegiatan</span>
-                                    <x-site-icon name="chevron-down" :size="16" class="event-details__chevron" />
+                                    <x-ikon-situs name="chevron-down" :size="16" class="event-details__chevron" />
                                 </summary>
-                                <p>{{ $event->detail }}</p>
+                                <p>{{ $event->rincian }}</p>
                             </details>
                         @endif
                     </article>
@@ -215,12 +215,12 @@
             </div>
 
             <div class="news-grid">
-                @forelse ($newsList as $article)
+                @forelse ($beritaList as $article)
                     <article class="news-card">
-                        <a class="news-card__link" href="{{ route('berita.show', $article->slug) }}" aria-label="Baca liputan: {{ $article->title }}">
+                        <a class="news-card__link" href="{{ route('berita.show', $article->slug) }}" aria-label="Baca liputan: {{ $article->judul }}">
                             <div class="news-media" aria-hidden="true">
-                                @if ($article->image)
-                                    <img src="{{ asset($article->image) }}" alt="" class="news-media__img" width="640" height="360" loading="lazy">
+                                @if ($article->gambar)
+                                    <img src="{{ asset($article->gambar) }}" alt="" class="news-media__img" width="640" height="360" loading="lazy">
                                 @else
                                     <span class="news-media__ring"></span>
                                     <span class="news-media__label">Foto liputan</span>
@@ -229,13 +229,13 @@
 
                             <div class="news-card__body">
                                 <div class="news-meta">
-                                <span class="chip">{{ $article->category }}</span>
+                                <span class="chip">{{ $article->kategori }}</span>
                             
-                                    <time datetime="{{ $article->date->toDateString() }}">{{ $article->date->locale('id')->translatedFormat('j F Y') }}</time>
+                                    <time datetime="{{ $article->tanggal->toDateString() }}">{{ $article->tanggal->locale('id')->translatedFormat('j F Y') }}</time>
                                 </div>
 
-                                <h3>{{ $article->title }}</h3>
-                                <p>{{ $article->excerpt }}</p>
+                                <h3>{{ $article->judul }}</h3>
+                                <p>{{ $article->ringkasan }}</p>
                                 <span class="news-card__cta">Baca liputan</span>
                             </div>
                         </a>

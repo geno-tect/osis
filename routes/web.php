@@ -1,27 +1,27 @@
 <?php
 
-use App\Http\Controllers\AspirationController;
-use App\Http\Controllers\EventController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\NewsAdminController;
-use App\Http\Controllers\NewsController;
+use App\Http\Controllers\AgendaController;
+use App\Http\Controllers\AspirasiController;
+use App\Http\Controllers\BerandaController;
+use App\Http\Controllers\BeritaAdminController;
+use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\OsisController;
 use App\Http\Controllers\ProfileController;
-use App\Models\Event;
-use App\Models\Aspiration;
+use App\Models\Agenda;
+use App\Models\Aspirasi;
+use App\Models\Berita;
 use App\Models\Osis;
-use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index'])->name('beranda');
+Route::get('/', [BerandaController::class, 'index'])->name('beranda');
 
-Route::get('/aspirasi', [AspirationController::class, 'index'])->name('aspirasi.index');
-Route::post('/aspirasi', [AspirationController::class, 'store'])
+Route::get('/aspirasi', [AspirasiController::class, 'index'])->name('aspirasi.index');
+Route::post('/aspirasi', [AspirasiController::class, 'store'])
     ->middleware('throttle:5,1')
     ->name('aspirasi.store');
 
-Route::get('/berita/{slug}', [NewsController::class, 'show'])->name('berita.show');
+Route::get('/berita/{slug}', [BeritaController::class, 'show'])->name('berita.show');
 
 Route::get('/osis', fn () => redirect('/#anggota'));
 
@@ -34,10 +34,10 @@ Route::get('/dashboard', function (Request $request) {
         'totalAnggota' => Osis::count(),
         'totalSekbid' => Osis::query()->distinct()->count('sekbid'),
         'anggotaList' => Osis::latest()->get(),
-        'agendaList' => Event::query()->orderByDesc('start_date')->get(),
-        'totalAgendaMendatang' => Event::upcoming()->count(),
-        'newsList' => News::query()->orderByDesc('date')->get(),
-        'aspirationList' => Aspiration::query()->latest()->get(),
+        'agendaList' => Agenda::query()->orderByDesc('tanggal_mulai')->get(),
+        'totalAgendaMendatang' => Agenda::upcoming()->count(),
+        'beritaList' => Berita::query()->orderByDesc('tanggal')->get(),
+        'aspirasiList' => Aspirasi::query()->latest()->get(),
     ]);
 })->middleware('auth')->name('dashboard');
 
@@ -48,17 +48,17 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/dashboard/berita/create', [NewsAdminController::class, 'create'])->name('news.create');
-    Route::post('/dashboard/berita', [NewsAdminController::class, 'store'])->name('news.store');
-    Route::get('/dashboard/berita/{news}/edit', [NewsAdminController::class, 'edit'])->name('news.edit');
-    Route::put('/dashboard/berita/{news}', [NewsAdminController::class, 'update'])->name('news.update');
-    Route::delete('/dashboard/berita/{news}', [NewsAdminController::class, 'destroy'])->name('news.destroy');
+    Route::get('/dashboard/berita/create', [BeritaAdminController::class, 'create'])->name('berita.create');
+    Route::post('/dashboard/berita', [BeritaAdminController::class, 'store'])->name('berita.store');
+    Route::get('/dashboard/berita/{berita}/edit', [BeritaAdminController::class, 'edit'])->name('berita.edit');
+    Route::put('/dashboard/berita/{berita}', [BeritaAdminController::class, 'update'])->name('berita.update');
+    Route::delete('/dashboard/berita/{berita}', [BeritaAdminController::class, 'destroy'])->name('berita.destroy');
 
-    Route::get('/agenda/create', [EventController::class, 'create'])->name('events.create');
-    Route::post('/agenda', [EventController::class, 'store'])->name('events.store');
-    Route::get('/agenda/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
-    Route::put('/agenda/{event}', [EventController::class, 'update'])->name('events.update');
-    Route::delete('/agenda/{event}', [EventController::class, 'destroy'])->name('events.destroy');
+    Route::get('/agenda/create', [AgendaController::class, 'create'])->name('agenda.create');
+    Route::post('/agenda', [AgendaController::class, 'store'])->name('agenda.store');
+    Route::get('/agenda/{agenda}/edit', [AgendaController::class, 'edit'])->name('agenda.edit');
+    Route::put('/agenda/{agenda}', [AgendaController::class, 'update'])->name('agenda.update');
+    Route::delete('/agenda/{agenda}', [AgendaController::class, 'destroy'])->name('agenda.destroy');
 
     Route::get('/osis/create', [OsisController::class, 'create'])->name('osis.create');
     Route::post('/osis', [OsisController::class, 'store'])->name('osis.store');

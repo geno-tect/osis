@@ -3,7 +3,7 @@
 return [
     'cabinet' => 'kelompok 6',
     'period' => '2026/2027',
-    'school' => 'SMK Pasim Plus',
+    'school' => 'SMK',
     'city' => 'Kota Sukabumi',
 
     'hero' => [
@@ -17,9 +17,9 @@ return [
 
 
     'about' => [
-        'title' => 'OSIS SMK Pasim Plus',
+        'title' => 'OSIS',
         'paragraphs' => [
-            'OSIS SMK Pasim Plus adalah wadah organisasi siswa untuk menyalurkan ide, minat, dan kepedulian. Kabinet kelompok 6 bekerja lewat sepuluh seksi bidang yang menyentuh kegiatan akademik, seni, olahraga, sosial, dan lingkungan.',
+            'OSIS adalah wadah organisasi siswa untuk menyalurkan ide, minat, dan kepedulian. Kabinet kelompok 6 bekerja lewat sepuluh seksi bidang yang menyentuh kegiatan akademik, seni, olahraga, sosial, dan lingkungan.',
             'Kami ingin informasi kegiatan mudah ditemukan, aspirasi mudah dikirim, dan setiap program punya alasan yang jelas.',
         ],
         'vision' => 'Menjadi ruang terbuka bagi setiap siswa untuk menyampaikan ide, mengambil peran, dan merasakan dampak dari kegiatan sekolah.',
@@ -59,9 +59,8 @@ return [
 
     'contact' => [
         'address_lines' => [
-            'SMK Pasim Plus',
+            'SMK',
             'Kota Sukabumi, Jawa Barat',
         ],
-        'email' => null,
     ],
 ];

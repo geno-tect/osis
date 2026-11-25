@@ -12,7 +12,7 @@ class OsisController extends Controller
 {
     public function create()
     {
-        return view('osis.create', [
+        return view('osis.buat', [
             'sekbidOptions' => $this->sekbidOptions(),
         ]);
     }
@@ -36,7 +36,7 @@ class OsisController extends Controller
             'jabatan' => $request->filled('jabatan') ? $request->jabatan : 'Anggota',
         ]);
 
-        // Handle photo upload
+      
         if ($request->hasFile('foto')) {
             $file = $request->file('foto');
             $extension = $file->getClientOriginalExtension();
@@ -58,7 +58,7 @@ class OsisController extends Controller
     {
         $osis = Osis::findOrFail($id);
 
-        return view('osis.edit', [
+        return view('osis.ubah', [
             'osis' => $osis,
             'sekbidOptions' => $this->sekbidOptions(),
         ]);
@@ -86,14 +86,14 @@ class OsisController extends Controller
             'jabatan' => $request->filled('jabatan') ? $request->jabatan : $osis->jabatan,
         ]);
 
-        // Handle photo upload or removal
+       
         if ($request->boolean('hapus_foto')) {
             if ($osis->foto) {
                 Storage::disk('public')->delete('osis/' . $osis->foto);
             }
             $data['foto'] = null;
         } elseif ($request->hasFile('foto')) {
-            // Hapus foto lama jika ada
+            
             if ($osis->foto) {
                 Storage::disk('public')->delete('osis/' . $osis->foto);
             }
@@ -104,7 +104,7 @@ class OsisController extends Controller
             $file->storeAs('osis', $filename, 'public');
             $data['foto'] = $filename;
         } else {
-            // Jangan timpa foto lama jika tidak ada file baru yang diunggah
+            
             unset($data['foto']);
         }
 

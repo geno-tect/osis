@@ -10,9 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#0ea5e9">
-    <meta name="description" content="@yield('meta_description', 'Informasi resmi OSIS SMK Pasim Plus Kota Sukabumi: agenda, program kerja, berita kegiatan, dan kotak aspirasi siswa.')">
+    <meta name="description" content="@yield('meta_description', 'Informasi resmi OSIS : agenda, program kerja, berita kegiatan, dan kotak aspirasi siswa.')">
 
-    <title>@yield('title', 'Beranda') | OSKA PASIM</title>
+    <title>@yield('title', 'Beranda') | OSKA</title>
 
     <link rel="icon" type="image/png" href="{{ asset('img/logo-osis-dikanan.png') }}">
 
@@ -33,7 +33,8 @@
                     <img src="{{ asset('img/logo-osis-dikanan.png') }}" alt="" width="44" height="44">
                 </span>
                 <span class="brand-copy">
-                    <span class="brand-name">OSKA PASIM</span>
+                    <span class="brand-name">OSKA kelompok 6
+                    </span>
                     <span class="brand-sub">Kabinet {{ $site['cabinet'] }}</span>
                 </span>
             </a>
@@ -48,27 +49,7 @@
 
             <div class="header-actions">
                 <a class="button button--sky button--small header-cta" href="{{ route('aspirasi.index') }}">Kirim aspirasi</a>
-
-                <button class="nav-toggle" type="button"
-                        aria-expanded="false"
-                        aria-controls="mobile-menu"
-                        aria-label="Buka menu navigasi"
-                        data-nav-toggle>
-                    <span class="nav-toggle__open"><x-site-icon name="menu" :size="22" /></span>
-                    <span class="nav-toggle__close"><x-site-icon name="close" :size="22" /></span>
-                </button>
             </div>
-        </div>
-
-        <div class="mobile-menu" id="mobile-menu" hidden data-mobile-menu>
-            <nav class="container mobile-menu__nav" aria-label="Navigasi seluler">
-                <a href="{{ route('beranda') }}" data-nav-id="beranda">Beranda</a>
-                <a href="{{ route('beranda') }}#tentang" data-nav-id="tentang">Tentang Kami</a>
-                <a href="{{ route('beranda') }}#struktur" data-nav-id="anggota">Anggota OSIS</a>
-                <a href="{{ route('beranda') }}#berita" data-nav-id="berita" @if ($isBerita) aria-current="page" @endif>Berita</a>
-                <a href="{{ route('aspirasi.index') }}" data-nav-id="aspirasi" @if ($isAspirasi) aria-current="page" @endif>Aspirasi</a>
-                <a class="button button--sky mobile-menu__cta" href="{{ route('aspirasi.index') }}">Kirim aspirasi</a>
-            </nav>
         </div>
     </header>
 
@@ -79,12 +60,12 @@
     <footer class="site-footer">
         <div class="container footer-grid">
             <div class="footer-brand">
-                <a class="footer-brand__link" href="{{ route('beranda') }}" aria-label="OSKA PASIM, kembali ke beranda">
+                <a class="footer-brand__link" href="{{ route('beranda') }}" aria-label="OSKA kelompok 6, kembali ke beranda">
                     <span class="footer-logo">
                         <img src="{{ asset('img/logo-osis-dikanan.png') }}" alt="" width="48" height="48">
                     </span>
                     <span>
-                        <span class="footer-brand__name">OSKA PASIM</span>
+                        <span class="footer-brand__name">OSKA kelompok 6</span>
                         <span class="footer-brand__sub">OSIS {{ $site['school'] }} {{ $site['city'] }}</span>
                     </span>
                 </a>
@@ -95,12 +76,11 @@
                     @foreach ($site['social'] as $social)
                         @if ($social['url'])
                             <a class="social-link" href="{{ $social['url'] }}" target="_blank" rel="noopener noreferrer" aria-label="{{ $social['label'] }} OSIS, buka di tab baru">
-                                <x-site-icon :name="$social['icon']" :size="20" />
+                                <x-ikon-situs :name="$social['icon']" :size="20" />
                             </a>
                         @else
                             <span class="social-link is-disabled" aria-disabled="true">
-                                <x-site-icon :name="$social['icon']" :size="20" />
-                                <span class="sr-only">{{ $social['label'] }}, tautan belum tersedia</span>
+                                <x-ikon-situs :name="$social['icon']" :size="20" />
                             </span>
                         @endif
                     @endforeach
@@ -120,16 +100,13 @@
                 <h2 class="footer-heading">Sekretariat</h2>
                 <address>
                     <span class="footer-address-line">
-                        <x-site-icon name="map-pin" :size="18" />
+                        <x-ikon-situs name="map-pin" :size="18" />
                         <span class="footer-address-copy">
                             @foreach ($site['contact']['address_lines'] as $line)
                                 <span>{{ $line }}</span>
                             @endforeach
                         </span>
                     </span>
-                    @if ($site['contact']['email'])
-                        <a class="footer-email" href="mailto:{{ $site['contact']['email'] }}">{{ $site['contact']['email'] }}</a>
-                    @endif
                 </address>
             </div>
         </div>

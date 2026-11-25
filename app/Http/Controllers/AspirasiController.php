@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Aspiration;
+use App\Models\Aspirasi;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class AspirationController extends Controller
+class AspirasiController extends Controller
 {
     public function index()
     {
@@ -30,7 +30,7 @@ class AspirationController extends Controller
             'nama.max' => 'Nama maksimal 100 karakter.',
         ]);
 
-        Aspiration::create($validated);
+        Aspirasi::create($validated);
 
         return redirect()
             ->route('aspirasi.index')

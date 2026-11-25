@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        $this->call(EventSeeder::class);
-        $this->call(NewsSeeder::class);
+        $this->call(AgendaSeeder::class);
+        $this->call(BeritaSeeder::class);
     }
 }

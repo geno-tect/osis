@@ -1,0 +1,143 @@
+﻿PANDUAN PRAKTIS MENGUBAH CSS SAAT ADA PERMINTAAN
+================================================
+
+Contoh permintaan: “Coba ganti background.”
+Panduan ini untuk pemula yang perlu menemukan bagian, mengubah tampilannya, lalu memastikan hasilnya cocok di desktop dan HP.
+
+1. TENTUKAN BAGIAN YANG DIMAKSUD
+--------------------------------
+Tanya/identifikasi background yang diminta: seluruh halaman, hero, section tentang, kartu agenda, panel aspirasi, footer, atau halaman form anggota. “Background” bisa berarti warna area atau gambar latar.
+
+Peta cepat project:
+- Beranda dan seluruh halaman publik (aspirasi/detail berita), header/footer publik: public/css/beranda.css
+- Header halaman tambah/edit anggota: public/css/navbar.css
+- Form/tabel halaman tambah/edit anggota: public/css/osis.css
+- Dashboard admin: resources/css/app.css atau class Tailwind pada Blade, terutama resources/views/dashboard.blade.php dan resources/views/components/dashboard-summary.blade.php
+
+2. TEMUKAN SELECTOR-NYA
+-----------------------
+Cara paling gampang:
+1. Buka halaman di browser.
+2. Klik kanan tepat di area yang akan diubah, pilih Inspect/Periksa.
+3. Pilih elemen yang disorot. Cari class di HTML, misalnya class="hero".
+4. Di CSS, cari class itu dengan Ctrl+F. Selector CSS ditulis memakai titik: .hero.
+5. Pastikan file CSS-nya benar: layout publik memuat beranda.css; layout form anggota memuat osis.css dan navbar.css.
+
+Cara lewat pencarian kode:
+Buka terminal pada folder project, lalu jalankan:
+  rg -n "\.hero \{" public/css/beranda.css
+Ini mencari aturan .hero dan menampilkan nomor barisnya.
+
+3. CONTOH: GANTI BACKGROUND HERO SAJA
+-------------------------------------
+Hero beranda memakai selector .hero, ada di public/css/beranda.css sekitar baris 593. Tambahkan/ubah properti background di aturan itu:
+
+  .hero {
+      background: #f0f9ff;
+  }
+
+Simpan lalu refresh beranda. Hanya area hero yang berubah.
+
+Kalau ingin warna seluruh halaman publik, ubah aturan body (sekitar baris 59):
+
+  body {
+      background: #f8fafc;
+  }
+
+Perhatian: body memengaruhi semua halaman yang memakai layouts/public.blade.php. Jangan pakai body jika pengajar hanya meminta satu section.
+
+4. CONTOH: GANTI LATAR SECTION / KARTU / FOOTER
+------------------------------------------------
+Section biru muda “Tentang kami”:
+Cari .section--sky (sekitar baris 215), ubah background di situ. Kelas ini hanya untuk section yang memang memakai class section--sky.
+
+Kartu agenda:
+Cari .event-card (sekitar baris 797), ubah background di aturan tersebut.
+Contoh:
+  .event-card {
+      background: #ffffff;
+  }
+
+Panel ajakan aspirasi:
+Cari .aspiration-band (sekitar baris 1502), ubah background di selector itu.
+
+Footer publik:
+Cari .site-footer (sekitar baris 1577), ubah background-nya di situ.
+
+Untuk halaman form anggota, latar utama diatur oleh body pada public/css/osis.css. Warna variabel seperti --paper dan --surface ada di :root paling atas file. Navbar halaman anggota memiliki aturan .site-header pada public/css/navbar.css.
+
+5. PILIH WARNA DAN JAGA TEKS TETAP TERBACA
+------------------------------------------
+Project memakai variabel warna di awal beranda.css, misalnya:
+- --white: putih
+- --bg-soft: latar abu/biru muda
+- --sky-100: biru muda
+- --sky-500: biru terang
+- --ink-900: teks gelap
+- --line: warna garis/border
+
+Warna bisa ditulis sebagai nama (white), kode hex (#f0f9ff), atau variabel (var(--bg-soft)). Contoh:
+  .hero { background: var(--bg-soft); }
+
+Setelah mengubah latar, cek warna teks. Latar gelap biasanya perlu teks terang; latar terang perlu teks gelap. Jangan membuat tulisan sulit dibaca. Periksa juga tombol, link, dan focus outline.
+
+6. KALAU YANG DIMINTA GAMBAR BACKGROUND
+---------------------------------------
+Background gambar berbeda dari mengganti foto konten. CSS contoh:
+  .hero {
+      background-image: url("../img/nama-gambar.jpg");
+      background-size: cover;
+      background-position: center;
+  }
+
+Path URL dihitung dari lokasi file CSS: dari public/css/beranda.css menuju public/img berarti ../img/nama-gambar.jpg. Pastikan file gambarnya memang ada.
+
+Foto utama hero saat ini bukan background CSS, melainkan elemen <img class="hero-frame__image"> di resources/views/beranda.blade.php. Kalau permintaannya mengganti foto hero, ganti file/path gambar yang dipakai Blade, bukan background .hero.
+
+7. GANTI TEKS ATAU WARNA TEKS
+-----------------------------
+Warna teks ditentukan properti color. Contoh:
+  .hero-lede { color: #334155; }
+
+Kalau diminta mengganti kalimat, jangan ubah CSS. Ubah kontennya di Blade/config/beranda.php. CSS hanya mengatur tampilannya, bukan isi tulisan.
+
+8. PERIKSA ATURAN HP / RESPONSIVE
+---------------------------------
+Di akhir beranda.css ada media query seperti:
+  @media (max-width: 720px) { ... }
+
+Aturan di dalamnya berlaku untuk layar kecil dan dapat menimpa aturan desktop. Jika background ingin sama di semua ukuran, biasanya cukup ubah selector utama. Jika hanya HP yang berbeda, ubah/tambahkan aturan di media query yang sesuai:
+  @media (max-width: 720px) {
+      .hero { background: #e0f2fe; }
+  }
+
+Setelah perubahan, lihat halaman pada lebar desktop dan HP. Pastikan teks, gambar, tombol, dan kolom tetap terlihat rapi.
+
+9. CARA MEMASTIKAN PERUBAHAN BERHASIL
+-------------------------------------
+1. Ubah satu hal saja terlebih dahulu.
+2. Simpan file CSS.
+3. Refresh halaman. Jika tidak berubah, tekan Ctrl+F5 untuk hard refresh.
+4. Periksa lagi selector dan file CSS yang dimuat layout.
+5. Jika berubah di area yang salah, selector terlalu umum (misalnya body). Gunakan selector spesifik (misalnya .hero atau .site-footer).
+6. Jika aturan terlihat benar tetapi tertimpa, cari selector yang sama di bawah file dan di dalam @media.
+7. Coba tampilan desktop dan HP.
+8. Jangan menghapus aturan lain yang tidak terkait.
+
+10. CARA MENJELASKAN HASIL KE PENGAJAR
+--------------------------------------
+Contoh: “Saya mengganti background hero pada public/css/beranda.css di selector .hero. Perubahan ini hanya berlaku pada bagian pembuka halaman. Saya juga mengecek tampilannya pada desktop dan HP.”
+
+RINGKASAN PILIH SELECTOR
+------------------------
+Seluruh halaman publik: body di beranda.css
+Hero: .hero
+Header publik: .site-header di beranda.css
+Section tentang: .section--sky / .about-grid
+Kartu agenda: .event-card
+Kartu berita: .news-card
+CTA aspirasi: .aspiration-band
+Footer publik: .site-footer
+Header form anggota: .site-header di navbar.css
+Latar form anggota: body di osis.css
+Dashboard admin: app.css / class Tailwind di Blade

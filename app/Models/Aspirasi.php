@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Aspiration extends Model
+class Aspirasi extends Model
 {
+    protected $table = 'aspirasi';
+
     protected $fillable = [
         'kategori',
         'pesan',

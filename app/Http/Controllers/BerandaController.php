@@ -2,30 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Event;
-use App\Models\News;
+use App\Models\Agenda;
+use App\Models\Berita;
 use App\Models\Osis;
 use Illuminate\Support\Facades\Schema;
 
-class HomeController extends Controller
+class BerandaController extends Controller
 {
     public function index()
     {
         $osisList = Schema::hasTable('osis')
             ? Osis::orderBy('nama')->get()
             : collect();
-        $agendaList = Schema::hasTable('events')
-            ? Event::upcoming()->get()
+        $agendaList = Schema::hasTable('agenda')
+            ? Agenda::upcoming()->get()
             : collect();
-        $newsList = Schema::hasTable('news')
-            ? News::query()->orderByDesc('date')->get()
+        $beritaList = Schema::hasTable('berita')
+            ? Berita::query()->orderByDesc('tanggal')->get()
             : collect();
 
         return view('beranda', [
             'content' => config('beranda'),
             'osisList' => $osisList,
             'agendaList' => $agendaList,
-            'newsList' => $newsList,
+            'beritaList' => $beritaList,
         ]);
     }
 }

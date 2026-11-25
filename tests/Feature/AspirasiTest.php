@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class AspirationTest extends TestCase
+class AspirasiTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -35,7 +35,7 @@ class AspirationTest extends TestCase
             ->assertRedirect('/aspirasi')
             ->assertSessionHas('success');
 
-        $this->assertDatabaseHas('aspirations', [
+        $this->assertDatabaseHas('aspirasi', [
             'kategori' => 'Fasilitas',
             'pesan' => $data['pesan'],
             'nama' => 'Siswa Uji',
@@ -48,7 +48,7 @@ class AspirationTest extends TestCase
             ->assertRedirect('/aspirasi')
             ->assertSessionHas('success');
 
-        $this->assertDatabaseHas('aspirations', [
+        $this->assertDatabaseHas('aspirasi', [
             'kategori' => 'Fasilitas',
             'nama' => null,
         ]);
@@ -62,7 +62,7 @@ class AspirationTest extends TestCase
         ])
             ->assertSessionHasErrors(['kategori', 'pesan']);
 
-        $this->assertDatabaseCount('aspirations', 0);
+        $this->assertDatabaseCount('aspirasi', 0);
     }
 
     public function test_message_has_minimum_length(): void
@@ -72,7 +72,7 @@ class AspirationTest extends TestCase
             'pesan' => 'Terlalu singkat.',
         ])->assertSessionHasErrors('pesan');
 
-        $this->assertDatabaseCount('aspirations', 0);
+        $this->assertDatabaseCount('aspirasi', 0);
     }
 
     public function test_category_must_be_available(): void
@@ -82,6 +82,6 @@ class AspirationTest extends TestCase
             'pesan' => 'Mohon tambah tempat sampah di koridor lantai dua agar kelas tetap bersih.',
         ])->assertSessionHasErrors('kategori');
 
-        $this->assertDatabaseCount('aspirations', 0);
+        $this->assertDatabaseCount('aspirasi', 0);
     }
 }

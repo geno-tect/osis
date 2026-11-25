@@ -30,7 +30,7 @@
             @if (session('success'))
                 <div class="success-card" role="status" tabindex="-1" data-success>
                     <span class="success-icon" aria-hidden="true">
-                        <x-site-icon name="check" :size="26" />
+                        <x-ikon-situs name="check" :size="26" />
                     </span>
                     <h2>Aspirasi terkirim.</h2>
                     <p>Terima kasih. Pesanmu sudah masuk ke kotak aspirasi pengurus.</p>

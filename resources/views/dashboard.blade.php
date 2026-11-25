@@ -15,7 +15,7 @@
                    class="inline-flex items-center rounded-md bg-gray-800 px-4 py-2 text-sm font-semibold text-white transition duration-150 ease-in-out hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-gray-900 dark:bg-gray-200 dark:text-gray-800 dark:hover:bg-white">
                     Tambah anggota
                 </a>
-                <a href="{{ route('events.create') }}"
+                <a href="{{ route('agenda.create') }}"
                    class="inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700">
                     Tambah agenda
                 </a>
@@ -32,14 +32,14 @@
                 </div>
             @endif
 
-            <x-dashboard-summary
+            <x-ringkasan-dashboard
                 :total-anggota="$totalAnggota"
                 :total-sekbid="$totalSekbid"
                 :anggota-list="$anggotaList"
                 :agenda-list="$agendaList"
                 :total-agenda-mendatang="$totalAgendaMendatang"
-                :news-list="$newsList"
-                :aspiration-list="$aspirationList"
+                :berita-list="$beritaList"
+                :aspirasi-list="$aspirasiList"
             />
         </div>
     </div>

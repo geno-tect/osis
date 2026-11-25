@@ -5,27 +5,29 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class Event extends Model
+class Agenda extends Model
 {
+    protected $table = 'agenda';
+
     protected $fillable = [
-        'title',
-        'start_date',
-        'description',
+        'judul',
+        'tanggal_mulai',
+        'deskripsi',
         'status',
-        'status_tone',
-        'detail',
-        'image',
+        'warna_status',
+        'rincian',
+        'gambar',
     ];
 
     protected function casts(): array
     {
         return [
-            'start_date' => 'date',
+            'tanggal_mulai' => 'date',
         ];
     }
 
     public function scopeUpcoming(Builder $query): Builder
     {
-        return $query->whereDate('start_date', '>=', today())->orderBy('start_date');
+        return $query->whereDate('tanggal_mulai', '>=', today())->orderBy('tanggal_mulai');
     }
 }
