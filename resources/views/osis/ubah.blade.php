@@ -129,7 +129,7 @@
             <label for="foto">Foto</label>
             @if ($osis->foto)
                 <div class="foto-preview" id="foto-preview-box">
-                    <img src="{{ asset('storage/osis/' . $osis->foto) }}" alt="Foto {{$osis->nama}}" class="foto-preview-img" data-foto-current>
+                    <img src="{{ asset('storage/osis/' . $osis->foto) }}" alt="Foto {{$osis->nama}}" class="foto-preview-img">
                     <p class="foto-preview-desc">Foto saat ini</p>
                     <button type="button" class="btn btn--ghost btn--small hapus-foto" id="btn-hapus-foto" title="Hapus foto">Hapus</button>
                     <input type="hidden" name="hapus_foto" id="hapus_foto" value="0">

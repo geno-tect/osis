@@ -7,7 +7,6 @@ return [
     'city' => 'Kota Sukabumi',
 
     'hero' => [
-        'title' => 'Dari ide siswa, jadi gerak sekolah.',
         'title_lines' => [
             'Dari ide siswa,',
             'jadi gerak sekolah.',

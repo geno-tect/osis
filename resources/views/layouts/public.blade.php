@@ -1,5 +1,5 @@
 @php
-    $site = $content ?? config('beranda');
+    $site = $content;
     $isBerita = request()->routeIs('berita.*');
     $isAspirasi = request()->routeIs('aspirasi.*');
 @endphp
@@ -26,7 +26,7 @@
 <body data-page="@yield('page', 'site')">
     <a class="skip-link" href="#konten">Langsung ke konten</a>
 
-    <header class="site-header" data-site-header>
+    <header class="site-header">
         <div class="container header-bar">
             <a class="brand" href="{{ route('beranda') }}" aria-label="OSKA PASIM, kembali ke beranda">
                 <span class="brand-logo">

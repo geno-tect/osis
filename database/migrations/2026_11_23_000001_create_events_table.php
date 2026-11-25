@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -22,25 +21,6 @@ return new class extends Migration
 
             $table->index('start_date');
         });
-
-        $now = now();
-        $events = collect(config('beranda.events', []))->map(function (array $event) use ($now) {
-            return [
-                'title' => $event['title'],
-                'start_date' => $event['date_iso'],
-                'description' => $event['description'],
-                'status' => $event['status'],
-                'status_tone' => $event['status_tone'] ?? 'sky',
-                'detail' => $event['detail'] ?? null,
-                'image' => $event['image'] ?? null,
-                'created_at' => $now,
-                'updated_at' => $now,
-            ];
-        })->all();
-
-        if ($events !== []) {
-            DB::table('events')->insert($events);
-        }
     }
 
     public function down(): void

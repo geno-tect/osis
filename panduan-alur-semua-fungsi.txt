@@ -1,6 +1,10 @@
 ﻿PANDUAN ALUR SEMUA FUNGSI APLIKASI OSIS
 =======================================
 
+CATATAN: Dokumen ini snapshot lama. Sebagian nama controller, model, tabel,
+dan file sudah berubah ke bahasa Indonesia. Lihat README.md untuk struktur
+yang berlaku saat ini.
+
 Dokumen ini menjelaskan alur berdasarkan kode project saat ini. Nama route dan file ditulis agar alur bisa ditelusuri kembali. Aplikasi memakai Laravel, Blade, dan database.
 
 DAFTAR FITUR

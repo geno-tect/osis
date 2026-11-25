@@ -133,6 +133,6 @@ class OsisController extends Controller
 
     private function sekbidOptions(): array
     {
-        return array_column(config('beranda.sekbid'), 'name');
+        return Osis::SEKBID_OPTIONS;
     }
 }

@@ -8,11 +8,11 @@ Blade dan CSS custom, sedangkan dashboard admin memakai Laravel Breeze.
 ## Fitur
 
 - Halaman `/` adalah beranda publik: agenda dari database, visi/misi, Badan
-  Pengurus Harian, tab Sekbid 1-10, berita contoh, dan banner aspirasi.
+  Pengurus Harian, daftar anggota, berita kegiatan, dan banner aspirasi.
   Informasi profil berada di `config/beranda.php`.
-- Form `/aspirasi` menyimpan pesan ke tabel `aspirations`. Nama boleh
+- Form `/aspirasi` menyimpan pesan ke tabel `aspirasi`. Nama boleh
   dikosongkan dan pengiriman dibatasi 5 kali per menit.
-- Detail artikel contoh tersedia di `/berita/{slug}`.
+- Detail artikel tersedia di `/berita/{slug}`.
 - Seluruh data anggota tampil di beranda dan bisa dibuka tanpa akun. Tidak ada
   halaman daftar anggota terpisah.
 - Tamu hanya bisa melihat data anggota. Tidak ada tombol tambah, edit, atau
@@ -31,7 +31,7 @@ Blade dan CSS custom, sedangkan dashboard admin memakai Laravel Breeze.
 - Pencarian bawaan browser tetap bisa dipakai melalui `Ctrl + F`; tidak ada
   kotak pencarian aplikasi.
 - Form tambah dan edit anggota memakai layout dan CSS sendiri (`osis.css` dan
-  `navbar.css`), terpisah dari Tailwind Breeze.
+  `navigasi.css`), terpisah dari Tailwind Breeze.
 
 ## Teknologi
 
@@ -132,43 +132,46 @@ Atau promosikan akun yang sudah ada:
 ## Struktur penting
 
 ```text
-app/Http/Controllers/HomeController.php     beranda publik
-app/Http/Controllers/NewsController.php     detail artikel contoh
-app/Http/Controllers/AspirationController.php form dan simpan aspirasi
-app/Http/Controllers/EventController.php  CRUD agenda/kegiatan
-app/Http/Controllers/OsisController.php     CRUD + hapus anggota
-app/Http/Controllers/Auth/                  login dan reset password
-app/Http/Middleware/EnsureUserIsAdmin.php   penjaga route admin
-app/Models/Aspiration.php                   model aspirasi
-app/Models/Event.php                        model agenda/kegiatan
-app/Models/Osis.php                         model data anggota
-app/Models/User.php                         role dan isAdmin()
-config/beranda.php                          seluruh isi beranda
-routes/web.php                              route publik, dashboard, OSIS
-routes/auth.php                             login, logout, reset password
+app/Http/Controllers/BerandaController.php   beranda publik
+app/Http/Controllers/BeritaController.php    detail berita
+app/Http/Controllers/BeritaAdminController.php CRUD berita
+app/Http/Controllers/AspirasiController.php  form dan simpan aspirasi
+app/Http/Controllers/AgendaController.php    CRUD agenda/kegiatan
+app/Http/Controllers/OsisController.php      CRUD + hapus anggota
+app/Http/Controllers/Auth/                   login dan reset password
+app/Http/Middleware/PastikanPenggunaAdmin.php penjaga route admin
+app/Models/Aspirasi.php                      model aspirasi
+app/Models/Agenda.php                        model agenda/kegiatan
+app/Models/Berita.php                        model berita
+app/Models/Osis.php                          model data anggota + daftar sekbid
+app/Models/User.php                          role dan isAdmin()
+config/beranda.php                           isi teks beranda
+routes/web.php                               route publik, dashboard, OSIS
+routes/auth.php                              login, logout, reset password
 
-resources/views/layouts/public.blade.php    kerangka beranda, form, artikel
-resources/views/beranda.blade.php           halaman beranda
-resources/views/aspirasi/index.blade.php    form aspirasi
-resources/views/berita/show.blade.php       detail artikel
-resources/views/components/site-icon.blade.php ikon SVG
-resources/views/layouts/osis.blade.php      kerangka form tambah/edit anggota
+resources/views/layouts/public.blade.php     kerangka beranda, form, artikel
+resources/views/beranda.blade.php            halaman beranda
+resources/views/aspirasi/index.blade.php     form aspirasi
+resources/views/berita/detail.blade.php      detail artikel
+resources/views/components/ikon-situs.blade.php ikon SVG
+resources/views/layouts/osis.blade.php       kerangka form tambah/edit anggota
 resources/views/layouts/navigation.blade.php navbar Breeze/admin
-resources/views/osis/                       form tambah dan edit anggota
-resources/views/dashboard.blade.php         dashboard admin
-resources/views/components/dashboard-summary.blade.php
+resources/views/osis/                        form tambah dan edit anggota
+resources/views/dashboard.blade.php          dashboard admin
+resources/views/components/ringkasan-dashboard.blade.php
 
-public/css/beranda.css                      styling beranda dan halaman publik
-public/css/osis.css                         styling halaman OSIS
-public/css/navbar.css                       styling navbar OSIS
-public/js/beranda.js                        menu, tab, dan state form
-public/js/osis.js                           cegah submit ganda
+public/css/beranda.css                       styling beranda dan halaman publik
+public/css/osis.css                          styling halaman OSIS
+public/css/navigasi.css                      styling navbar OSIS
+public/js/beranda.js                         navigasi aktif dan state form
+public/js/osis.js                            cegah submit ganda
 
-database/migrations/                        struktur database
-database/seeders/EventSeeder.php             data awal agenda, idempotent
-tests/Feature/BerandaTest.php               test beranda dan artikel
-tests/Feature/AspirationTest.php            test validasi dan simpan aspirasi
-tests/Feature/OsisRoleTest.php              test akses publik, role, CRUD
+database/migrations/                         struktur database
+database/seeders/AgendaSeeder.php            data awal agenda, idempotent
+database/seeders/BeritaSeeder.php            data awal berita, idempotent
+tests/Feature/BerandaTest.php                test beranda dan artikel
+tests/Feature/AspirasiTest.php               test validasi dan simpan aspirasi
+tests/Feature/OsisRoleTest.php               test akses publik, role, CRUD
 ```
 
 Registrasi publik sudah dihapus. File `RegisteredUserController` dan view
@@ -178,14 +181,15 @@ Registrasi publik sudah dihapus. File `RegisteredUserController` dan view
 
 Ringkasnya:
 
-- Isi profil beranda (kabinet, BPH, Sekbid, berita, sosial): `config/beranda.php`.
-- Agenda/kegiatan: tabel `events`, dikelola dari dashboard admin. Data agenda
-  contoh lama disalin saat migration; `EventSeeder` mengisi contoh hanya saat
-  tabel agenda masih kosong.
+- Isi profil beranda (kabinet, visi/misi, aspirasi, sosial): `config/beranda.php`.
+- Agenda/kegiatan: tabel `agenda`, dikelola dari dashboard admin. `AgendaSeeder`
+  mengisi contoh hanya saat tabel agenda masih kosong.
+- Berita: tabel `berita`, dikelola dari dashboard admin. `BeritaSeeder` mengisi
+  contoh berdasarkan slug yang belum ada.
 - Tampilan beranda, form aspirasi, dan artikel: `public/css/beranda.css`.
-- Menu, tab, dan state form: `public/js/beranda.js`.
-- Warna, font, tombol, tabel halaman OSIS: `public/css/osis.css`.
-- Navbar: `public/css/navbar.css` dan `resources/views/layouts/osis.blade.php`.
+- Navigasi aktif dan state form: `public/js/beranda.js`.
+- Warna, font, tombol halaman OSIS: `public/css/osis.css`.
+- Navbar: `public/css/navigasi.css` dan `resources/views/layouts/osis.blade.php`.
 - Dashboard admin dan halaman login: class Tailwind di file Blade, lalu
   `npm run build`.
 - Teks halaman: file di `resources/views/osis/`.
@@ -207,7 +211,7 @@ Test memakai SQLite in-memory, jadi tidak menyentuh database `db_osis`.
 php artisan test
 ```
 
-Status terakhir: 49 test lulus, 155 assertion.
+Status terakhir: 50 test lulus, 163 assertion.
 
 Cakupan penting:
 
@@ -234,7 +238,7 @@ Cakupan penting:
 - Jangan mengedit file di `public/build` secara manual; itu hasil build.
 - Data anggota tampil publik di beranda, jadi pastikan datanya memang boleh
   ditampilkan.
-- Jalankan `php artisan migrate` untuk membuat tabel `aspirations` sebelum
+- Jalankan `php artisan migrate` untuk membuat tabel `aspirasi` sebelum
   form aspirasi dipakai di database MySQL.
 - Nama kabinet, pengurus, agenda, berita, dan tautan sosial di beranda masih
   placeholder. Ganti dulu sebelum publikasi.

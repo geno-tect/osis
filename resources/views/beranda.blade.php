@@ -40,7 +40,7 @@
         </div>
     </section>
 
-    <section class="agenda-section" id="agenda" aria-labelledby="agenda-title" data-nav-match="agenda">
+    <section class="agenda-section" id="agenda" aria-labelledby="agenda-title">
         <div class="container">
             <div class="section-head">
                 <div>

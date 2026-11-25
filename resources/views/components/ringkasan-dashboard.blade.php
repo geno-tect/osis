@@ -240,7 +240,7 @@
                                 </td>
                                 <td class="whitespace-nowrap px-5 py-3 text-sm text-gray-500 dark:text-gray-400">
                                     @if ($item->foto)
-                                        <img src="{{ asset('storage/osis/' . $item->foto) }}" alt="Foto" class="dashboard-foto-thumb" width="40">
+                                        <img src="{{ asset('storage/osis/' . $item->foto) }}" alt="Foto" class="inline-block h-10 w-10 rounded object-cover align-middle" width="40" height="40">
                                     @else
                                         <span class="text-gray-400">—</span>
                                     @endif

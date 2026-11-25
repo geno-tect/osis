@@ -8,12 +8,8 @@
     --accent: #0f5a49;
     --accent-deep: #0a4135;
     --nav-hover: #e5dfd0;
-    --table-head: #ece6d8;
     --row-hover: #faf6ec;
     --input-bg: #fffdf9;
-    --success-bg: #e4efe7;
-    --success-line: #b4cdbf;
-    --success-ink: #14503f;
     --danger: #7f2d26;
     --danger-bg: #f7e8e6;
     --danger-line: #ddb6b0;
@@ -181,123 +177,10 @@ p {
     margin-top: 0.15rem;
 }
 
-.alert--success {
-    border-color: var(--success-line);
-    background: var(--success-bg);
-    color: var(--success-ink);
-}
-
 .alert--error {
     border-color: var(--danger-line);
     background: var(--danger-bg);
     color: var(--danger);
-}
-
-.table-wrap {
-    overflow-x: auto;
-    border: 1px solid var(--line);
-    border-radius: 5px;
-    background: var(--surface);
-}
-
-.data-table {
-    width: 100%;
-    min-width: 46rem;
-    border-collapse: collapse;
-    font-size: 0.925rem;
-}
-
-.data-table th,
-.data-table td {
-    padding: 0.78rem 1rem;
-    border-bottom: 1px solid var(--line);
-    text-align: left;
-    vertical-align: middle;
-}
-
-.data-table thead th {
-    border-bottom-color: var(--line-strong);
-    background: var(--table-head);
-    color: var(--muted);
-    font-size: 0.8rem;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.data-table tbody tr:last-child td {
-    border-bottom: 0;
-}
-
-.data-table tbody tr:hover {
-    background: var(--row-hover);
-}
-
-.data-table .num {
-    width: 3.5rem;
-    color: var(--muted);
-    font-variant-numeric: tabular-nums;
-}
-
-.data-table .id {
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-}
-
-.data-table .actions {
-    text-align: center;
-    white-space: nowrap;
-}
-
-.data-table .actions a {
-    font-weight: 600;
-}
-
-.data-table .actions .row-actions {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.9rem;
-}
-
-.data-table .actions form {
-    margin: 0;
-}
-
-.data-table .actions button {
-    padding: 0;
-    border: 0;
-    background: none;
-    color: var(--danger);
-    font: inherit;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.data-table .actions button:hover {
-    text-decoration: underline;
-}
-
-.empty-state {
-    padding: 2.5rem 1rem;
-    text-align: center;
-    color: var(--muted);
-}
-
-.empty-state strong {
-    display: block;
-    margin-bottom: 0.2rem;
-    color: var(--ink);
-    font-family: var(--font-display);
-    font-size: 1.1rem;
-}
-
-.empty-state .btn {
-    margin-top: 1rem;
-}
-
-.table-note {
-    margin-top: 0.7rem;
-    color: var(--muted);
-    font-size: 0.85rem;
 }
 
 .form-card {
@@ -475,13 +358,4 @@ p {
     height: 100%;
     opacity: 0;
     cursor: pointer;
-}
-
-.dashboard-foto-thumb {
-    width: 36px;
-    height: 36px;
-    object-fit: cover;
-    border-radius: 6px;
-    display: inline-block;
-    vertical-align: middle;
 }

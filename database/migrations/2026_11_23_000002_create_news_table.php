@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -22,25 +21,6 @@ return new class extends Migration
 
             $table->index('date');
         });
-
-        $now = now();
-        $articles = collect(config('beranda.news', []))->map(function (array $article) use ($now) {
-            return [
-                'slug' => $article['slug'],
-                'category' => $article['category'],
-                'date' => $article['date'],
-                'title' => $article['title'],
-                'excerpt' => $article['excerpt'],
-                'image' => $article['image'] ?? null,
-                'body' => json_encode($article['body'] ?? []),
-                'created_at' => $now,
-                'updated_at' => $now,
-            ];
-        })->all();
-
-        if ($articles !== []) {
-            DB::table('news')->insert($articles);
-        }
     }
 
     public function down(): void

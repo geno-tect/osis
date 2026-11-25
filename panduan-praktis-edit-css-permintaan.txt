@@ -1,6 +1,9 @@
 ﻿PANDUAN PRAKTIS MENGUBAH CSS SAAT ADA PERMINTAAN
 ================================================
 
+CATATAN: Dokumen ini snapshot lama. Nama file CSS sudah berubah
+(navbar.css kini navigasi.css). Lihat README.md untuk struktur terbaru.
+
 Contoh permintaan: “Coba ganti background.”
 Panduan ini untuk pemula yang perlu menemukan bagian, mengubah tampilannya, lalu memastikan hasilnya cocok di desktop dan HP.
 

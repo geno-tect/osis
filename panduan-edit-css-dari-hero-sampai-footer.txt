@@ -1,6 +1,10 @@
 ﻿PANDUAN EDIT CSS PROJECT OSIS
 ============================
 
+CATATAN: Dokumen ini snapshot lama. Nama file CSS dan jumlah barisnya sudah
+berubah (navbar.css kini navigasi.css). Lihat README.md untuk struktur yang
+berlaku saat ini.
+
 Tujuan
 ------
 Panduan ini menunjukkan file CSS mana yang mengatur tiap halaman dan bagian visual, dari hero sampai footer, cara menemukan selector, lalu cara mengubah warna, ukuran, jarak, gambar, dan tampilan mobile tanpa mengubah fungsi aplikasi.
