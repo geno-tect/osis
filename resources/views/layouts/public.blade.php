@@ -1,7 +1,6 @@
 @php
     $site = $content;
     $isBerita = request()->routeIs('berita.*');
-    $isAspirasi = request()->routeIs('aspirasi.*');
 @endphp
 
 <!DOCTYPE html>
@@ -44,12 +43,7 @@
                 <a href="{{ route('beranda') }}#tentang" data-nav-id="tentang">Tentang Kami</a>
                 <a href="{{ route('beranda') }}#struktur" data-nav-id="anggota">Anggota OSIS</a>
                 <a href="{{ route('beranda') }}#berita" data-nav-id="berita" @if ($isBerita) aria-current="page" @endif>Berita</a>
-                <a href="{{ route('aspirasi.index') }}" data-nav-id="aspirasi" @if ($isAspirasi) aria-current="page" @endif>Aspirasi</a>
             </nav>
-
-            <div class="header-actions">
-                <a class="button button--sky button--small header-cta" href="{{ route('aspirasi.index') }}">Kirim aspirasi</a>
-            </div>
         </div>
     </header>
 

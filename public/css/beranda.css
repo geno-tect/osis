@@ -332,12 +332,6 @@ section[id] {
     color: var(--sky-900);
 }
 
-.button--small {
-    min-height: 44px;
-    padding: 0.55rem 0.9rem;
-    font-size: 0.85rem;
-}
-
 .button:active {
     transform: translateY(1px);
 }
@@ -496,13 +490,6 @@ section[id] {
 .desktop-nav a[aria-current="location"]::after,
 .desktop-nav a.is-active::after {
     background: var(--sky-500);
-}
-
-.header-actions {
-    display: flex;
-    align-items: center;
-    justify-self: end;
-    gap: 0.5rem;
 }
 
 .hero {

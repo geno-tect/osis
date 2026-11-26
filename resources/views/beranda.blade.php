@@ -250,7 +250,7 @@
         </div>
     </section>
 
-    <section class="aspiration-section" id="aspirasi" aria-labelledby="aspirasi-title" data-nav-match="aspirasi">
+    <section class="aspiration-section" id="aspirasi" aria-labelledby="aspirasi-title">
         <div class="container">
             <div class="aspiration-band">
                 <span class="aspiration-orbit" aria-hidden="true"></span>

@@ -30,12 +30,6 @@
                 }
             });
 
-            const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
-
-            if (nearBottom) {
-                activeId = "aspirasi";
-            }
-
             setActiveNav(activeId);
             ticking = false;
         };
