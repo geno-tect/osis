@@ -148,8 +148,7 @@
                 @if ($bphFromDb->isNotEmpty())
                     <div class="bph-grid">
                         @foreach ($bphFromDb as $person)
-                            <article class="bph-card{{ $loop->first ? ' bph-card--lead' : '' }}">
-                                {{-- Gambar jika ada, else inisial --}}
+                            <article class="bph-card">
                                 @if ($person->foto)
                                     <span class="bph-avatar" aria-hidden="true"><img src="{{ asset('storage/osis/' . $person->foto) }}" alt="" width="40" height="40"></span>
                                 @else

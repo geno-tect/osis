@@ -53,7 +53,7 @@ return [
 
     'social' => [
         ['label' => 'Instagram', 'icon' => 'instagram', 'url' => 'https://www.instagram.com/osis.smkpasim//'],
-        ['label' => 'YouTube', 'icon' => 'youtube', 'url' => 'https://www.youtube.com/@PASIMChannel'],
+        ['label' => 'YouTube', 'icon' => 'youtube', 'url' => 'https://www.youtube.com/@osissmkpasim'],
     ],
 
     'contact' => [
